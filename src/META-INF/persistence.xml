@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+  xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+  http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+  <persistence-unit name="targets"
+    transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    
+    <class>no.atferdssenteret.panda.Target</class>
+    <class>no.atferdssenteret.panda.DataCollection</class>
+    <class>no.atferdssenteret.panda.Questionnaire</class>
+    <class>no.atferdssenteret.panda.QuestionnaireEvent</class>
+    <class>no.atferdssenteret.panda.DataCollector</class>
+     
+    <properties>
+      <property name="javax.persistence.jdbc.password" value="panda" />
+      <property name="javax.persistence.jdbc.user" value="pandaboy" />
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+      <property name="javax.persistence.jdbc.url"
+        value="jdbc:mysql://localhost:3306/panda" />
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+      <property name="eclipselink.ddl-generation.output-mode" value="database" />
+      <property name="eclipselink.logging.level" value="INFO" />
+    </properties>
+  </persistence-unit>
+  
+  <persistence-unit name="hello"
+    transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <class>no.atferdssenteret.panda.hellopersistence.Monster</class>
+    <class>no.atferdssenteret.panda.hellopersistence.Cat</class>
+    
+    <properties>
+      <property name="javax.persistence.jdbc.password" value="panda" />
+      <property name="javax.persistence.jdbc.user" value="pandaboy" />
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+      <property name="javax.persistence.jdbc.url"
+        value="jdbc:mysql://localhost:3306/panda" />
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+      <property name="eclipselink.ddl-generation.output-mode" value="database" />
+      <property name="eclipselink.logging.level" value="INFO" />
+    </properties>
+  </persistence-unit>
+</persistence>
