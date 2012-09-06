@@ -9,11 +9,13 @@
     transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     
-    <class>no.atferdssenteret.panda.Target</class>
-    <class>no.atferdssenteret.panda.DataCollection</class>
-    <class>no.atferdssenteret.panda.Questionnaire</class>
-    <class>no.atferdssenteret.panda.QuestionnaireEvent</class>
-    <class>no.atferdssenteret.panda.DataCollector</class>
+    <class>no.atferdssenteret.panda.model.Target</class>
+    <class>no.atferdssenteret.panda.model.DataCollection</class>
+    <class>no.atferdssenteret.panda.model.Questionnaire</class>
+    <class>no.atferdssenteret.panda.model.QuestionnaireEvent</class>
+    <class>no.atferdssenteret.panda.model.DataCollector</class>
+    <class>no.atferdssenteret.panda.model.Participant</class>
+    <class>no.atferdssenteret.panda.model.fft.Youth</class>
      
     <properties>
       <property name="javax.persistence.jdbc.password" value="panda" />
@@ -25,24 +27,5 @@
       <property name="eclipselink.ddl-generation.output-mode" value="database" />
       <property name="eclipselink.logging.level" value="INFO" />
     </properties>
-  </persistence-unit>
-  
-  <persistence-unit name="hello"
-    transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-
-    <class>no.atferdssenteret.panda.hellopersistence.Monster</class>
-    <class>no.atferdssenteret.panda.hellopersistence.Cat</class>
-    
-    <properties>
-      <property name="javax.persistence.jdbc.password" value="panda" />
-      <property name="javax.persistence.jdbc.user" value="pandaboy" />
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-      <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://localhost:3306/panda" />
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-      <property name="eclipselink.ddl-generation.output-mode" value="database" />
-      <property name="eclipselink.logging.level" value="INFO" />
-    </properties>
-  </persistence-unit>
+  </persistence-unit>  
 </persistence>

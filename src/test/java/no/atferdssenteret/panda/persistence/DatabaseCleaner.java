@@ -5,17 +5,16 @@ import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import com.sun.corba.se.spi.orb.DataCollector;
+import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.Target;
 
-import no.atferdssenteret.panda.DataCollection;
-import no.atferdssenteret.panda.Questionnaire;
-import no.atferdssenteret.panda.QuestionnaireEvent;
-import no.atferdssenteret.panda.Target;
+import com.sun.corba.se.spi.orb.DataCollector;
 
 public class DatabaseCleaner {
     private static final Class<?>[] ENTITY_TYPES = {
 	Target.class, DataCollection.class, Questionnaire.class, QuestionnaireEvent.class, DataCollector.class
-//	Monster.class, Cat.class
     };
     private final EntityManager entityManager;
     

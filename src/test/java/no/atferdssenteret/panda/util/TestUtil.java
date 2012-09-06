@@ -3,7 +3,7 @@ package no.atferdssenteret.panda.util;
 import java.util.Calendar;
 
 import no.atferdssenteret.panda.DataCollectionRule;
-import no.atferdssenteret.panda.Target;
+import no.atferdssenteret.panda.model.Target;
 
 public class TestUtil {
 

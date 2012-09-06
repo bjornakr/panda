@@ -4,9 +4,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import no.atferdssenteret.panda.DataCollectionRule.ApplicationTimes;
-import no.atferdssenteret.panda.DataCollectionRule.TargetDates;
-import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.model.Target;
 
 public class DataCollectionManager {
     private static DataCollectionManager dataCollectionManager;
@@ -38,8 +37,7 @@ public class DataCollectionManager {
 		DataCollection dataCollection = new DataCollection();
 		//		dataCollection.setTarget(target);
 		dataCollection.setType(dataCollectionRule.dataCollectionType());
-		java.sql.Date targetDate = calculateTargetDate(target.getCreated(), dataCollectionRule);
-		dataCollection.setTargetDate(new java.sql.Date(targetDate.getTime()));
+		dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
 		dataCollection.setDataCollector(target.getDataCollector());
 		target.addDataCollection(dataCollection);
 	    }
@@ -58,12 +56,12 @@ public class DataCollectionManager {
 			&& target.getTreatmentStart() != null) {
 		    DataCollection dataCollection = target.getDataCollection(dataCollectionRule.dataCollectionType()); 
 		    if (dataCollection != null) {
-			dataCollection.setTargetDate(calculateTargetDate(target.getTreatmentStart(), dataCollectionRule));
+			dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
 		    }
 		    else {
 			dataCollection = new DataCollection();
 			dataCollection.setType(dataCollectionRule.dataCollectionType());		
-			dataCollection.setTargetDate(calculateTargetDate(target.getTreatmentStart(), dataCollectionRule));
+			dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
 			dataCollection.setDataCollector(target.getDataCollector());
 			target.addDataCollection(dataCollection);
 			System.out.println("Data collection: " + dataCollection);
@@ -78,7 +76,7 @@ public class DataCollectionManager {
     private void deleteUntouchedDataCollections(Target target) {
 	List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 	for (DataCollection dataCollection : target.getDataCollections()) {
-	    if (dataCollection.getProgressStatus() == DataCollection.ProgressStatus.NOT_INITIATED) {
+	    if (dataCollection.getProgressStatus() == DataCollection.ProgressStatuses.NOT_INITIATED) {
 		untouchedDataCollections.add(dataCollection);
 	    }
 	}
@@ -89,9 +87,14 @@ public class DataCollectionManager {
 	dataCollectionRules.add(dataCollectionRule);
     }
 
-    public java.sql.Date calculateTargetDate(java.sql.Date initialDate, DataCollectionRule dataCollectionRule) {
+    public java.sql.Date calculateTargetDate(Target target, DataCollectionRule dataCollectionRule) {
 	Calendar targetDateCalendar = Calendar.getInstance();
-	targetDateCalendar.setTime(initialDate);
+	if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE) {
+	    targetDateCalendar.setTime(target.getCreated());
+	}
+	else if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TREATMENT_START) {
+	    targetDateCalendar.setTime(target.getTreatmentStart());
+	}
 	targetDateCalendar.add(dataCollectionRule.timeUnit(), dataCollectionRule.timeSpan());
 	return new java.sql.Date(targetDateCalendar.getTimeInMillis());
     }

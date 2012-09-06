@@ -1,8 +1,8 @@
 package no.atferdssenteret.panda.unit;
 
 import static org.junit.Assert.assertEquals;
-import no.atferdssenteret.panda.Questionnaire;
-import no.atferdssenteret.panda.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.QuestionnaireEvent;
 
 import org.junit.Before;
 import org.junit.Test;

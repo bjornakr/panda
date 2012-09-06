@@ -1,9 +1,9 @@
 package no.atferdssenteret.panda.persistence;
 
 import static org.junit.Assert.assertNotNull;
-import no.atferdssenteret.panda.DataCollection;
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.util.JPATransactor;
 
 import org.junit.Before;
@@ -23,8 +23,8 @@ public class DataCollectionsAndQuestionnaires {
 	final String questionnaireTRF = "TRF";
 
 	QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
-	dcqMap.addQuestionnaireForDataCollection("T1", questionnaireCBCL);
-	dcqMap.addQuestionnaireForDataCollection("T1", questionnaireTRF);
+	dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireCBCL);
+	dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTRF);
 
 	DataCollection dataCollection = new DataCollection();
 	dataCollection.setType("T1");

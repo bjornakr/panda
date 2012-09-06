@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.text.ParseException;
 
 import no.atferdssenteret.panda.DataCollectionManager;
-import no.atferdssenteret.panda.Target;
+import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.TestUtil;
@@ -52,15 +52,15 @@ public class TargetStatusRippleEffects {
     @Test
     public void untouchedDataCollectionsAreDeletedWhenTargetsStatusIsChangedToNotParticipating() throws ParseException {
 	DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(3));
-	Target target = createTarget();
-	target.setStatus(Target.Statuses.PARTICIPATING);
-
+	Target target = TestUtil.createParticipatingTarget();
+	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
 	JPATransactor.getInstance().transaction().begin();
 	JPATransactor.getInstance().entityManager().persist(target);
 	JPATransactor.getInstance().transaction().commit();
 	assertEquals("No. of data collections before: ", 1, target.getDataCollections().size());
 	JPATransactor.getInstance().transaction().begin();
 	target.setStatus(Target.Statuses.WAITING_FOR_CONSENT);
+	DataCollectionManager.getInstance().notifyTargetUpdated(target);
 	JPATransactor.getInstance().transaction().commit();
 	assertEquals("No. of data collections after: ", 0, target.getDataCollections().size());
     }
@@ -70,11 +70,11 @@ public class TargetStatusRippleEffects {
 	
     }
     
-    private Target createTarget() throws ParseException {
-	Target target = new Target();
-	target.setFirstName("Megaroy");
-	target.setLastName("Baljetrøkk");
-	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
-	return target;
-    }
+//    private Target createTarget() throws ParseException {
+//	Target target = new Target();
+//	target.setFirstName("Megaroy");
+//	target.setLastName("Baljetrøkk");
+//	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
+//	return target;
+//    }
 }

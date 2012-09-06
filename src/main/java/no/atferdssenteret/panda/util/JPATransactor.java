@@ -6,6 +6,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
+import no.atferdssenteret.panda.model.Model;
+
 public class JPATransactor {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("targets");
     private final EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -47,5 +49,11 @@ public class JPATransactor {
 	    transaction.rollback();
 	    throw e;
 	}
+    }
+
+    public void persist(Model model) {
+	transaction().begin();
+	entityManager.persist(model);
+	transaction().commit();
     }
 }
