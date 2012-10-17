@@ -42,7 +42,7 @@ public class ParticipantController extends ApplicationController {
 	view.setLastName(model.getLastName());
 	view.setRole(model.getRole());
 	view.setTlfNo(model.getTlfNo());
-	view.seteMail(model.geteMail());
+	view.seteMail(model.getEMail());
 	view.setContactInfo(model.getContactInfo());
 	view.setComment(model.getComment());
     }
@@ -56,7 +56,7 @@ public class ParticipantController extends ApplicationController {
 	model.setLastName(StringUtil.groomString(view.getLastName()));
 	model.setRole((String)view.getRole());
 	model.setTlfNo(StringUtil.groomString(view.getTlfNo()));
-	model.seteMail(StringUtil.groomString(view.geteMail()));
+	model.setEMail(StringUtil.groomString(view.geteMail()));
 	model.setContactInfo(StringUtil.groomString(view.getContactInfo()));
 	model.setComment(StringUtil.groomString(view.getComment()));
     }

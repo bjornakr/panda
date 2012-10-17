@@ -11,10 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
-
-import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import javax.persistence.PreUpdate;
 
 @Entity
 public class DataCollection implements Model {
@@ -31,6 +29,8 @@ public class DataCollection implements Model {
     private Date targetDate;
     private ProgressStatuses progressStatus;
     private Date progressDate;
+    private Date created;
+    private Date updated;
     
     @OneToMany(mappedBy="dataCollection", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
@@ -39,19 +39,15 @@ public class DataCollection implements Model {
     
     
     @PrePersist
-    public void addQuestionnaires() {
-	for (String questionnaireName : QuestionnairesForDataCollectionType.getInstance().getQuestionnaireNamesFor(type)) {
-	    Questionnaire questionnaire = new Questionnaire();
-	    questionnaire.setName(questionnaireName);
-	    addQuestionnaire(questionnaire);
-	}
-	System.out.println("DC: " + this + ", ID: " + id);
+    protected void onCreate() {
+	setCreated(new Date(System.currentTimeMillis()));
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+	setUpdated(new Date(System.currentTimeMillis()));
     }
     
-    @PostPersist
-    public void debug() {
-	System.out.println("DC: " + this + ", ID: " + id);
-    }
     
     public DataCollection() {
 	progressStatus = ProgressStatuses.NOT_INITIATED;
@@ -116,6 +112,9 @@ public class DataCollection implements Model {
     }
     
     public void setQuestionnaires(List<Questionnaire> questionnaires) {
+	for (Questionnaire questionnaire : questionnaires) {
+	    questionnaire.setDataCollection(this);
+	}
 	this.questionnaires = questionnaires;
     }
 
@@ -133,5 +132,21 @@ public class DataCollection implements Model {
 
     public void setProgressDate(Date progressDate) {
 	this.progressDate = progressDate;
+    }
+
+    public Date getCreated() {
+	return created;
+    }
+
+    public void setCreated(Date created) {
+	this.created = created;
+    }
+
+    public Date getUpdated() {
+	return updated;
+    }
+
+    public void setUpdated(Date updated) {
+	this.updated = updated;
     }
 }

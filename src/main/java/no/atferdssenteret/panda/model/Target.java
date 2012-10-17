@@ -18,7 +18,7 @@ import no.atferdssenteret.panda.DataCollectionManager;
 
 @Entity
 public class Target implements Model {
-    public enum Statuses {WAITING_FOR_CONSENT, PARTICIPATING};
+    public enum Statuses {WAITING_FOR_CONSENT, PARTICIPATING};    
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

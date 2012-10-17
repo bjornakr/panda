@@ -51,6 +51,7 @@ public abstract class ApplicationController implements ActionListener {
 	if (event.getActionCommand().equals(COMMAND_SAVE)) {
 	    transferUserInputToModel();
 	    if (mode == Mode.CREATE) {
+		System.out.println("Persisting: " + model().toString());
 		JPATransactor.getInstance().persist(model());
 	    }
 	    else if (mode == Mode.EDIT) {

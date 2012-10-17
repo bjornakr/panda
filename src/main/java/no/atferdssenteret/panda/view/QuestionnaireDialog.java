@@ -18,10 +18,10 @@ import no.atferdssenteret.panda.view.util.LabelFieldPair;
 public class QuestionnaireDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private ActionListener actionListener;
-    private DefaultOverviewPanel questionnaireEventPanel;
+    private DefaultTablePanel questionnaireEventPanel;
     private JComboBox cboxName = new JComboBox(QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
 
-    public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultOverviewPanel questionnaireEventPanel) {
+    public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireEventPanel) {
 	this.actionListener = actionListener;
 	this.questionnaireEventPanel = questionnaireEventPanel;
 	setModalityType(ModalityType.APPLICATION_MODAL);

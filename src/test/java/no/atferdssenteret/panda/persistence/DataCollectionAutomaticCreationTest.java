@@ -111,7 +111,7 @@ public class DataCollectionAutomaticCreationTest {
 	Target target = TestUtil.createParticipatingTarget();
 	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-08-25"));
 	persist(target);
-	DataCollectionManager.getInstance().notifyTargetCreated(target);
+//	DataCollectionManager.getInstance().notifyTargetCreated(target);
 	DataCollection dataCollection = getDataCollection(target, "T1");
 	assertEquals("Target date: ", DateUtil.parseDateFromInternationalDateFormat("2013-04-25"), dataCollection.getTargetDate());	
     }
@@ -128,11 +128,13 @@ public class DataCollectionAutomaticCreationTest {
 	JPATransactor.getInstance().transaction().commit();
 	System.out.println("JPATransactor.getInstance().transaction().commit();");
 	JPATransactor.getInstance().transaction().begin();
-	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-02-02"));
+	target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
 	JPATransactor.getInstance().transaction().commit();
-	assertFalse("Duplicate data collections", hasDuplicateDataCollections(target));
-//	DataCollection dataCollection = getDataCollection(target, "T2");
-//	assertEquals(DateUtil.parseDateFromInternationalDateFormat("2012-08-02"), dataCollection.getTargetDate());	
+	
+	DataCollectionManager.getInstance().notifyTargetUpdated(target);
+	assertFalse("Duplicate data collections", hasDuplicateDataCollections(target));	
+	DataCollection dataCollection = getDataCollection(target, "T2");
+	assertEquals(DateUtil.parseDateFromInternationalDateFormat("2012-07-02"), dataCollection.getTargetDate());	
     }
     
     @Test

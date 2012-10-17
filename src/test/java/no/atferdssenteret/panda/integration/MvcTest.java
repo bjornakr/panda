@@ -60,13 +60,12 @@ public class MvcTest {
     private static void testDataCollection(Window mainWindow) {
 	createQuestionnairesForDataCollectionsTypes();
 	DataCollection model = createDataCollection();
-	new DataCollectionController(mainWindow, null);
-	
+	new DataCollectionController(mainWindow, null, null);
     }
 
     private static void testParticipant(Window mainWindow) {
 	Participant model = createParticipant();
-	new ParticipantController(mainWindow, model);	
+	new ParticipantController(mainWindow, null);	
     }
 
     private static void testYouth(Window mainWindow) {
@@ -96,7 +95,7 @@ public class MvcTest {
 	participant.setLastName("Trugeslesk");
 	participant.setRole("Mor eller annen kvinnelig forsørger");
 	participant.setTlfNo("95 16 61 35");
-	participant.seteMail("targul@gmail.com");
+	participant.setEMail("targul@gmail.com");
 	participant.setContactInfo("Knarkesløyfa 3F, 0192 Oslo");
 	participant.setComment("Testing - Ein to tre");
 	return participant;

@@ -43,6 +43,7 @@ public class YouthController extends ApplicationController {
     public void transferModelToView() {
 	view.setFirstName(model.getFirstName());
 	view.setLastName(model.getLastName());
+	view.setGender(model.getGender());
 	view.setRegion(model.getRegion());
 	view.setStatus(model.getStatus());
 	view.setTreatmentGroup(model.getTreatmentGroup());
@@ -57,6 +58,7 @@ public class YouthController extends ApplicationController {
 	}
 	model.setFirstName(StringUtil.groomString(view.getFirstName()));
 	model.setLastName(StringUtil.groomString(view.getLastName()));
+	model.setGender((Youth.Genders)view.getGender());
 	model.setRegion((Youth.Regions)view.getRegion());
 	model.setStatus((Target.Statuses)view.getStatus());
 	model.setTreatmentGroup((Youth.TreatmentGroups)view.getTreatmentGroup());

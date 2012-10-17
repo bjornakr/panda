@@ -27,6 +27,7 @@ public class YouthDialog extends JDialog {
     private JComboBox cboxStatuses = new JComboBox(Target.Statuses.values());
     private JComboBox cboxTreatmentGroups = new JComboBox(Youth.TreatmentGroups.values());
     private JComboBox cboxRegions = new JComboBox(Youth.Regions.values());
+    private JComboBox cboxGenders = new JComboBox(Youth.Genders.values());
     private DefaultTextField txtTreatmentStart = new DefaultTextField(DefaultTextField.DATE_WIDTH);
     private DefaultTextArea txtComment = new DefaultTextArea();
     
@@ -55,7 +56,8 @@ public class YouthDialog extends JDialog {
 	c.fill = GridBagConstraints.BOTH;
 	add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), c);
 
-	labelsAndFields = new LinkedList<LabelFieldPair>(); 
+	labelsAndFields = new LinkedList<LabelFieldPair>();
+	labelsAndFields.add(new LabelFieldPair(new JLabel("Kjønn"), cboxGenders));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Region"), cboxRegions));
@@ -105,6 +107,14 @@ public class YouthDialog extends JDialog {
     
     public String getComment() {
 	return txtComment.getText();
+    }
+    
+    public void setGender(Youth.Genders gender) {
+	cboxGenders.setSelectedItem(gender);
+    }
+    
+    public Object getGender() {
+	return cboxGenders.getSelectedItem();
     }
     
     public void setFirstName(String firstName) {

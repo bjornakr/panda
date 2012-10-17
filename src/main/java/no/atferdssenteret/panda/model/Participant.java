@@ -14,6 +14,7 @@ public class Participant implements Model {
     private long id;
     private Target target;
     private String role;
+    private Statuses status;
     private String firstName;
     private String lastName;
     private String contactInfo;
@@ -61,11 +62,11 @@ public class Participant implements Model {
         this.tlfNo = tlfNo;
     }
     
-    public String geteMail() {
+    public String getEMail() {
         return eMail;
     }
     
-    public void seteMail(String eMail) {
+    public void setEMail(String eMail) {
         this.eMail = eMail;
     }
     
@@ -91,5 +92,13 @@ public class Participant implements Model {
 
     public void setRole(String role) {
 	this.role = role;
+    }
+
+    public Statuses getStatus() {
+	return status;
+    }
+
+    public void setStatus(Statuses status) {
+	this.status = status;
     }
 }

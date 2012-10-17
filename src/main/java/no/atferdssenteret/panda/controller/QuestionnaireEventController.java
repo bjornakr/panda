@@ -1,6 +1,7 @@
 package no.atferdssenteret.panda.controller;
 
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
@@ -49,8 +50,22 @@ public class QuestionnaireEventController extends ApplicationController {
 
     @Override
     protected void transferUserInputToModel() {
+	if (getMode() == Mode.CREATE) {
+	    model = new QuestionnaireEvent();
+	}
 	model.setDate(StringUtil.parseDate(view.getDate()));
 	model.setType((QuestionnaireEvent.Types)view.getType());
 	model.setComment(StringUtil.groomString(view.getComment()));
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+	if (event.getActionCommand().equals(COMMAND_SAVE)) {
+	    transferUserInputToModel();
+	    view.dispose();
+	}
+	else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
+	    view().dispose();
+	}
     }
 }

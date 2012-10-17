@@ -2,30 +2,38 @@ package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.view.AbstractOverviewTableModel;
+import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
-public class QuestionnaireTable extends AbstractOverviewTableModel {
+public class QuestionnaireTable extends DefaultAbstractTableModel {
     private static final long serialVersionUID = 1L;
 
+    private final static int NO_OF_FIELDS = 2;
+    private final static int NAME = 0;
+    private final static int STATUS = 1;
+
+    
     @Override
     protected String[] headerColumns() {
-	String[] headerColumns = {"Spørreskjema", "Status"};
+	String[] headerColumns = new String[NO_OF_FIELDS];
+	headerColumns[NAME] = "Spørreskjema";
+	headerColumns[STATUS] = "Status";
 	return headerColumns;
-    }
-
-    @Override
-    protected ColumnSizes[] columnSizes() {
-	ColumnSizes[] columnSizes = {ColumnSizes.WIDE, ColumnSizes.SMALL};
-	return columnSizes;
     }
 
     @Override
     protected Object[] dataColumns(Model model) {
 	Questionnaire questionnaire = (Questionnaire)model;
-	Object[] columns = new Object[3];
-	columns[0] = questionnaire.getName();
-	columns[1] = questionnaire.getStatus();
-	return columns;
+	Object[] dataColumns = new Object[NO_OF_FIELDS];
+	dataColumns[NAME] = questionnaire.getName();
+	dataColumns[STATUS] = questionnaire.getStatus();
+	return dataColumns;
     }
     
+    @Override
+    protected ColumnSizes[] columnSizes() {
+	ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
+	columnSizes[NAME] = ColumnSizes.WIDE;
+	columnSizes[STATUS] = ColumnSizes.SMALL;
+	return columnSizes;
+    }
 }

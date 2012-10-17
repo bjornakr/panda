@@ -1,30 +1,33 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.LinkedList;
+import java.util.List;
 
-import no.atferdssenteret.panda.controller.AbstractOverviewController;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
+import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
-import no.atferdssenteret.panda.view.AbstractOverviewTableModel;
-import no.atferdssenteret.panda.view.DefaultOverviewPanel;
+import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
+import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
-public class QuestionnaireTableController extends AbstractOverviewController {
-    private DefaultOverviewPanel view;
+public class QuestionnaireTableController extends AbstractTableController {
+    private DefaultTablePanel view;
     private QuestionnaireTable tableModel = new QuestionnaireTable();
     
     public QuestionnaireTableController() {
 	super("Spørreskjemaer");
-	view = new DefaultOverviewPanel(this, null);	
+	view = new DefaultTablePanel(this, null);	
     }
     
     @Override
-    public DefaultOverviewPanel view() {
+    public DefaultTablePanel view() {
 	return view;
     }
 
     @Override
-    public AbstractOverviewTableModel tableModel() {
+    public DefaultAbstractTableModel tableModel() {
 	return tableModel;
     }
     
@@ -33,11 +36,30 @@ public class QuestionnaireTableController extends AbstractOverviewController {
 	return null;
     }
 
+    public List<Questionnaire> allModels() {
+	List<Questionnaire> models = new LinkedList<Questionnaire>();
+	for (Model model : tableModel.allModels()) {
+	    models.add((Questionnaire)model);
+	}
+	return models;
+    }
+    
+    @Override
+    protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	return allModels();
+    }    
+    
     @Override
     public void evaluateActionEvent(ActionEvent event) {
 	if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-	    view.getWindow();
-	    new QuestionnaireController(view.getWindow(), null); 
+	    QuestionnaireController questionnaireController = new QuestionnaireController(view.getWindow(), null);
+	    if (questionnaireController.model() != null) {
+		tableModel.addRow(questionnaireController.model());
+	    }
+	}
+	else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
+	    new QuestionnaireController(view.getWindow(), (Questionnaire)modelForSelectedTableRow());
+	    updateTableModel();
 	}
     }
 }

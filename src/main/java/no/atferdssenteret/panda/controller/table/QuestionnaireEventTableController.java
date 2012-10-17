@@ -1,18 +1,34 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.LinkedList;
+import java.util.List;
 
-import no.atferdssenteret.panda.controller.AbstractOverviewController;
+import no.atferdssenteret.panda.controller.QuestionnaireEventController;
+import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.table.QuestionnaireEventTable;
-import no.atferdssenteret.panda.view.AbstractOverviewTableModel;
-import no.atferdssenteret.panda.view.DefaultOverviewPanel;
+import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
+import no.atferdssenteret.panda.view.DefaultTablePanel;
+import no.atferdssenteret.panda.view.util.ButtonUtil;
 
-public class QuestionnaireEventTableController extends AbstractOverviewController {
+public class QuestionnaireEventTableController extends AbstractTableController {
     private QuestionnaireEventTable tableModel = new QuestionnaireEventTable();
-    private DefaultOverviewPanel view = new DefaultOverviewPanel(this, null);
+    private DefaultTablePanel view;
     
     public QuestionnaireEventTableController() {
 	super("Hendelser");
+	view = new DefaultTablePanel(this, null);
+    }
+
+    @Override
+    public DefaultTablePanel view() {
+	return view;
+    }
+    
+    @Override
+    public DefaultAbstractTableModel tableModel() {
+	return tableModel;
     }
 
     @Override
@@ -20,18 +36,32 @@ public class QuestionnaireEventTableController extends AbstractOverviewControlle
 	return null;
     }
 
+    public List<QuestionnaireEvent> allModels() {
+	List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
+	for (Model model : tableModel.allModels()) {
+	    models.add((QuestionnaireEvent)model);
+	}
+	return models;
+    }
+    
+    @Override
+    protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	return allModels();
+    }    
+    
     @Override
     public void evaluateActionEvent(ActionEvent event) {
-	// TODO Auto-generated method stub
+	if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
+	    QuestionnaireEventController questionnaireEventController = new QuestionnaireEventController(view.getWindow(), null);
+	    if (questionnaireEventController.model() != null) {
+		tableModel.addRow(questionnaireEventController.model());
+	    }
+	}
+	else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
+	    new QuestionnaireEventController(view.getWindow(), (QuestionnaireEvent)modelForSelectedTableRow());
+	    updateTableModel();
+	}
     }
 
-    @Override
-    public DefaultOverviewPanel view() {
-	return view;
-    }
 
-    @Override
-    public AbstractOverviewTableModel tableModel() {
-	return tableModel;
-    }
 }

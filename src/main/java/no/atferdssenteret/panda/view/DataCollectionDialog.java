@@ -24,9 +24,9 @@ public class DataCollectionDialog extends JDialog {
     private DefaultTextField txtTargetDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
     private JComboBox cboxProgressStatuses = new JComboBox(DataCollection.ProgressStatuses.values());
     private DefaultTextField txtProgressDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
-    private DefaultOverviewPanel questionnaireView;
+    private DefaultTablePanel questionnaireView;
     
-    public DataCollectionDialog(Window parentWindow, ActionListener actionListener, DefaultOverviewPanel questionnaireView) {
+    public DataCollectionDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireView) {
 	this.actionListener = actionListener;
 	this.questionnaireView = questionnaireView;
 	setModalityType(ModalityType.APPLICATION_MODAL);
@@ -58,5 +58,21 @@ public class DataCollectionDialog extends JDialog {
 
     public void initializeTypeComboBox() {
 	cboxTypes.setSelectedIndex(0);	
+    }
+
+    public Object getDataCollectionType() {
+	return cboxTypes.getSelectedItem();
+    }
+
+    public String getTargetDate() {
+	return txtTargetDate.getText();
+    }
+
+    public Object getProgressStatus() {
+	return cboxProgressStatuses.getSelectedItem();
+    }
+
+    public String getProgressDate() {
+	return txtProgressDate.getText();
     }
 }

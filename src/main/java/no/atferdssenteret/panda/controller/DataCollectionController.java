@@ -10,17 +10,21 @@ import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DataCollectionDialog;
 
 public class DataCollectionController extends ApplicationController {
     private DataCollection model;
     private DataCollectionDialog view;
     private QuestionnaireTableController questionnaireTableController = new QuestionnaireTableController();
+    private Target target;
 //    private QuestionnaireTable questionnaireTable = new QuestionnaireTable();
 
-    public DataCollectionController(Window parentWindow, DataCollection model) {
+    public DataCollectionController(Window parentWindow, DataCollection model, Target target) {
 	super(model);
 	this.model = model;
+	this.target = target;
 	view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
 	view.initializeTypeComboBox();
 	if (getMode() == Mode.EDIT) {
@@ -59,17 +63,18 @@ public class DataCollectionController extends ApplicationController {
     protected void transferUserInputToModel() {
 	if (getMode() == Mode.CREATE) {
 	    model = new DataCollection();
+	    model.setTarget(target);
 	}
-	//	model.setFirstName(StringUtil.groomString(view.getFirstName()));
-	//	model.setLastName(StringUtil.groomString(view.getLastName()));
-	//	model.setRole((String)view.getRole());
-	//	model.setTlfNo(StringUtil.groomString(view.getTlfNo()));
-	//	model.seteMail(StringUtil.groomString(view.geteMail()));
-	//	model.setContactInfo(StringUtil.groomString(view.getContactInfo()));
-	//	model.setComment(StringUtil.groomString(view.getComment()));
+	model.setType((String)view.getDataCollectionType());	
+	model.setTargetDate(StringUtil.parseDate(view.getTargetDate()));
+	model.setProgressStatus((DataCollection.ProgressStatuses)view.getProgressStatus());
+	model.setProgressDate(StringUtil.parseDate(view.getProgressDate()));
+	model.setQuestionnaires(questionnaireTableController.allModels());
+	System.err.println("questionnaireTableController.allModels().size(): " + model.getQuestionnaires().size());
     }
 
-    @Override public void actionPerformed(ActionEvent event) {
+    @Override
+    public void actionPerformed(ActionEvent event) {
 	super.actionPerformed(event);
 	if (event.getActionCommand().equals("TYPE_COMBO_BOX") && getMode() == Mode.CREATE) {
 	    List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
@@ -78,7 +83,7 @@ public class DataCollectionController extends ApplicationController {
 		questionnaire.setName(questionnaireName);
 		questionnaires.add(questionnaire);
 	    }
-	    questionnaireTableController.updateModel(questionnaires);
+	    questionnaireTableController.updateTableModel();
 	}
     }
 }

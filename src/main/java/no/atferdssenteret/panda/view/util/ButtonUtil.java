@@ -16,6 +16,7 @@ public class ButtonUtil {
     public final static String COMMAND_DELETE = "DELETE";
     public final static String COMMAND_SAVE = "SAVE";
     public final static String COMMAND_CANCEL = "CANCEL";
+    public final static String COMMAND_DOUBLE_CLICK = "DOUBLE_CLICK";
     
     public static List<JButton> createCRUDButtons(ActionListener actionListener) {
 	JButton deleteButton = new JButton("Slett...");

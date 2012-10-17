@@ -32,7 +32,7 @@ public class GuiUtil {
 	return Box.createRigidArea(new Dimension(width, 0));
     }
 
-    public static Font getValueFont() {
+    public static Font valueFont() {
 	return new Font("SansSerif", Font.BOLD, 14);
     }
 

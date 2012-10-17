@@ -3,6 +3,7 @@ package no.atferdssenteret.panda.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,7 @@ public class Questionnaire implements Model {
     private String name;
     private DataCollection dataCollection;
     
-    @OneToMany(mappedBy = "questionnaire")
+    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<QuestionnaireEvent> events = new LinkedList<QuestionnaireEvent>();
     
     public long getId() {
@@ -63,6 +64,9 @@ public class Questionnaire implements Model {
     }
 
     public void setEvents(List<QuestionnaireEvent> events) {
+	for (QuestionnaireEvent event : events) {
+	    event.setQuestionnaire(this);
+	}
 	this.events = events;
     }
     
@@ -82,5 +86,8 @@ public class Questionnaire implements Model {
 	}
 	return false;
     }
-
+    
+    public String toString() {
+	return "Q: " + name;
+    }
 }

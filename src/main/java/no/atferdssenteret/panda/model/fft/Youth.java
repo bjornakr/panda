@@ -6,9 +6,11 @@ import no.atferdssenteret.panda.model.Target;
 
 @Entity
 public class Youth extends Target {
+    public enum Genders {MALE, FEMALE}
     public enum TreatmentGroups {INTERVENTION, CONTROL, NOT_YET_RANDOMIZED}
     public enum Regions {TRONDHEIM, SANDVIKA, STAVANGER, SKIEN}
 
+    private Genders gender;
     private TreatmentGroups treatmentGroup;
     private Regions region;
 
@@ -30,5 +32,13 @@ public class Youth extends Target {
 
     public void setTreatmentGroup(TreatmentGroups treatmentGroup) {
 	this.treatmentGroup = treatmentGroup;
+    }
+
+    public Genders getGender() {
+	return gender;
+    }
+
+    public void setGender(Genders gender) {
+	this.gender = gender;
     }
 }
