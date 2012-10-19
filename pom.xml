@@ -10,11 +10,8 @@
 
   <repositories>
     <repository>
-      <id>EclipseLink Repo</id>
-      <url>http://www.gtlib.gatech.edu/pub/eclipse/rt/eclipselink/maven.repo/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <id>EclipseLink</id>
+      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
     </repository>
   </repositories>
 
