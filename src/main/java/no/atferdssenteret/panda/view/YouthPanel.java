@@ -5,8 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -137,7 +135,7 @@ public class YouthPanel extends JPanel {
 	c.weighty = 1;
 	c.anchor = GridBagConstraints.LINE_START;
 	c.insets = insetsForLabel;
-	barnInfoPanel.add(new JLabel("Kjønn: "), c);
+	barnInfoPanel.add(new JLabel("KjÃ¸nn: "), c);
 
 	c = new GridBagConstraints();
 	c.gridx = 1;

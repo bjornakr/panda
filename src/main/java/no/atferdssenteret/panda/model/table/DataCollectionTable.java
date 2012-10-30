@@ -18,7 +18,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
     protected String[] headerColumns() {
 	String[] headerColumns = new String[NO_OF_FIELDS];
 	headerColumns[TARGET_ID] = "ID-kode";
-	headerColumns[TARGET_DATE] = "Måldato";
+	headerColumns[TARGET_DATE] = "MÃ¥ldato";
 	headerColumns[TYPE] = "Type";
 	headerColumns[PROGRESS_STATUS] = "Status";
 	headerColumns[PROGRESS_DATE] = "Dato";

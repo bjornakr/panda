@@ -26,7 +26,7 @@ public class YouthTable extends DefaultAbstractTableModel {
 	headerColumns[TARGET_ID] = "ID-kode";
 	headerColumns[STATUS] = "Status";
 	headerColumns[REGION] = "Region";
-	headerColumns[GENDER] = "Kjønn";
+	headerColumns[GENDER] = "KjÃ¸nn";
 	headerColumns[FIRST_NAME] = "Fornavn";
 	headerColumns[LAST_NAME] = "Etternavn";
 	headerColumns[TREATMENT_GROUP] = "Gruppe";

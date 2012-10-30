@@ -13,55 +13,64 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class QuestionnaireEventTableController extends AbstractTableController {
-    private QuestionnaireEventTable tableModel = new QuestionnaireEventTable();
-    private DefaultTablePanel view;
-    
-    public QuestionnaireEventTableController() {
-	super("Hendelser");
-	view = new DefaultTablePanel(this, null);
-    }
+	private QuestionnaireEventTable tableModel = new QuestionnaireEventTable();
+	private DefaultTablePanel view;
 
-    @Override
-    public DefaultTablePanel view() {
-	return view;
-    }
-    
-    @Override
-    public DefaultAbstractTableModel tableModel() {
-	return tableModel;
-    }
+	public QuestionnaireEventTableController() {
+		super("Hendelser");
+		view = new DefaultTablePanel(this, null);
+	}
 
-    @Override
-    protected String getWarningBeforeDelete() {
-	return null;
-    }
+	@Override
+	public DefaultTablePanel view() {
+		return view;
+	}
 
-    public List<QuestionnaireEvent> allModels() {
-	List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
-	for (Model model : tableModel.allModels()) {
-	    models.add((QuestionnaireEvent)model);
+	@Override
+	public DefaultAbstractTableModel tableModel() {
+		return tableModel;
 	}
-	return models;
-    }
-    
-    @Override
-    protected List<? extends Model> retrieveModelsForCurrentConditions() {
-	return allModels();
-    }    
-    
-    @Override
-    public void evaluateActionEvent(ActionEvent event) {
-	if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-	    QuestionnaireEventController questionnaireEventController = new QuestionnaireEventController(view.getWindow(), null);
-	    if (questionnaireEventController.model() != null) {
-		tableModel.addRow(questionnaireEventController.model());
-	    }
+
+	@Override
+	protected String getWarningBeforeDelete() {
+		return null;
 	}
-	else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
-	    new QuestionnaireEventController(view.getWindow(), (QuestionnaireEvent)modelForSelectedTableRow());
-	    updateTableModel();
+
+	public List<QuestionnaireEvent> allModels() {
+		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
+		for (Model model : tableModel.allModels()) {
+			models.add((QuestionnaireEvent)model);
+		}
+		return models;
 	}
-    }
+
+	@Override
+	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+		return allModels();
+	}
+
+	public List<QuestionnaireEvent> currentModels() {
+		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
+		for (Model model : tableModel.allModels()) {
+			models.add((QuestionnaireEvent)model);
+		}
+		return models;
+	}
+
+	@Override
+	public void evaluateActionEvent(ActionEvent event) {
+		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)
+				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
+			QuestionnaireEventController questionnaireEventController = new QuestionnaireEventController(view.getWindow(), null);
+			if (questionnaireEventController.model() != null) {
+				tableModel.addRow(questionnaireEventController.model());
+			}
+		}
+		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
+			new QuestionnaireEventController(view.getWindow(), (QuestionnaireEvent)modelForSelectedTableRow());
+			updateTableModel();
+		}
+	}
 
 
 }

@@ -22,26 +22,26 @@ public class QuestionnairesAndQuestionnaireEvents {
     
     @Test
     public void statusShouldBeRecievedWhenQuestionnaireHasRecieveEvent() {
-	questionnaire.addEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.RECIEVED_FOR_PROCESSING));
+	questionnaire.addQuestionnaireEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.RECIEVED_FOR_PROCESSING));
 	assertEquals(Questionnaire.Statuses.RECIEVED_FOR_PROCESSING, questionnaire.getStatus());
     }
     
     @Test
     public void statusShouldBeGivenUpWhenQuestionnaireHasGivenUpEvent() {
-	questionnaire.addEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.GIVEN_UP));
+	questionnaire.addQuestionnaireEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.GIVEN_UP));
 	assertEquals(Questionnaire.Statuses.GIVEN_UP, questionnaire.getStatus());
     }
     
     @Test
     public void statusShouldBeLostWhenQuestionnaireHasLostEvent() {
-	questionnaire.addEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.LOST));
+	questionnaire.addQuestionnaireEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.LOST));
 	assertEquals(Questionnaire.Statuses.LOST, questionnaire.getStatus());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotHaveMultipleConclusiveEventStatuses() {
-	questionnaire.addEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.PROCESSED));
-	questionnaire.addEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.LOST));
+	questionnaire.addQuestionnaireEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.PROCESSED));
+	questionnaire.addQuestionnaireEvent(new QuestionnaireEvent(QuestionnaireEvent.Types.LOST));
     }
     
 }

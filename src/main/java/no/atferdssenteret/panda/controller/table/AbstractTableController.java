@@ -20,199 +20,199 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener, Observable {
-    //    private DefaultOverviewPanel view;
-    //    private AbstractOverviewTableModel tableModel;
-    //    private Model model;
-    private String title;
+	//    private DefaultOverviewPanel view;
+	//    private AbstractOverviewTableModel tableModel;
+	//    private Model model;
+	private String title;
 
-    private List<Observer> observers;
-    //    private List<Condition> conditionList;
+	private List<Observer> observers;
+	//    private List<Condition> conditionList;
 
-    //    private ObserverCommand childCommand;
+	//    private ObserverCommand childCommand;
 
-    public AbstractTableController(String title) {
-	this.title = title;
-	observers  = new LinkedList<Observer>();	
-    }
-
-    //    @Override
-    public abstract DefaultTablePanel view();
-
-    public abstract DefaultAbstractTableModel tableModel();
-    //    @Override
-    public String title() {
-	return title;
-    }
-
-    protected abstract String getWarningBeforeDelete();
-
-
-
-
-    //    public void setObserverCommand(ObserverCommand childCommand) {
-    //	this.childCommand = childCommand;
-    //    }
-
-//    @Override
-    public boolean isModelInitialized() {
-	if (tableModel() == null) {
-	    return false;
-	}
-	return (tableModel().getRowCount() > 0);
-    }
-
-    //    @Override
-//    public void updateTableModel(List<? extends Model> data) {
-//	view().setWaitingState();
-//	//	conditionList = view.getSelectedFilterConditions();
-//	tableModel().setModels(data);
-//	setButtonEnabledStates();
-//	view().endWaitingState();
-//	view().revalidate();
-//    }
-    
-    public void updateTableModel() {
-	view().setWaitingState();
-	//	conditionList = view.getSelectedFilterConditions();
-	tableModel().setModels(retrieveModelsForCurrentConditions());
-	setButtonEnabledStates();
-	view().endWaitingState();
-	view().revalidate();
-    }
-
-    protected abstract List<? extends Model> retrieveModelsForCurrentConditions();  
-
-//    public List
-    
-    public abstract void evaluateActionEvent(ActionEvent event);
-
-    @Override
-    public void addObserver(Observer o) {
-	observers.add(o);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent event) {
-	//	if (event.getSource() instanceof JComboBox) {
-	//	    updateModel();
-	//	}
-	//
-	//	try {
-	//	    if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-	//		String[] options = {"Slett", "Avbryt"};
-	//
-	//		int answer = JOptionPane.showOptionDialog(view,
-	//			StringParser.splitString(getWarningBeforeDelete(), 80, 0),
-	//			"Slett " + getTitle(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-	//			null, options, options[1]);
-	//		
-	//		if (options[answer].equals("Avbryt")) {
-	//		    return;
-	//		}
-	//	    }
-
-	if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-	    JPATransactor.getInstance().transaction().begin();
-	    JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
-	    JPATransactor.getInstance().transaction().commit();
-	    tableModel().deleteRow(modelForSelectedTableRow());
+	public AbstractTableController(String title) {
+		this.title = title;
+		observers  = new LinkedList<Observer>();	
 	}
 
-	evaluateActionEvent(event);
-	tableModel().fireTableDataChanged();
-	//	}
-	//	catch (IllegalArgumentException e) {
-	//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
-	//	}
-	//	catch (IllegalStateException e) {
-	//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
-	//	}
-	//	catch (Exception e) {
-	//	    e.printStackTrace();
-	//	    new ErrorMessageDialog(e.getMessage(), e, view.getWindow());
-	//	}
-    }    
+	//    @Override
+	public abstract DefaultTablePanel view();
 
-    /**
-     *  Some buttons should be enabled or disabled depending
-     *  if there are at least one selected row in the table.
-     */
-    protected void setButtonEnabledStates() {
-	//	List<JButton> buttons = getButtons();
-	//	if (buttons == null) return;
-	boolean hasSelection = view().selectedTableRow() >= 0;
-	for (JButton button : view().buttons()) {
-	    if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
-		button.setEnabled(hasSelection);
-	    }
-	    else if (button.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-		button.setEnabled(hasSelection);
-	    }
-	    else if (button.getActionCommand().equals("ASSIGN")) {
-		button.setEnabled(hasSelection);
-	    }
+	public abstract DefaultAbstractTableModel tableModel();
+	//    @Override
+	public String title() {
+		return title;
 	}
-    }
 
-    @Override
-    public void valueChanged(ListSelectionEvent event) {
-	//	System.out.println("Columns:");
-	//	Object[] columns = tableModel().rowAt(view().selectedTableRow());
-	//	for (Object o : columns) {
-	//	    System.out.println(o);	    
-	//	}
-	//	System.out.println("Data:");
-	//	System.out.println(tableModel().metadataAt(view().selectedTableRow()));
+	protected abstract String getWarningBeforeDelete();
 
 
 
-	//	Model selectedModel = getModelForSelectedTableRow();
-	//	if (event.getSource() instanceof ListSelectionModel
-	//		&& selectedModel != null
-	//		&& selectedModel instanceof ChildIDCarrier) {
-	//	    ChildIDCarrier childIDCarrier = (ChildIDCarrier)getModelForSelectedTableRow();
 
-	//	    childCommand = new ObserverCommand(childIDCarrier.getChildID(), Command.DISPLAY_CHILD_ID);
-	//	    notifyObservers();
-	//	}
+	//    public void setObserverCommand(ObserverCommand childCommand) {
+	//	this.childCommand = childCommand;
+	//    }
 
-
-	setButtonEnabledStates();
-	//	view.updateTableCounters();
-
-    }
-
-    public Model modelForSelectedTableRow() {
-	if (view().selectedTableRow() < 0) {
-	    return null;
+	//    @Override
+	public boolean isModelInitialized() {
+		if (tableModel() == null) {
+			return false;
+		}
+		return (tableModel().getRowCount() > 0);
 	}
-	return (Model)tableModel().metadataAt(view().selectedTableRow());
-    }
 
+	//    @Override
+	//    public void updateTableModel(List<? extends Model> data) {
+	//	view().setWaitingState();
+	//	//	conditionList = view.getSelectedFilterConditions();
+	//	tableModel().setModels(data);
+	//	setButtonEnabledStates();
+	//	view().endWaitingState();
+	//	view().revalidate();
+	//    }
 
-    @Override
-    public void mouseClicked(MouseEvent event) {
-	if (event.getClickCount() >= 2) {
-	    evaluateActionEvent(new ActionEvent(event.getSource(), event.getID(), ButtonUtil.COMMAND_DOUBLE_CLICK));
+	public void updateTableModel() {
+		view().setWaitingState();
+		//	conditionList = view.getSelectedFilterConditions();
+		tableModel().setModels(retrieveModelsForCurrentConditions());
+		setButtonEnabledStates();
+		view().endWaitingState();
+		view().revalidate();
 	}
-    }
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-    }
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-    }
 
-    @Override
-    public void notifyObservers() {
-	for (Observer o : observers) {
-	    o.update(null, null);
+	protected abstract List<? extends Model> retrieveModelsForCurrentConditions();  
+
+	//    public List
+
+	public abstract void evaluateActionEvent(ActionEvent event);
+
+	@Override
+	public void addObserver(Observer o) {
+		observers.add(o);
 	}
-    }
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		//	if (event.getSource() instanceof JComboBox) {
+		//	    updateModel();
+		//	}
+		//
+		//	try {
+		//	    if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+		//		String[] options = {"Slett", "Avbryt"};
+		//
+		//		int answer = JOptionPane.showOptionDialog(view,
+		//			StringParser.splitString(getWarningBeforeDelete(), 80, 0),
+		//			"Slett " + getTitle(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+		//			null, options, options[1]);
+		//		
+		//		if (options[answer].equals("Avbryt")) {
+		//		    return;
+		//		}
+		//	    }
+
+		if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+			JPATransactor.getInstance().transaction().begin();
+			JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
+			JPATransactor.getInstance().transaction().commit();
+			tableModel().deleteRow(modelForSelectedTableRow());
+		}
+
+		evaluateActionEvent(event);
+		tableModel().fireTableDataChanged();
+		//	}
+		//	catch (IllegalArgumentException e) {
+		//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
+		//	}
+		//	catch (IllegalStateException e) {
+		//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
+		//	}
+		//	catch (Exception e) {
+		//	    e.printStackTrace();
+		//	    new ErrorMessageDialog(e.getMessage(), e, view.getWindow());
+		//	}
+	}    
+
+	/**
+	 *  Some buttons should be enabled or disabled depending
+	 *  if there are at least one selected row in the table.
+	 */
+	protected void setButtonEnabledStates() {
+		//	List<JButton> buttons = getButtons();
+		//	if (buttons == null) return;
+		boolean hasSelection = view().selectedTableRow() >= 0;
+		for (JButton button : view().buttons()) {
+			if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
+				button.setEnabled(hasSelection);
+			}
+			else if (button.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+				button.setEnabled(hasSelection);
+			}
+			else if (button.getActionCommand().equals("ASSIGN")) {
+				button.setEnabled(hasSelection);
+			}
+		}
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event) {
+		//	System.out.println("Columns:");
+		//	Object[] columns = tableModel().rowAt(view().selectedTableRow());
+		//	for (Object o : columns) {
+		//	    System.out.println(o);	    
+		//	}
+		//	System.out.println("Data:");
+		//	System.out.println(tableModel().metadataAt(view().selectedTableRow()));
+
+
+
+		//	Model selectedModel = getModelForSelectedTableRow();
+		//	if (event.getSource() instanceof ListSelectionModel
+		//		&& selectedModel != null
+		//		&& selectedModel instanceof ChildIDCarrier) {
+		//	    ChildIDCarrier childIDCarrier = (ChildIDCarrier)getModelForSelectedTableRow();
+
+		//	    childCommand = new ObserverCommand(childIDCarrier.getChildID(), Command.DISPLAY_CHILD_ID);
+		//	    notifyObservers();
+		//	}
+
+
+		setButtonEnabledStates();
+		//	view.updateTableCounters();
+
+	}
+
+	public Model modelForSelectedTableRow() {
+		if (view().selectedTableRow() < 0) {
+			return null;
+		}
+		return (Model)tableModel().metadataAt(view().selectedTableRow());
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (event.getClickCount() >= 2) {
+			evaluateActionEvent(new ActionEvent(event.getSource(), event.getID(), ButtonUtil.COMMAND_DOUBLE_CLICK));
+		}
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+	}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (Observer o : observers) {
+			o.update(null, null);
+		}
+	}
 }

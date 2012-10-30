@@ -15,42 +15,44 @@ import no.atferdssenteret.panda.view.TabsAndTablesPanel;
 import no.atferdssenteret.panda.view.YouthPanel;
 
 public class YouthOverviewController extends AbstractTabsAndTablesController {
-    private YouthPanel view;
-    private Youth model;
-    private List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
-    
-    public YouthOverviewController(Window parentWindow, Youth model) {
-	this.model = model;
-	
-	createTableControllers();
-	TabsAndTablesPanel tabsAndTablesPanel = new TabsAndTablesPanel(this, tableControllers);
-	view = new YouthPanel(this, model, tabsAndTablesPanel);
-    }
-    
-    @Override
-    public Component view() {
-	return view;
-    }
+	private YouthPanel view;
+	private Youth model;
+	private List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
 
-    private List<AbstractTableController> createTableControllers() {
-//	List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
-	tableControllers.add(new DataCollectionTableController(model));
-	tableControllers.add(new ParticipantTableController());
-	return tableControllers;
-    }
+	public YouthOverviewController(Window parentWindow, Youth model) {
+		this.model = model;
 
-    @Override
-    public String title() {
-	return "U ID " + model.getId();
-    }
+		createTableControllers();
+		TabsAndTablesPanel tabsAndTablesPanel = new TabsAndTablesPanel(this, tableControllers);
+		view = new YouthPanel(this, model, tabsAndTablesPanel);
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-    }
+	@Override
+	public Component view() {
+		return view;
+	}
 
-    @Override
-    public List<AbstractTableController> tableControllers() {
-	return tableControllers;
-    }
+	private List<AbstractTableController> createTableControllers() {
+		//	List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
+		DataCollectionTableController dataCollectionTableController = new DataCollectionTableController(model);
+		dataCollectionTableController.updateTableModel();
+		tableControllers.add(dataCollectionTableController);
+		tableControllers.add(new ParticipantTableController());
+		return tableControllers;
+	}
+
+	@Override
+	public String title() {
+		return "U ID " + model.getId();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	}
+
+	@Override
+	public List<AbstractTableController> tableControllers() {
+		return tableControllers;
+	}
 
 }

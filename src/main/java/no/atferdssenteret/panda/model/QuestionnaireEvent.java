@@ -2,6 +2,7 @@ package no.atferdssenteret.panda.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,10 +15,12 @@ public class QuestionnaireEvent implements Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private Questionnaire questionnaire;
+    @Column(nullable = false)
     private Date date;
+    @Column(nullable = false)
     private Types type;
     private String comment;
-    private Questionnaire questionnaire;
 
     public QuestionnaireEvent() {	
 	// Dummy constructor for JPA

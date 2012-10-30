@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="1.341" errors="0" skipped="0" tests="7" name="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
+    <property name="java.vm.version" value="20.12-b01-434"/>
+    <property name="awt.nativeDoubleBuffering" value="true"/>
+    <property name="gopherProxySet" value="false"/>
+    <property name="mrj.build" value="11M3909"/>
+    <property name="java.vm.vendor" value="Apple Inc."/>
+    <property name="java.vendor.url" value="http://www.apple.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/bjornakr/Code/maven/panda"/>
+    <property name="java.runtime.version" value="1.6.0_37-b06-434-11M3909"/>
+    <property name="java.awt.graphicsenv" value="apple.awt.CGraphicsEnvironment"/>
+    <property name="basedir" value="/Users/bjornakr/Code/maven/panda"/>
+    <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="surefire.real.class.path" value="/Users/bjornakr/Code/maven/panda/target/surefire/surefirebooter8415125453306221198.jar"/>
+    <property name="java.io.tmpdir" value="/var/folders/9f/y913thlj6wv67gjj_5001qx00000gn/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="sun.jnu.encoding" value="MacRoman"/>
+    <property name="java.library.path" value=".:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java"/>
+    <property name="surefire.test.class.path" value="/Users/bjornakr/Code/maven/panda/target/test-classes:/Users/bjornakr/Code/maven/panda/target/classes:/Users/bjornakr/.m2/repository/junit/junit/4.10/junit-4.10.jar:/Users/bjornakr/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/Users/bjornakr/.m2/repository/org/mockito/mockito-all/1.9.0/mockito-all-1.9.0.jar:/Users/bjornakr/.m2/repository/org/eclipse/persistence/eclipselink/2.0.0/eclipselink-2.0.0.jar:/Users/bjornakr/.m2/repository/org/eclipse/persistence/javax.persistence/2.0.0/javax.persistence-2.0.0.jar:/Users/bjornakr/.m2/repository/mysql/mysql-connector-java/5.1.20/mysql-connector-java-5.1.20.jar:/Users/bjornakr/.m2/repository/com/googlecode/windowlicker/windowlicker-swing/r268/windowlicker-swing-r268.jar:/Users/bjornakr/.m2/repository/com/googlecode/windowlicker/windowlicker-core/r268/windowlicker-core-r268.jar:/Users/bjornakr/.m2/repository/org/hamcrest/hamcrest-all/1.1/hamcrest-all-1.1.jar:"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.8.2"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/bjornakr"/>
+    <property name="user.timezone" value="Europe/Oslo"/>
+    <property name="java.awt.printerjob" value="apple.awt.CPrinterJob"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="file.encoding" value="MacRoman"/>
+    <property name="user.name" value="bjornakr"/>
+    <property name="java.class.path" value="/Users/bjornakr/Code/maven/panda/target/test-classes:/Users/bjornakr/Code/maven/panda/target/classes:/Users/bjornakr/.m2/repository/junit/junit/4.10/junit-4.10.jar:/Users/bjornakr/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/Users/bjornakr/.m2/repository/org/mockito/mockito-all/1.9.0/mockito-all-1.9.0.jar:/Users/bjornakr/.m2/repository/org/eclipse/persistence/eclipselink/2.0.0/eclipselink-2.0.0.jar:/Users/bjornakr/.m2/repository/org/eclipse/persistence/javax.persistence/2.0.0/javax.persistence-2.0.0.jar:/Users/bjornakr/.m2/repository/mysql/mysql-connector-java/5.1.20/mysql-connector-java-5.1.20.jar:/Users/bjornakr/.m2/repository/com/googlecode/windowlicker/windowlicker-swing/r268/windowlicker-swing-r268.jar:/Users/bjornakr/.m2/repository/com/googlecode/windowlicker/windowlicker-core/r268/windowlicker-core-r268.jar:/Users/bjornakr/.m2/repository/org/hamcrest/hamcrest-all/1.1/hamcrest-all-1.1.jar:"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"/>
+    <property name="sun.java.command" value="/Users/bjornakr/Code/maven/panda/target/surefire/surefirebooter8415125453306221198.jar /Users/bjornakr/Code/maven/panda/target/surefire/surefire63225667703675712tmp /Users/bjornakr/Code/maven/panda/target/surefire/surefire4503659676166748219tmp"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="apple.awt.CToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0_37"/>
+    <property name="java.ext.dirs" value="/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/ext"/>
+    <property name="sun.boot.class.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsfd.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/laf.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/sunrsasign.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar"/>
+    <property name="java.vendor" value="Apple Inc."/>
+    <property name="localRepository" value="/Users/bjornakr/.m2/repository"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.apple.com/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="mrj.version" value="1070.1.6.0_37-434"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="1.212" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="dataCollectionManagerGetsNotifiedWhenTargetIsCreated"/>
+  <testcase time="0.025" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="dataCollectionIsCreatedAfterTargetIsCreatedAccordingToRule"/>
+  <testcase time="0.018" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="dataCollectionsAreCreatedAfterTargetIsUpdatedAccordingToRules"/>
+  <testcase time="0.012" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="targetDateOfAutogeneratedDataCollectionIsCorrect"/>
+  <testcase time="0.019" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="updatesExistingInsteadOfCreatingNewDataCollection"/>
+  <testcase time="0.008" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="ruleIsIgnoredWhenPrerequisiteFieldsAreNotSet"/>
+  <testcase time="0.012" classname="no.atferdssenteret.panda.persistence.DataCollectionAutomaticCreationTest" name="GeneratedDataCollectionsAreAssignedToSameDataCollectorAsTarget"/>
+</testsuite>

@@ -16,8 +16,8 @@ public class DataCollector implements Model {
     private long id;
     private String firstName;
     
-    @OneToMany(mappedBy="dataCollector")
-    private List<Target> targets = new LinkedList<Target>();
+//    @OneToMany(mappedBy="dataCollector")
+//    private List<Target> targets = new LinkedList<Target>();
     @OneToMany(mappedBy="dataCollector")
     private List<DataCollection> dataCollections = new LinkedList<DataCollection>();
     
@@ -37,13 +37,13 @@ public class DataCollector implements Model {
 	this.firstName = firstName;
     }
 
-    public List<Target> getTargets() {
-	return targets;
-    }
-
-    public void setTargets(List<Target> targets) {
-	this.targets = targets;
-    }
+//    public List<Target> getTargets() {
+//	return targets;
+//    }
+//
+//    public void setTargets(List<Target> targets) {
+//	this.targets = targets;
+//    }
 
     public List<DataCollection> getDataCollections() {
 	return dataCollections;

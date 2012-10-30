@@ -11,17 +11,21 @@ import javax.swing.event.ChangeListener;
 import no.atferdssenteret.panda.controller.table.AbstractTableController;
 
 public class TabsAndTablesPanel extends JPanel {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbedPane = new JTabbedPane();
 
-    public TabsAndTablesPanel(ChangeListener changeListener, List<AbstractTableController> controllers) {
-	JTabbedPane tabbedPane = new JTabbedPane();
+	public TabsAndTablesPanel(ChangeListener changeListener, List<AbstractTableController> controllers) {
 
-	for (AbstractTableController controller : controllers) {    
-	    tabbedPane.addTab(controller.title(), controller.view());
-	}	
-	setLayout(new BorderLayout());
-	tabbedPane.setBackground(new Color(0xE5C0F3));
-	add(tabbedPane, BorderLayout.CENTER);
-	tabbedPane.addChangeListener(changeListener);
-    }    
+		for (AbstractTableController controller : controllers) {    
+			tabbedPane.addTab(controller.title(), controller.view());
+		}	
+		setLayout(new BorderLayout());
+		tabbedPane.setBackground(new Color(0xE5C0F3));
+		add(tabbedPane, BorderLayout.CENTER);
+		tabbedPane.addChangeListener(changeListener);
+	}
+	
+	public JTabbedPane tabbedPane() {
+		return tabbedPane;
+	}
 }

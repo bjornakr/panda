@@ -57,7 +57,7 @@ public class YouthDialog extends JDialog {
 	add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), c);
 
 	labelsAndFields = new LinkedList<LabelFieldPair>();
-	labelsAndFields.add(new LabelFieldPair(new JLabel("Kjønn"), cboxGenders));
+	labelsAndFields.add(new LabelFieldPair(new JLabel("KjÃ¸nn"), cboxGenders));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Region"), cboxRegions));

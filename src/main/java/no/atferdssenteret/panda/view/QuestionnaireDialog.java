@@ -34,7 +34,7 @@ public class QuestionnaireDialog extends JDialog {
 	setLayout(new GridBagLayout());
 	
 	List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-	labelsAndFields.add(new LabelFieldPair(new JLabel("Spørreskjema"), cboxName));
+	labelsAndFields.add(new LabelFieldPair(new JLabel("SpÃ¸rreskjema"), cboxName));
 	add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 	questionnaireEventPanel.setTableHeight(100);
 	questionnaireEventPanel.showCounters(false);
