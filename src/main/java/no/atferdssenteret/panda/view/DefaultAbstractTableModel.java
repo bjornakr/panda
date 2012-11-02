@@ -130,6 +130,12 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel imple
 		fireTableDataChanged();
 	}
 
+	public void update(Model model) {
+		rows.remove(new TableRow(dataColumns(model), model));
+		rows.add(new TableRow(dataColumns(model), model));
+		fireTableDataChanged();
+	}
+	
 	public List<Model> allModels() {	
 		List<Model> models = new LinkedList<Model>();
 		for (TableRow tableRow : rows) {

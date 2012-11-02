@@ -4,9 +4,8 @@ PANDA
 
 WORKING ON...
 -------------
-* DataCollections
-* Questionnaires
-* QuestionnaireEvents
-* ...and the interaction between them
+* Need to figure out respondent roles
+* Filters for tables
+
 
 

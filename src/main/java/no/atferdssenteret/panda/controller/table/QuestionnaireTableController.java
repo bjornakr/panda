@@ -69,8 +69,9 @@ public class QuestionnaireTableController extends AbstractTableController {
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
-			new QuestionnaireController(view.getWindow(), (Questionnaire)modelForSelectedTableRow());
-			updateTableModel();
+			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
+			new QuestionnaireController(view.getWindow(), model);
+			tableModel.update(model);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.view;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 import java.awt.event.ActionListener;
@@ -9,44 +10,56 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class QuestionnaireDialog extends JDialog {
-    private static final long serialVersionUID = 1L;
-    private ActionListener actionListener;
-    private DefaultTablePanel questionnaireEventPanel;
-    private JComboBox cboxName = new JComboBox(QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
+	private static final long serialVersionUID = 1L;
+	private ActionListener actionListener;
+	private DefaultTablePanel questionnaireEventView;
+	private JComboBox cboxName = new JComboBox(QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
 
-    public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireEventPanel) {
-	this.actionListener = actionListener;
-	this.questionnaireEventPanel = questionnaireEventPanel;
-	setModalityType(ModalityType.APPLICATION_MODAL);
-	layoutContent();
-	pack();
-	setLocationRelativeTo(parentWindow);
-    }
+	public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireEventPanel) {
+		this.actionListener = actionListener;
+		this.questionnaireEventView = questionnaireEventPanel;
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		layoutContent();
+		pack();
+		setLocationRelativeTo(parentWindow);
+	}
 
-    private void layoutContent() {
-	setLayout(new GridBagLayout());
+	private void layoutContent() {
+		setLayout(new GridBagLayout());
+
+		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
+		labelsAndFields.add(new LabelFieldPair(new JLabel("Spørreskjema"), cboxName));
+		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
+		questionnaireEventView.setTableHeight(100);
+		questionnaireEventView.showCounters(false);
+		add(createQuestionnaireEventPanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
+		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(2));
+	}
+
+	private JPanel createQuestionnaireEventPanel() {
+		JPanel questionnaireEventPanel = new JPanel();
+		questionnaireEventPanel.setLayout(new BorderLayout());
+		questionnaireEventView.setTableHeight(100);
+		questionnaireEventView.showCounters(false);
+		questionnaireEventPanel.add(questionnaireEventView, BorderLayout.CENTER);
+		questionnaireEventPanel.setBorder(GuiUtil.createTitledBorder("Hendelser"));
+		return questionnaireEventPanel;
+	}
 	
-	List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-	labelsAndFields.add(new LabelFieldPair(new JLabel("Spørreskjema"), cboxName));
-	add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
-	questionnaireEventPanel.setTableHeight(100);
-	questionnaireEventPanel.showCounters(false);
-	add(questionnaireEventPanel, GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
-	add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(2));
-    }
-    
-    public Object getQuestionnaireName() {
-	return cboxName.getSelectedItem();
-    }
-    
-    public void setQuestionnaireName(String name) {
-	cboxName.setSelectedItem(name);
-    }
+	public Object getQuestionnaireName() {
+		return cboxName.getSelectedItem();
+	}
+
+	public void setQuestionnaireName(String name) {
+		cboxName.setSelectedItem(name);
+	}
 }

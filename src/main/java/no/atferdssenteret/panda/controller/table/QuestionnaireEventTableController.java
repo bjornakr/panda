@@ -59,18 +59,17 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
-		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)
-				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
+		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			QuestionnaireEventController questionnaireEventController = new QuestionnaireEventController(view.getWindow(), null);
 			if (questionnaireEventController.model() != null) {
 				tableModel.addRow(questionnaireEventController.model());
 			}
 		}
-		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
-			new QuestionnaireEventController(view.getWindow(), (QuestionnaireEvent)modelForSelectedTableRow());
-			updateTableModel();
+		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
+				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
+			QuestionnaireEvent model = (QuestionnaireEvent)modelForSelectedTableRow();
+			new QuestionnaireEventController(view.getWindow(), model);
+			tableModel.update(model);
 		}
 	}
-
-
 }

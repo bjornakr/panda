@@ -10,6 +10,9 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import no.atferdssenteret.panda.model.Participant;
+import no.atferdssenteret.panda.model.Participant.Statuses;
+import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
@@ -19,8 +22,8 @@ import no.atferdssenteret.panda.view.util.LabelFieldPair;
 public class ParticipantDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private ActionListener actionListener;
-    private String[] roles = {"Mor eller annen kvinnelig forsørger", "Far eller annen mannlig forsørger", "Lærer", "Intervensjonist"}; // TODO: Find a better way
-    private JComboBox cboxRole = new JComboBox(roles);
+    private JComboBox cboxRoles = new JComboBox(ParticipantRoles.allRoles());
+    private JComboBox cboxStatuses = new JComboBox(Participant.Statuses.values());
     private DefaultTextField txtFirstName = new DefaultTextField();
     private DefaultTextField txtLastName = new DefaultTextField();
     private DefaultTextArea txtContactInfo = new DefaultTextArea();
@@ -41,7 +44,8 @@ public class ParticipantDialog extends JDialog {
 	setLayout(new GridBagLayout());
 	
 	List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-	labelsAndFields.add(new LabelFieldPair(new JLabel("Deltaker"), cboxRole));
+	labelsAndFields.add(new LabelFieldPair(new JLabel("Deltaker"), cboxRoles));
+	labelsAndFields.add(new LabelFieldPair(new JLabel("Status"), cboxStatuses));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
 	labelsAndFields.add(new LabelFieldPair(new JLabel("Tlf. nr"), txtTlfNo));
@@ -101,10 +105,19 @@ public class ParticipantDialog extends JDialog {
     }
 
     public Object getRole() {
-	return cboxRole.getSelectedItem();
+	return cboxRoles.getSelectedItem();
     }
 
     public void setRole(String role) {
-	cboxRole.setSelectedItem(role);
+	cboxRoles.setSelectedItem(role);
     }
+
+	public void setStatus(Statuses status) {
+		cboxStatuses.setSelectedItem(status);
+		
+	}
+	
+	public Object getStatus() {
+		return cboxStatuses.getSelectedItem();
+	}
 }

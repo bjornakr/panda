@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.view;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 import java.awt.event.ActionListener;
@@ -10,12 +11,13 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class DataCollectionDialog extends JDialog {
@@ -43,17 +45,26 @@ public class DataCollectionDialog extends JDialog {
 		setLayout(new GridBagLayout());
 
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Type"), cboxTypes));
+		labelsAndFields.add(new LabelFieldPair(new JLabel("Datainnsamling"), cboxTypes));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Måldato"), txtTargetDate));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Framdrift"), cboxProgressStatuses));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtProgressDate));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
-		questionnaireView.setTableHeight(100);
-		questionnaireView.showCounters(false);
-		add(questionnaireView, GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
+		add(createQuestionnairePanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(2));	
 	}
 
+	private JPanel createQuestionnairePanel() {
+		JPanel questionnairePanel = new JPanel();
+		questionnairePanel.setLayout(new BorderLayout());
+		questionnaireView.setTableHeight(100);
+		questionnaireView.showCounters(false);
+		questionnairePanel.add(questionnaireView, BorderLayout.CENTER);
+		questionnairePanel.setBorder(GuiUtil.createTitledBorder("Spørreskjemaer"));
+		return questionnairePanel;
+	}
+	
+	
 	public Object getType() {
 		return cboxTypes.getSelectedItem();
 	}
