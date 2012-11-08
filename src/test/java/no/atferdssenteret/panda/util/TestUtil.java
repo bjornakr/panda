@@ -22,7 +22,7 @@ public class TestUtil {
     private static Target createBasicTarget() {
 	Target target = new Target();
 	target.setFirstName("Kalle");
-	target.setLastName("Trusenøff");
+	target.setLastName("TrusenÃ¸ff");
 	return target;
     }
     

@@ -1,14 +1,12 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.Predicate;
 
-import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.controller.ParticipantController;
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.table.ParticipantTable;
@@ -53,7 +51,7 @@ public class ParticipantTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
 		return allModels();
 	}
 

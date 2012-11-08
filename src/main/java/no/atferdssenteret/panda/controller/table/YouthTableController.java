@@ -3,11 +3,14 @@ package no.atferdssenteret.panda.controller.table;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
+import no.atferdssenteret.panda.filter.YouthFilterCreator;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
@@ -25,9 +28,8 @@ public class YouthTableController extends AbstractTableController {
 	public YouthTableController(MainController mainController) {
 		super("Targets");
 		this.mainController = mainController;
-		view = new DefaultTablePanel(this, null);
+		view = new DefaultTablePanel(this, new YouthFilterCreator());
 	}
-
 
 	@Override
 	public DefaultTablePanel view() {
@@ -44,29 +46,37 @@ public class YouthTableController extends AbstractTableController {
 		return null;
 	}
 
-	public List<Youth> allModels() {
-		System.err.println("WHOOP?");
-		TypedQuery<Youth> query = JPATransactor.getInstance().entityManager().createQuery("SELECT y FROM Youth y", Youth.class);
-		return query.getResultList();
+//	public List<Youth> allModels() {
+//		TypedQuery<Youth> query = JPATransactor.getInstance().entityManager().createQuery("SELECT y FROM Youth y", Youth.class);
+//		return query.getResultList();
+//
+//		//	List<Youth> models = new LinkedList<Youth>();
+//		//	for (Model model : tableModel.allModels()) {
+//		//	    models.add((Youth)model);
+//		//	}
+//		//	return models;
+//	}
 
-		//	List<Youth> models = new LinkedList<Youth>();
-		//	for (Model model : tableModel.allModels()) {
-		//	    models.add((Youth)model);
-		//	}
-		//	return models;
-	}
-
+//	@Override
+//	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+//		return allModels();
+//	}
+	
 	@Override
-	protected List<? extends Model> retrieveModelsForCurrentConditions() {
-		return allModels();
-	}    
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+		CriteriaQuery<Youth> criteriaQuery = criteriaBuilder.createQuery(Youth.class);
+		criteriaQuery.where(predicates);
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			YouthController youthController = new YouthController(view.getWindow(), null);
 			if (youthController.model() != null) {
-				tableModel.addRow(youthController.model());
+//				tableModel.addRow(youthController.model());
+				updateTableModel();
 			}
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {

@@ -8,7 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
+import javax.persistence.criteria.Predicate;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -74,13 +76,23 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	public void updateTableModel() {
 		view().setWaitingState();
 		//	conditionList = view.getSelectedFilterConditions();
-		tableModel().setModels(retrieveModelsForCurrentConditions());
+		Predicate[] predicates = new Predicate[view().selectedFilterPredicates().size()];
+		view().selectedFilterPredicates().toArray(predicates);
+		tableModel().setModels(retrieve(predicates));
 		setButtonEnabledStates();
 		view().endWaitingState();
 		view().revalidate();
 	}
 
-	protected abstract List<? extends Model> retrieveModelsForCurrentConditions();  
+	//	protected abstract List<? extends Model> retrieveModelsForCurrentConditions();
+	protected abstract List<? extends Model> retrieve(Predicate[] predicates); 
+	//	protected List<? extends Model> retrieve(List<FilterUnit> filterUnits) {
+	//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+	//		CriteriaQuery<Target> criteriaQuery = criteriaBuilder.createQuery(Target.class);
+	//		Root<Target> targetRoot = criteriaQuery.from(Target.class);
+	//		criteriaQuery.select(targetRoot);
+	//		criteriaQuery.where(criteriaBuilder.equal(targetRoot.get("status"), Target.Statuses.PARTICIPATING));
+	//	}
 
 	//    public List
 
@@ -93,9 +105,9 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		//	if (event.getSource() instanceof JComboBox) {
-		//	    updateModel();
-		//	}
+		if (event.getSource() instanceof JComboBox) {
+			updateTableModel();
+		}
 		//
 		//	try {
 		//	    if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
@@ -119,7 +131,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		}
 
 		evaluateActionEvent(event);
-		tableModel().fireTableDataChanged();
+		//		tableModel().fireTableDataChanged();
 		//	}
 		//	catch (IllegalArgumentException e) {
 		//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());

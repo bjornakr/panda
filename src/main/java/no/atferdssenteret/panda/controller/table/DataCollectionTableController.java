@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.Predicate;
 
 import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.model.DataCollection;
@@ -58,7 +59,7 @@ public class DataCollectionTableController extends AbstractTableController {
 	
 
 	@Override
-	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
 		if (target != null) {
 			return modelsForTarget(target.getId());
 		}

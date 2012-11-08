@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.criteria.Predicate;
+
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
@@ -45,7 +47,7 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
 		return allModels();
 	}
 

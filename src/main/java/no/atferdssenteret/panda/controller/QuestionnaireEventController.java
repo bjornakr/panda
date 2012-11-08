@@ -6,7 +6,6 @@ import java.sql.Date;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
-import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.QuestionnaireEventDialog;
 

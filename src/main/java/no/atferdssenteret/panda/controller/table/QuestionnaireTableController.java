@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.Predicate;
 
 import no.atferdssenteret.panda.controller.QuestionnaireController;
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
@@ -47,7 +47,7 @@ public class QuestionnaireTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieveModelsForCurrentConditions() {
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
 		return retrieveAllModels();
 	}    
 

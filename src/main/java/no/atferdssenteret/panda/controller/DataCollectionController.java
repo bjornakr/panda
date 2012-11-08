@@ -7,13 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
-import no.atferdssenteret.panda.controller.ApplicationController.Mode;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DataCollectionDialog;
 

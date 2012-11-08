@@ -17,7 +17,7 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 public class YouthPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private ActionListener controller;
+//    private ActionListener controller;
     private Youth model; 
     private JLabel labStatus = new JLabel();
     private JLabel labRegion = new JLabel();
@@ -27,7 +27,7 @@ public class YouthPanel extends JPanel {
     private DefaultTextArea txtComment = new DefaultTextArea();
 
     public YouthPanel(ActionListener controller, Youth model, TabsAndTablesPanel tabsAndTablesPanel) {
-	this.controller = controller;
+//	this.controller = controller;
 	this.model = model;
 //	this.model.addObserver(this);
 
