@@ -37,7 +37,7 @@ public class ParticipantTable extends DefaultAbstractTableModel {
 	dataColumns[STATUS] = participant.getStatus();
 	dataColumns[FIRST_NAME] = participant.getFirstName();
 	dataColumns[LAST_NAME] = participant.getLastName();
-	dataColumns[TLF_NO] = participant.getTlfNo();
+	dataColumns[TLF_NO] = participant.getPhoneNo();
 	dataColumns[E_MAIL] = participant.getEMail();
 	dataColumns[COMMENT] = participant.getComment();	
 	return dataColumns;

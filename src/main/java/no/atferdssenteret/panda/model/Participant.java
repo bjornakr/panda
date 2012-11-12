@@ -21,7 +21,7 @@ public class Participant implements Model {
     private String firstName;
     private String lastName;
     private String contactInfo;
-    private String tlfNo;
+    private String phoneNo;
     private String eMail;
     private String comment;
     
@@ -57,12 +57,12 @@ public class Participant implements Model {
         this.contactInfo = contactInfo;
     }
     
-    public String getTlfNo() {
-        return tlfNo;
+    public String getPhoneNo() {
+        return phoneNo;
     }
     
-    public void setTlfNo(String tlfNo) {
-        this.tlfNo = tlfNo;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
     
     public String getEMail() {

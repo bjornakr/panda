@@ -22,7 +22,7 @@ import no.atferdssenteret.panda.view.util.LabelFieldPair;
 public class ParticipantDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private ActionListener actionListener;
-    private JComboBox cboxRoles = new JComboBox(ParticipantRoles.allRoles());
+    private JComboBox cboxRoles = new JComboBox(ParticipantRoles.values());
     private JComboBox cboxStatuses = new JComboBox(Participant.Statuses.values());
     private DefaultTextField txtFirstName = new DefaultTextField();
     private DefaultTextField txtLastName = new DefaultTextField();
@@ -80,11 +80,11 @@ public class ParticipantDialog extends JDialog {
         txtContactInfo.setText(contactInfo);
     }
     
-    public String getTlfNo() {
+    public String getPhoneNo() {
         return txtTlfNo.getText();
     }
     
-    public void setTlfNo(String tlfNo) {
+    public void setPhoneNo(String tlfNo) {
         txtTlfNo.setText(tlfNo);
     }
     

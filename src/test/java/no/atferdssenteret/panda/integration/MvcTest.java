@@ -93,7 +93,7 @@ public class MvcTest {
 		participant.setFirstName("Targulf");
 		participant.setLastName("Trugeslesk");
 		participant.setRole("Mor eller annen kvinnelig forsørger");
-		participant.setTlfNo("95 16 61 35");
+		participant.setPhoneNo("95 16 61 35");
 		participant.setEMail("targul@gmail.com");
 		participant.setContactInfo("Knarkesløyfa 3F, 0192 Oslo");
 		participant.setComment("Testing - Ein to tre");

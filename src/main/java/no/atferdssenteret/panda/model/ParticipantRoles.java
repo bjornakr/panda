@@ -6,7 +6,7 @@ public class ParticipantRoles {
 	public final static String INTERVENTIONIST = "Intervensjonist";
 	public final static String TEACHER = "Lærer";
 
-	public static String[] allRoles() {
+	public static String[] values() {
 		String[] allRoles = {MOTHER, FATHER, INTERVENTIONIST, TEACHER};
 		return allRoles;
 	}
