@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -85,7 +87,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	//	protected abstract List<? extends Model> retrieveModelsForCurrentConditions();
-	protected abstract List<? extends Model> retrieve(Predicate[] predicates); 
+//	protected abstract List<? extends Model> retrieve(Predicate[] predicates); 
 	//	protected List<? extends Model> retrieve(List<FilterUnit> filterUnits) {
 	//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
 	//		CriteriaQuery<Target> criteriaQuery = criteriaBuilder.createQuery(Target.class);
@@ -95,6 +97,17 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	//	}
 
 	//    public List
+
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
+		criteriaQuery.where(predicates);
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
+
+	
+	
+	protected abstract Class<? extends Model> getModelClass();
 
 	public abstract void evaluateActionEvent(ActionEvent event);
 

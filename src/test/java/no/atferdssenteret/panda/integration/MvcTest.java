@@ -4,15 +4,14 @@ import java.awt.Window;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.DataCollectionController;
-import no.atferdssenteret.panda.controller.ParticipantController;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Participant;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
-import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.EmptyMainWindow;
@@ -62,10 +61,10 @@ public class MvcTest {
 		new DataCollectionController(mainWindow, null, null);
 	}
 
-	private static void testParticipant(Window mainWindow) {
-		Participant model = createParticipant();
-		new ParticipantController(mainWindow, null);	
-	}
+//	private static void testParticipant(Window mainWindow) {
+//		Participant model = createParticipant();
+//		new ParticipantController(mainWindow, null);	
+//	}
 
 	private static void testYouth(Window mainWindow) {
 		Youth model = createYouthModel();
@@ -82,7 +81,7 @@ public class MvcTest {
 		youth.setLastName("Jones");
 		youth.setComment("Hey Dr. Ukulele man");
 		youth.setRegion(Youth.Regions.STAVANGER);
-		youth.setStatus(Target.Statuses.PARTICIPATING);
+		youth.setStatus(ParticipationStatuses.PARTICIPATING);
 		youth.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
 		youth.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
 		return youth;

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
@@ -23,7 +24,7 @@ import no.atferdssenteret.panda.view.util.LabelFieldPair;
 public class DataCollectionDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
-	private String[] types = {"T1", "T2", "T3"}; // TODO
+	private String[] types = DataCollectionTypes.values();
 	private JComboBox cboxTypes = new JComboBox(types);
 	private DefaultTextField txtTargetDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
 	private JComboBox cboxProgressStatuses = new JComboBox(DataCollection.ProgressStatuses.values());

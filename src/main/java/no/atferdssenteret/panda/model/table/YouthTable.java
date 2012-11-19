@@ -39,7 +39,7 @@ public class YouthTable extends DefaultAbstractTableModel {
     protected Object[] dataColumns(Model model) {
 	Youth target = (Youth)model;
 	Object[] columns = new Object[headerColumns().length];
-	columns[TARGET_ID] = target.getId();
+	columns[TARGET_ID] = target.formattedIdWithLetterAppendix();
 	columns[STATUS] = target.getStatus();
 	columns[REGION] = target.getRegion();
 	columns[GENDER] = target.getGender();

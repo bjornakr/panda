@@ -57,6 +57,7 @@ public class QuestionnaireController extends ApplicationController {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+//		super.actionPerformed(event);
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			transferUserInputToModel();
 			view.dispose();

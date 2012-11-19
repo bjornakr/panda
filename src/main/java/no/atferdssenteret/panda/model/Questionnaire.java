@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,5 +94,15 @@ public class Questionnaire implements Model {
 
 	public String toString() {
 		return "Q: " + name;
+	}
+
+	public QuestionnaireEvent lastEvent() {
+		if (questionnaireEvents != null && questionnaireEvents.size() > 0) {
+			Collections.sort(questionnaireEvents);
+			return questionnaireEvents.get(0);
+		}
+		else {
+			return null;
+		}
 	}
 }

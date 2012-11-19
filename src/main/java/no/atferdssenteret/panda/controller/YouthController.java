@@ -3,7 +3,7 @@ package no.atferdssenteret.panda.controller;
 import java.awt.Window;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StringUtil;
@@ -64,7 +64,7 @@ public class YouthController extends ApplicationController {
 		model.setLastName(StringUtil.groomString(view.getLastName()));
 		model.setGender((Youth.Genders)view.getGender());
 		model.setRegion((Youth.Regions)view.getRegion());
-		model.setStatus((Target.Statuses)view.getStatus());
+		model.setStatus((ParticipationStatuses)view.getStatus());
 		model.setTreatmentGroup((Youth.TreatmentGroups)view.getTreatmentGroup());
 		model.setTreatmentStart(StringUtil.parseDate(view.getTreatmentStart()));
 		model.setComment(StringUtil.groomString(view.getComment()));

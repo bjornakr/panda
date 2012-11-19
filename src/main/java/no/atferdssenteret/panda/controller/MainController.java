@@ -55,9 +55,9 @@ public class MainController extends AbstractTabsAndTablesController implements A
 		if (tableControllers == null) {
 			tableControllers = new LinkedList<AbstractTableController>();
 			tableControllers.add(new YouthTableController(this));
-			tableControllers.add(new ParticipantTableController());
+			tableControllers.add(new ParticipantTableController(null));
 			tableControllers.add(new DataCollectionTableController(null));
-			tableControllers.add(new QuestionnaireTableController());
+			tableControllers.add(new QuestionnaireTableController(null));
 			tableControllers.add(new QuestionnaireEventTableController());
 		}
 		return tableControllers;

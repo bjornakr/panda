@@ -10,9 +10,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import no.atferdssenteret.panda.model.Participant;
-import no.atferdssenteret.panda.model.Participant.Statuses;
 import no.atferdssenteret.panda.model.ParticipantRoles;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
@@ -23,7 +22,7 @@ public class ParticipantDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private ActionListener actionListener;
     private JComboBox cboxRoles = new JComboBox(ParticipantRoles.values());
-    private JComboBox cboxStatuses = new JComboBox(Participant.Statuses.values());
+    private JComboBox cboxStatuses = new JComboBox(ParticipationStatuses.values());
     private DefaultTextField txtFirstName = new DefaultTextField();
     private DefaultTextField txtLastName = new DefaultTextField();
     private DefaultTextArea txtContactInfo = new DefaultTextArea();
@@ -112,7 +111,7 @@ public class ParticipantDialog extends JDialog {
 	cboxRoles.setSelectedItem(role);
     }
 
-	public void setStatus(Statuses status) {
+	public void setStatus(ParticipationStatuses status) {
 		cboxStatuses.setSelectedItem(status);
 		
 	}

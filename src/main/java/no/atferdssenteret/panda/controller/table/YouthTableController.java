@@ -1,21 +1,14 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.filter.YouthFilterCreator;
-import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.table.YouthTable;
-import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -62,13 +55,13 @@ public class YouthTableController extends AbstractTableController {
 //		return allModels();
 //	}
 	
-	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-		CriteriaQuery<Youth> criteriaQuery = criteriaBuilder.createQuery(Youth.class);
-		criteriaQuery.where(predicates);
-		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
-	}
+//	@Override
+//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+//		CriteriaQuery<Youth> criteriaQuery = criteriaBuilder.createQuery(Youth.class);
+//		criteriaQuery.where(predicates);
+//		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+//	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
@@ -89,5 +82,10 @@ public class YouthTableController extends AbstractTableController {
 			mainController.addYouthTab((Youth)modelForSelectedTableRow());
 			//	    new YouthOverviewController(view().getWindow(), (Youth)modelForSelectedTableRow());
 		}
+	}
+
+	@Override
+	protected Class<Youth> getModelClass() {
+		return Youth.class;
 	}
 }

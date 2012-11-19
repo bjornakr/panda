@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
@@ -24,7 +24,7 @@ public class YouthDialog extends JDialog {
     private ActionListener actionListener;
     private DefaultTextField txtFirstName = new DefaultTextField(DefaultTextField.STANDARD_TEXT_WIDTH);
     private DefaultTextField txtLastName = new DefaultTextField(DefaultTextField.STANDARD_TEXT_WIDTH);
-    private JComboBox cboxStatuses = new JComboBox(Target.Statuses.values());
+    private JComboBox cboxStatuses = new JComboBox(ParticipationStatuses.values());
     private JComboBox cboxTreatmentGroups = new JComboBox(Youth.TreatmentGroups.values());
     private JComboBox cboxRegions = new JComboBox(Youth.Regions.values());
     private JComboBox cboxGenders = new JComboBox(Youth.Genders.values());

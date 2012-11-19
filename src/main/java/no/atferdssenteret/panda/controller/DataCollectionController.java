@@ -18,7 +18,7 @@ import no.atferdssenteret.panda.view.DataCollectionDialog;
 public class DataCollectionController extends ApplicationController {
 	private DataCollection model;
 	private DataCollectionDialog view;
-	private QuestionnaireTableController questionnaireTableController = new QuestionnaireTableController();
+	private QuestionnaireTableController questionnaireTableController;
 	private Target target;
 	//    private QuestionnaireTable questionnaireTable = new QuestionnaireTable();
 
@@ -26,6 +26,7 @@ public class DataCollectionController extends ApplicationController {
 		super(model);
 		this.model = model;
 		this.target = target;
+		questionnaireTableController = new QuestionnaireTableController(model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
 		view.initializeTypeComboBox();
 		if (getMode() == Mode.EDIT) {
@@ -67,6 +68,7 @@ public class DataCollectionController extends ApplicationController {
 		if (getMode() == Mode.CREATE) {
 			model = new DataCollection();
 			model.setTarget(target);
+			target.addDataCollection(model);
 		}
 		model.setType((String)view.getType());	
 		model.setTargetDate(StringUtil.parseDate(view.getTargetDate()));

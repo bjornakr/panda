@@ -12,6 +12,7 @@ import no.atferdssenteret.panda.model.Observable;
 
 public abstract class DefaultAbstractTableModel extends AbstractTableModel implements Observable {
 	private static final long serialVersionUID = 1L;
+	
 	protected enum ColumnSizes {
 		SMALL(75), NORMAL(100), WIDE(170);
 

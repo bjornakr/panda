@@ -4,16 +4,20 @@ import java.awt.Window;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Participant;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
 public class ParticipantController extends ApplicationController {
 	private Participant model;
 	private ParticipantDialog view;
+	private Target target;
 
-	public ParticipantController(Window parentWindow, Participant model) {
+	public ParticipantController(Window parentWindow, Participant model, Target target) {
 		super(model);
 		this.model = model;
+		this.target = target;
 		this.view = new ParticipantDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
 			transferModelToView();
@@ -52,11 +56,13 @@ public class ParticipantController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model = new Participant();
+//			model.setTarget(target);
+			target.addParticipant(model);
 		}
 		model.setFirstName(StringUtil.groomString(view.getFirstName()));
 		model.setLastName(StringUtil.groomString(view.getLastName()));
 		model.setRole((String)view.getRole());
-		model.setStatus((Participant.Statuses)view.getStatus());
+		model.setStatus((ParticipationStatuses)view.getStatus());
 		model.setPhoneNo(StringUtil.groomString(view.getPhoneNo()));
 		model.setEMail(StringUtil.groomString(view.geteMail()));
 		model.setContactInfo(StringUtil.groomString(view.getContactInfo()));

@@ -1,6 +1,7 @@
 package no.atferdssenteret.panda.model;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,27 +20,27 @@ import no.atferdssenteret.panda.DataCollectionManager;
 
 @Entity
 public class Target implements Model {
-	public enum Statuses {
-		WAITING_FOR_CONSENT("Venter på samtykke"),
-		PARTICIPATING("Deltar");
-
-		private String name;
-
-		private Statuses(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	};    
+	//	public enum Statuses {
+	//		WAITING_FOR_CONSENT("Venter på samtykke"),
+	//		PARTICIPATING("Deltar");
+	//
+	//		private String name;
+	//
+	//		private Statuses(String name) {
+	//			this.name = name;
+	//		}
+	//
+	//		@Override
+	//		public String toString() {
+	//			return name;
+	//		}
+	//	};    
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(nullable = false)
-	private Statuses status;
+	private ParticipationStatuses status;
 	private String firstName;
 	private String lastName;
 	private Date treatmentStart;
@@ -74,11 +75,21 @@ public class Target implements Model {
 		this.id = id;
 	}
 
-	public Statuses getStatus() {
+	public String formattedIdWithLetterAppendix() {
+		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"};
+		String letterId = "";
+		for (int i = 0; i < 2; i++) {
+			letterId += letters[(int)(id / Math.pow(letters.length, i)) % letters.length];
+		}
+		DecimalFormat idFormat = new DecimalFormat("000");
+		return idFormat.format(id) + letterId;
+	}
+
+	public ParticipationStatuses getStatus() {
 		return status;
 	}
 
-	public void setStatus(Statuses status) {
+	public void setStatus(ParticipationStatuses status) {
 		if (this.status != null && !this.status.equals(status)) {
 			DataCollectionManager.getInstance().notifyTargetUpdated(this);
 		}
@@ -153,7 +164,7 @@ public class Target implements Model {
 	}
 
 	public boolean isParticipating() {
-		return (status == Statuses.PARTICIPATING);
+		return (status == ParticipationStatuses.PARTICIPATING);
 	}
 
 	public DataCollector getDataCollector() {
@@ -168,9 +179,17 @@ public class Target implements Model {
 	public List<Participant> getParticipants() {
 		return participants;
 	}
-	
+
 	public void setParticipants(List<Participant> participants) {
+		for (Participant participant : participants) {
+			participant.setTarget(this);
+		}
 		this.participants = participants;
+	}
+
+	public void addParticipant(Participant participant) {
+		participant.setTarget(this);
+		participants.add(participant);
 	}
 
 	public String getComment() {

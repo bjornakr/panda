@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.Predicate;
-
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
@@ -38,18 +36,18 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		return null;
 	}
 
-	public List<QuestionnaireEvent> allModels() {
-		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
-		for (Model model : tableModel.allModels()) {
-			models.add((QuestionnaireEvent)model);
-		}
-		return models;
-	}
-
-	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		return allModels();
-	}
+//	public List<QuestionnaireEvent> allModels() {
+//		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
+//		for (Model model : tableModel.allModels()) {
+//			models.add((QuestionnaireEvent)model);
+//		}
+//		return models;
+//	}
+//
+//	@Override
+//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		return allModels();
+//	}
 
 	public List<QuestionnaireEvent> currentModels() {
 		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
@@ -73,5 +71,10 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 			new QuestionnaireEventController(view.getWindow(), model);
 			tableModel.update(model);
 		}
+	}
+
+	@Override
+	protected Class<? extends Model> getModelClass() {
+		return QuestionnaireEvent.class;
 	}
 }

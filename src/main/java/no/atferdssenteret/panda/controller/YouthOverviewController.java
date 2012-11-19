@@ -37,13 +37,13 @@ public class YouthOverviewController extends AbstractTabsAndTablesController {
 		DataCollectionTableController dataCollectionTableController = new DataCollectionTableController(model);
 		dataCollectionTableController.updateTableModel();
 		tableControllers.add(dataCollectionTableController);
-		tableControllers.add(new ParticipantTableController());
+		tableControllers.add(new ParticipantTableController(model));
 		return tableControllers;
 	}
 
 	@Override
 	public String title() {
-		return "U ID " + model.getId();
+		return "U ID " + model.formattedIdWithLetterAppendix();
 	}
 
 	@Override

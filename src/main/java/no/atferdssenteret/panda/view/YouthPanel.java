@@ -78,7 +78,7 @@ public class YouthPanel extends JPanel {
 	JPanel barnHeaderPanel = new JPanel();
 	barnHeaderPanel.setLayout(new GridBagLayout());
 
-	JLabel labID = new JLabel("Barn " + model.getId());
+	JLabel labID = new JLabel("Barn " + model.formattedIdWithLetterAppendix());
 	labID.setFont(GuiUtil.HEADER_FONT_PRIMARY);	
 
 	GridBagConstraints c = new GridBagConstraints();

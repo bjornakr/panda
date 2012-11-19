@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.DataCollectionManager;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.persistence.DatabaseCleaner;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -38,7 +39,7 @@ public class CriteriaBuilderTest {
 		
 		Root<Target> targetRoot = criteriaQuery.from(Target.class);
 		criteriaQuery.select(targetRoot);
-		criteriaQuery.where(criteriaBuilder.equal(targetRoot.get("status"), Target.Statuses.PARTICIPATING));
+		criteriaQuery.where(criteriaBuilder.equal(targetRoot.get("status"), ParticipationStatuses.PARTICIPATING));
 	
 		List<Target> targets = JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 		assertEquals(1, targets.size());
