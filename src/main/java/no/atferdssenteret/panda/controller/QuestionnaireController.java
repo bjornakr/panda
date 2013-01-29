@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import no.atferdssenteret.panda.controller.table.QuestionnaireEventTableController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.QuestionnaireDialog;
 
 public class QuestionnaireController extends ApplicationController {
@@ -53,6 +54,7 @@ public class QuestionnaireController extends ApplicationController {
 		}
 		model.setName((String)view.getQuestionnaireName());
 		model.setQuestionnaireEvents(questionnaireEventTableController.currentModels());
+		model.setStatus(model.calculateStatus());
 	}
 
 	@Override
@@ -60,6 +62,10 @@ public class QuestionnaireController extends ApplicationController {
 //		super.actionPerformed(event);
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			transferUserInputToModel();
+			if (getMode() == Mode.EDIT) {
+				JPATransactor.getInstance().transaction().begin();
+				JPATransactor.getInstance().transaction().commit();
+			}	    
 			view.dispose();
 		}
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {

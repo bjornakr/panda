@@ -4,17 +4,15 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
+import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.QuestionnaireController;
+import no.atferdssenteret.panda.filter.QuestionnaireFilter;
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
-import no.atferdssenteret.panda.model.table.QuestionnaireTableUnderDataCollection;
-import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.model.table.QuestionnaireTableForDataCollectionView;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -22,17 +20,20 @@ import no.atferdssenteret.panda.view.util.ButtonUtil;
 public class QuestionnaireTableController extends AbstractTableController {
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
-//	private DataCollection dataCollection;
+	private DataCollection dataCollection;
 
 	public QuestionnaireTableController(DataCollection dataCollection) {
 		super("Spørreskjemaer");
+		this.dataCollection = dataCollection;
+		
 		if (dataCollection == null) {
 			tableModel = new QuestionnaireTable();
+			view = new DefaultTablePanel(this, new QuestionnaireFilter());
 		}
 		else {
-			tableModel = new QuestionnaireTableUnderDataCollection();
+			tableModel = new QuestionnaireTableForDataCollectionView();
+			view = new DefaultTablePanel(this, null);
 		}
-		view = new DefaultTablePanel(this, null);	
 	}
 
 	@Override
@@ -70,13 +71,18 @@ public class QuestionnaireTableController extends AbstractTableController {
 //		}
 //	}    
 	
-	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
-		criteriaQuery.where(predicates);
-		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
-	}
+//	@Override
+//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+//		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
+//		Root<Questionnaire> qRoot = criteriaQuery.from(Questionnaire.class);
+////		Root<QuestionnaireEvent> qeRoot = criteriaQuery.from(QuestionnaireEvent.class);
+////		criteriaQuery.multiselect(qRoot, qeRoot);
+////		criteriaQuery.where(criteriaBuilder.equal(qRoot.get(Questionnaire_.id), qeRoot.get(QuestionnaireEvent_.questionnaire)));
+////		criteriaQuery.where(predicates);
+//		Join<Questionnaire, QuestionnaireEvent> join = qRoot.join(Questionnaire_.questionnaireEvents);
+//		criteriaQuery.multiselect(join);
+//	}
 	
 	
 	public List<Questionnaire> currentModels() {
@@ -87,6 +93,16 @@ public class QuestionnaireTableController extends AbstractTableController {
 		return models;		
 	}
 
+	@Override
+	public List<JButton> buttons() {
+		if (dataCollection == null) {
+			return new LinkedList<JButton>();
+		}
+		else {
+			return super.buttons();
+		}
+	}
+	
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {

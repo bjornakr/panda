@@ -24,40 +24,25 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener, Observable {
-	//    private DefaultOverviewPanel view;
-	//    private AbstractOverviewTableModel tableModel;
-	//    private Model model;
 	private String title;
-
 	private List<Observer> observers;
-	//    private List<Condition> conditionList;
-
-	//    private ObserverCommand childCommand;
+	private List<JButton> buttons;
 
 	public AbstractTableController(String title) {
 		this.title = title;
 		observers  = new LinkedList<Observer>();	
 	}
 
-	//    @Override
 	public abstract DefaultTablePanel view();
 
 	public abstract DefaultAbstractTableModel tableModel();
-	//    @Override
+
 	public String title() {
 		return title;
 	}
 
 	protected abstract String getWarningBeforeDelete();
 
-
-
-
-	//    public void setObserverCommand(ObserverCommand childCommand) {
-	//	this.childCommand = childCommand;
-	//    }
-
-	//    @Override
 	public boolean isModelInitialized() {
 		if (tableModel() == null) {
 			return false;
@@ -65,19 +50,8 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		return (tableModel().getRowCount() > 0);
 	}
 
-	//    @Override
-	//    public void updateTableModel(List<? extends Model> data) {
-	//	view().setWaitingState();
-	//	//	conditionList = view.getSelectedFilterConditions();
-	//	tableModel().setModels(data);
-	//	setButtonEnabledStates();
-	//	view().endWaitingState();
-	//	view().revalidate();
-	//    }
-
 	public void updateTableModel() {
 		view().setWaitingState();
-		//	conditionList = view.getSelectedFilterConditions();
 		Predicate[] predicates = new Predicate[view().selectedFilterPredicates().size()];
 		view().selectedFilterPredicates().toArray(predicates);
 		tableModel().setModels(retrieve(predicates));
@@ -85,18 +59,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		view().endWaitingState();
 		view().revalidate();
 	}
-
-	//	protected abstract List<? extends Model> retrieveModelsForCurrentConditions();
-//	protected abstract List<? extends Model> retrieve(Predicate[] predicates); 
-	//	protected List<? extends Model> retrieve(List<FilterUnit> filterUnits) {
-	//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-	//		CriteriaQuery<Target> criteriaQuery = criteriaBuilder.createQuery(Target.class);
-	//		Root<Target> targetRoot = criteriaQuery.from(Target.class);
-	//		criteriaQuery.select(targetRoot);
-	//		criteriaQuery.where(criteriaBuilder.equal(targetRoot.get("status"), Target.Statuses.PARTICIPATING));
-	//	}
-
-	//    public List
 
 	protected List<? extends Model> retrieve(Predicate[] predicates) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
@@ -121,20 +83,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		if (event.getSource() instanceof JComboBox) {
 			updateTableModel();
 		}
-		//
-		//	try {
-		//	    if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-		//		String[] options = {"Slett", "Avbryt"};
-		//
-		//		int answer = JOptionPane.showOptionDialog(view,
-		//			StringParser.splitString(getWarningBeforeDelete(), 80, 0),
-		//			"Slett " + getTitle(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-		//			null, options, options[1]);
-		//		
-		//		if (options[answer].equals("Avbryt")) {
-		//		    return;
-		//		}
-		//	    }
 
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
 			JPATransactor.getInstance().transaction().begin();
@@ -144,29 +92,18 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		}
 
 		evaluateActionEvent(event);
-		//		tableModel().fireTableDataChanged();
-		//	}
-		//	catch (IllegalArgumentException e) {
-		//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
-		//	}
-		//	catch (IllegalStateException e) {
-		//	    new ErrorMessageDialog(e.getMessage(), null, view.getWindow());
-		//	}
-		//	catch (Exception e) {
-		//	    e.printStackTrace();
-		//	    new ErrorMessageDialog(e.getMessage(), e, view.getWindow());
-		//	}
-	}    
+	}
+	
+	public List<JButton> buttons() {
+		if (buttons == null) {
+			buttons = ButtonUtil.createCRUDButtons(this);
+		}
+		return buttons;
+	}
 
-	/**
-	 *  Some buttons should be enabled or disabled depending
-	 *  if there are at least one selected row in the table.
-	 */
 	protected void setButtonEnabledStates() {
-		//	List<JButton> buttons = getButtons();
-		//	if (buttons == null) return;
 		boolean hasSelection = view().selectedTableRow() >= 0;
-		for (JButton button : view().buttons()) {
+		for (JButton button : buttons()) {
 			if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
 				button.setEnabled(hasSelection);
 			}
@@ -181,30 +118,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
-		//	System.out.println("Columns:");
-		//	Object[] columns = tableModel().rowAt(view().selectedTableRow());
-		//	for (Object o : columns) {
-		//	    System.out.println(o);	    
-		//	}
-		//	System.out.println("Data:");
-		//	System.out.println(tableModel().metadataAt(view().selectedTableRow()));
-
-
-
-		//	Model selectedModel = getModelForSelectedTableRow();
-		//	if (event.getSource() instanceof ListSelectionModel
-		//		&& selectedModel != null
-		//		&& selectedModel instanceof ChildIDCarrier) {
-		//	    ChildIDCarrier childIDCarrier = (ChildIDCarrier)getModelForSelectedTableRow();
-
-		//	    childCommand = new ObserverCommand(childIDCarrier.getChildID(), Command.DISPLAY_CHILD_ID);
-		//	    notifyObservers();
-		//	}
-
-
 		setButtonEnabledStates();
-		//	view.updateTableCounters();
-
 	}
 
 	public Model modelForSelectedTableRow() {

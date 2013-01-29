@@ -7,42 +7,57 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class DateUtil {
-    private static SimpleDateFormat df = new SimpleDateFormat("dd.MM.yy", new Locale("Norwegian"));
+	private static SimpleDateFormat df = new SimpleDateFormat("dd.MM.yy", new Locale("Norwegian"));
 
-    public static Date parseDateFromInternationalDateFormat(String dateString) {
-	try {
-	    return new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateString).getTime());
+	public static Date parseDateFromInternationalDateFormat(String dateString) {
+		try {
+			return new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateString).getTime());
+		}
+		catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
-	catch (ParseException e) {
-	    throw new RuntimeException(e);
+
+	public static SimpleDateFormat getDefaultDateFormat() {
+		return df;
+	}
+
+	public static String getFormattedTodaysDate() {
+		return df.format(today());
+	}
+
+	public static String formatDate(Date d) {
+		if (d == null) {
+			return null;
+		}
+
+		return df.format(d);
+	}
+
+	public static java.sql.Date formatYear(String year) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, Integer.parseInt(year));
+
+		return new java.sql.Date(cal.getTimeInMillis());
+	}
+
+	public static boolean IsDateInInterval(Date d, Date start, Date end) {
+		return (!d.before(start) && !d.after(end));		
+	}
+
+	public static Date today() {
+		return new Date(System.currentTimeMillis());
 	}
 	
-    }
-    
-    public static SimpleDateFormat getDefaultDateFormat() {
-	return df;
-    }
-    
-    public static String getFormattedTodaysDate() {
-	return df.format(new Date(System.currentTimeMillis()));
-    }
-    
-    public static String formatDate(Date d) {
-	if (d == null) {
-	    return null;
+	public static Date sqlDate(java.util.Date utilDate) {
+		return new Date(utilDate.getTime());
 	}
 	
-	return df.format(d);
-    }
-
-    public static java.sql.Date formatYear(String year) {
-	Calendar cal = Calendar.getInstance();
-	cal.set(Calendar.YEAR, Integer.parseInt(year));
-
-	return new java.sql.Date(cal.getTimeInMillis());
-    }
-    
-    public static boolean IsDateInInterval(Date d, Date start, Date end) {
-	return (!d.before(start) && !d.after(end));		
-    }
+	public static Date addTime(Date date, int field, int amount) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(field, amount);
+		return sqlDate(calendar.getTime());
+	}
 }

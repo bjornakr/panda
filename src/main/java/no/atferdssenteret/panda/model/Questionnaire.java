@@ -15,7 +15,21 @@ import javax.persistence.OneToMany;
 @Entity
 public class Questionnaire implements Model {
 
-	public enum Statuses {RECIEVED_FOR_PROCESSING, NOT_RECIEVED, GIVEN_UP, LOST}
+	public enum Statuses {RECIEVED("Mottatt"),
+		NOT_RECIEVED("Ikke motatt"),
+		GIVEN_UP("Gitt opp"),
+		LOST("Mistet");
+	
+		private String name;
+
+		Statuses(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +37,7 @@ public class Questionnaire implements Model {
 	@Column(nullable = false)
 	private String name;
 	private DataCollection dataCollection;
+	private Statuses status;
 
 	@OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<QuestionnaireEvent> questionnaireEvents = new LinkedList<QuestionnaireEvent>();
@@ -51,17 +66,24 @@ public class Questionnaire implements Model {
 		this.dataCollection = dataCollection;
 	}
 
-	public Statuses getStatus() {
+	public Statuses calculateStatus() {
 		for (QuestionnaireEvent event : questionnaireEvents) {
 			switch (event.getType()) {
-			case RECIEVED_FOR_PROCESSING: return Statuses.RECIEVED_FOR_PROCESSING;
-			case PROCESSED: return Statuses.RECIEVED_FOR_PROCESSING;
+			case RECIEVED: return Statuses.RECIEVED;
 			case GIVEN_UP: return Statuses.GIVEN_UP;
 			case LOST: return Statuses.LOST;
 			default: break;
 			}
 		}
 		return Statuses.NOT_RECIEVED;
+	}
+
+	public void setStatus(Statuses status) {
+		this.status = status;
+	}
+	
+	public Statuses getStatus() {
+		return status;
 	}
 
 	public List<QuestionnaireEvent> getQuestionnaireEvents() {
@@ -104,5 +126,9 @@ public class Questionnaire implements Model {
 		else {
 			return null;
 		}
+	}
+	
+	public Target target() {
+		return dataCollection.getTarget();
 	}
 }

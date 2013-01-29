@@ -4,26 +4,37 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
+import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.model.DataCollection_;
 import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Questionnaire_;
 
 public class QuestionnaireFilter implements FilterCreator {
 	private final CriteriaQuery<Questionnaire> criteriaQuery = criteriaBuilder.createQuery(Questionnaire.class);
 	private final Root<Questionnaire> root = criteriaQuery.from(Questionnaire.class);
-	private final Join<Questionnaire, QuestionnaireEvent> qqe = root.join(Questionnaire_.questionnaireEvents);
+	private final Path<String> dcPath = root.join(Questionnaire_.dataCollection).get(DataCollection_.type);
 	
 	@Override
 	public List<Filter> createFilters() {
 		List<Filter> filters = new LinkedList<Filter>();
+		filters.add(createDataCollectionFilter());
 		filters.add(createTypeFilter());
-//		filters.add(createTypeFiter());
-//		filters.add(createProgressStatusFilter());
+		filters.add(createStatusFilter());
 		return filters;
+	}
+	
+
+	private Filter createDataCollectionFilter() {
+		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
+		filterUnits.add(includeAllFilterUnit);
+		for (String value : DataCollectionTypes.values()) {
+			filterUnits.add(new FilterUnit(value, criteriaBuilder.equal(dcPath, value)));
+		}
+		return new Filter("Datainnsamling", filterUnits);
 	}
 
 	private Filter createTypeFilter() {
@@ -35,13 +46,12 @@ public class QuestionnaireFilter implements FilterCreator {
 		return new Filter("Spørreskjema", filterUnits);
 	}
 
-//	private Filter createLastEventFilter() {
-//		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-//		filterUnits.add(includeAllFilterUnit);
-//		for (String value : QuestionnaireTypes.values()) {
-//			filterUnits.add(new FilterUnit(value, criteriaBuilder.equal(root.get(Questionnaire_.questionnaireEvents.), value)));
-//		}
-//		return new Filter("Spørreskjema", filterUnits);
-//		
-//	}
+	private Filter createStatusFilter() {
+		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
+		filterUnits.add(includeAllFilterUnit);
+		for (Questionnaire.Statuses status : Questionnaire.Statuses.values()) {
+			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Questionnaire_.status), status)));
+		}
+		return new Filter("Status", filterUnits);
+	}
 }

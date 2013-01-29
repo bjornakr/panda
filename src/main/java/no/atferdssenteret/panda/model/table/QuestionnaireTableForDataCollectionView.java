@@ -4,20 +4,22 @@ import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
-public class QuestionnaireTableUnderDataCollection extends DefaultAbstractTableModel {
+public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private final static int NO_OF_FIELDS = 3;
+	private final static int NO_OF_FIELDS = 4;
 	private final static int NAME = 0;
 	private final static int STATUS = 1;
 	private final static int LAST_EVENT = 2;
+	private final static int EVENT_DATE = 3;
 
 	@Override
 	protected String[] headerColumns() {
 		String[] headerColumns = new String[NO_OF_FIELDS];
 		headerColumns[NAME] = "Spørreskjema";
 		headerColumns[STATUS] = "Status";
-		headerColumns[LAST_EVENT] = "Siste hendelse";	
+		headerColumns[LAST_EVENT] = "Siste hendelse";
+		headerColumns[EVENT_DATE] = "Dato";
 		return headerColumns;
 	}
 
@@ -26,8 +28,9 @@ public class QuestionnaireTableUnderDataCollection extends DefaultAbstractTableM
 		Questionnaire questionnaire = (Questionnaire)model;
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
 		dataColumns[NAME] = questionnaire.getName();
-		dataColumns[STATUS] = questionnaire.getStatus();
+		dataColumns[STATUS] = questionnaire.calculateStatus();
 		dataColumns[LAST_EVENT] = questionnaire.lastEvent();
+		dataColumns[EVENT_DATE] = questionnaire.lastEvent().getDate();
 		return dataColumns;
 	}
 
@@ -37,6 +40,7 @@ public class QuestionnaireTableUnderDataCollection extends DefaultAbstractTableM
 		columnSizes[NAME] = ColumnSizes.WIDE;
 		columnSizes[STATUS] = ColumnSizes.WIDE;
 		columnSizes[LAST_EVENT] = ColumnSizes.WIDE;
+		columnSizes[EVENT_DATE] = ColumnSizes.SMALL;
 		return columnSizes;
 	}
 }

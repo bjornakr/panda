@@ -1,32 +1,72 @@
 package no.atferdssenteret.panda.model;
 
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import no.atferdssenteret.panda.util.DateUtil;
 
 @Entity
 public class DataCollection implements Model {
-	public enum ProgressStatuses {NOT_INITIATED, TRYING_TO_CONTACT, APPOINTED, PERFORMED, GIVEN_UP};
-	public enum QuestionnaireStatuses {NOT_INITIATED, IN_PROGRESS, COMPLETED, COMPLETED_WITH_MISSING};
+	public enum Statuses {
+		PLANNED("Ubehandlet"),
+		CONCLUDED("Avklart"),
+		FORTHCOMING("Aktuell"),
+		DELAYED("Forsinket");
+
+		private String name;
+
+		Statuses(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
+	public enum ProgressStatuses {
+		NOT_INITIATED("Ubehandlet"),
+		TRYING_TO_CONTACT("Prøver fortsatt"),
+		APPOINTED("Avtalt"),
+		PERFORMED("Utført"),
+		GIVEN_UP("Gitt opp");
+
+		private String name;
+
+		private ProgressStatuses(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}	
+	};
+	//	public enum QuestionnaireStatuses {NOT_INITIATED, IN_PROGRESS, COMPLETED, COMPLETED_WITH_MISSING};
 	//    public enum Types {T1, T2, T3};
 	//    public static final Collection<String> types = new HashSet<String>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)    
 	private long id;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="target_id", nullable=false)
 	private Target target;
 	@Column(nullable = false)
 	private String type;
@@ -40,9 +80,9 @@ public class DataCollection implements Model {
 
 	@OneToMany(mappedBy="dataCollection", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
-	@ManyToOne
-	private DataCollector dataCollector;
-	
+	@ManyToOne(cascade = {CascadeType.DETACH})
+	private User dataCollector;
+
 
 	@PrePersist
 	protected void onCreate() {
@@ -124,11 +164,11 @@ public class DataCollection implements Model {
 		this.questionnaires = questionnaires;
 	}
 
-	public DataCollector getDataCollector() {
+	public User getDataCollector() {
 		return dataCollector;
 	}
 
-	public void setDataCollector(DataCollector dataCollector) {
+	public void setDataCollector(User dataCollector) {
 		this.dataCollector = dataCollector;
 	}
 
@@ -158,5 +198,27 @@ public class DataCollection implements Model {
 
 	public void setDefaultQuestionnaires() {
 		setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(type));
+	}
+
+	public Statuses status() {
+		if (progressStatus == ProgressStatuses.GIVEN_UP
+				|| progressStatus == ProgressStatuses.PERFORMED) {
+			return Statuses.CONCLUDED;
+		
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DateUtil.today());
+		calendar.add(Calendar.DAY_OF_MONTH, -7);
+		System.out.println("Comparing: " + calendar.getTime() + " and " + targetDate);
+		if (calendar.getTime().after(targetDate)) {
+			return Statuses.DELAYED;
+		}
+		
+		calendar.setTime(DateUtil.today());
+		calendar.add(Calendar.MONTH, 1);
+		if (calendar.getTime().after(targetDate)) {
+			return Statuses.FORTHCOMING;
+		}
+		return Statuses.PLANNED;
 	}
 }

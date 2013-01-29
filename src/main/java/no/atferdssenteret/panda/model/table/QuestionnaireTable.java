@@ -30,10 +30,12 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 	protected Object[] dataColumns(Model model) {
 		Questionnaire questionnaire = (Questionnaire)model;
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
-		dataColumns[TARGET_ID] = questionnaire.getDataCollection().getTarget().formattedIdWithLetterAppendix();
+		if (questionnaire.getDataCollection() != null) {
+			dataColumns[TARGET_ID] = questionnaire.target().formattedIdWithLetterAppendix();
+		}
 		dataColumns[DATA_COLLECTION] = questionnaire.getDataCollection().getType();
 		dataColumns[NAME] = questionnaire.getName();
-		dataColumns[STATUS] = questionnaire.getStatus();
+		dataColumns[STATUS] = questionnaire.calculateStatus();
 		dataColumns[LAST_EVENT] = questionnaire.lastEvent();
 		return dataColumns;
 	}
@@ -42,7 +44,7 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 	protected ColumnSizes[] columnSizes() {
 		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
 		columnSizes[TARGET_ID] = ColumnSizes.SMALL;
-		columnSizes[DATA_COLLECTION] = ColumnSizes.SMALL;
+		columnSizes[DATA_COLLECTION] = ColumnSizes.NORMAL;
 		columnSizes[NAME] = ColumnSizes.WIDE;
 		columnSizes[STATUS] = ColumnSizes.WIDE;
 		columnSizes[LAST_EVENT] = ColumnSizes.WIDE;

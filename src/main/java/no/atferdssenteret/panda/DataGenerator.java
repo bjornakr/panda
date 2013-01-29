@@ -10,7 +10,7 @@ import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.fft.Youth;
-import no.atferdssenteret.panda.persistence.DatabaseCleaner;
+import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.JPATransactor;
 
 public class DataGenerator {
@@ -45,7 +45,7 @@ public class DataGenerator {
 		youth.setFirstName(createFirstName());
 		youth.setLastName(createLastName());
 		youth.setStatus(pickRandom(ParticipationStatuses.values()));
-		youth.setRegion(pickRandom(Youth.Regions.values()));
+		youth.setRegion(pickRandom(Youth.Regions));
 		youth.setGender(pickRandom(Youth.Genders.values()));
 		youth.setTreatmentGroup(pickRandom(Youth.TreatmentGroups.values()));
 		return youth;

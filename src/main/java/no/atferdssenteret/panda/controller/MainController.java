@@ -19,8 +19,8 @@ import no.atferdssenteret.panda.controller.table.AbstractTableController;
 import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController;
 import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
 import no.atferdssenteret.panda.controller.table.ParticipantTableController;
-import no.atferdssenteret.panda.controller.table.QuestionnaireEventTableController;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
+import no.atferdssenteret.panda.controller.table.UserTableController;
 import no.atferdssenteret.panda.controller.table.YouthTableController;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.MainWindow;
@@ -44,6 +44,7 @@ public class MainController extends AbstractTabsAndTablesController implements A
 				view.display();
 			}
 		});
+		tableControllers.get(0).updateTableModel();
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class MainController extends AbstractTabsAndTablesController implements A
 			tableControllers.add(new ParticipantTableController(null));
 			tableControllers.add(new DataCollectionTableController(null));
 			tableControllers.add(new QuestionnaireTableController(null));
-			tableControllers.add(new QuestionnaireEventTableController());
+			tableControllers.add(new UserTableController());
 		}
 		return tableControllers;
 	}

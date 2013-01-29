@@ -20,22 +20,6 @@ import no.atferdssenteret.panda.DataCollectionManager;
 
 @Entity
 public class Target implements Model {
-	//	public enum Statuses {
-	//		WAITING_FOR_CONSENT("Venter på samtykke"),
-	//		PARTICIPATING("Deltar");
-	//
-	//		private String name;
-	//
-	//		private Statuses(String name) {
-	//			this.name = name;
-	//		}
-	//
-	//		@Override
-	//		public String toString() {
-	//			return name;
-	//		}
-	//	};    
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -52,8 +36,8 @@ public class Target implements Model {
 	private final List<DataCollection> dataCollections = new LinkedList<DataCollection>();
 	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Participant> participants = new LinkedList<Participant>();
-	@ManyToOne
-	private DataCollector dataCollector;
+	@ManyToOne(cascade = {CascadeType.DETACH})
+	private User dataCollector;
 
 	@PrePersist
 	protected void onCreate() {
@@ -76,15 +60,24 @@ public class Target implements Model {
 	}
 
 	public String formattedIdWithLetterAppendix() {
+		return formattedNumericId() + " " + letterId();
+	}
+
+	public Object formattedNumericId() {
+		DecimalFormat idFormat = new DecimalFormat("000");
+		return idFormat.format(id);
+	}
+
+	public String letterId() {
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"};
 		String letterId = "";
 		for (int i = 0; i < 2; i++) {
 			letterId += letters[(int)(id / Math.pow(letters.length, i)) % letters.length];
 		}
-		DecimalFormat idFormat = new DecimalFormat("000");
-		return idFormat.format(id) + letterId;
+		return letterId;
 	}
 
+	
 	public ParticipationStatuses getStatus() {
 		return status;
 	}
@@ -167,11 +160,11 @@ public class Target implements Model {
 		return (status == ParticipationStatuses.PARTICIPATING);
 	}
 
-	public DataCollector getDataCollector() {
+	public User getDataCollector() {
 		return dataCollector;
 	}
 
-	public void setDataCollector(DataCollector dataCollector) {
+	public void setDataCollector(User dataCollector) {
 		this.dataCollector = dataCollector;
 		DataCollectionManager.getInstance().notifyTargetUpdated(this);
 	}

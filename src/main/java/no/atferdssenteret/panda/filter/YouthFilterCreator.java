@@ -45,7 +45,7 @@ public class YouthFilterCreator implements FilterCreator {
 	private Filter createRegionFilter() {
 		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
 		filterUnits.add(includeAllFilterUnit);
-		for (Youth.Regions item : Youth.Regions.values()) {
+		for (String item : Youth.Regions) {
 			filterUnits.add(new FilterUnit(item.toString(), criteriaBuilder.equal(root.get(Youth_.region), item)));
 		}
 		return new Filter("Region", filterUnits);

@@ -40,7 +40,7 @@ public class MvcTest {
 	private static QuestionnaireEvent createQuestionnaireEvent() {
 		QuestionnaireEvent model = new QuestionnaireEvent();
 		model.setDate(DateUtil.parseDateFromInternationalDateFormat("2012-01-30"));
-		model.setType(QuestionnaireEvent.Types.PROCESSED);
+		model.setType(QuestionnaireEvent.Types.RECIEVED);
 		model.setComment("I saw you in the morning light, your skin was softly glowing.");
 		return model;
 	}
@@ -80,7 +80,7 @@ public class MvcTest {
 		youth.setFirstName("Doodlestick");
 		youth.setLastName("Jones");
 		youth.setComment("Hey Dr. Ukulele man");
-		youth.setRegion(Youth.Regions.STAVANGER);
+		youth.setRegion(Youth.Regions[0]);
 		youth.setStatus(ParticipationStatuses.PARTICIPATING);
 		youth.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
 		youth.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));

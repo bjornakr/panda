@@ -1,9 +1,10 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.Predicate;
+import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.ParticipantController;
 import no.atferdssenteret.panda.filter.ParticipantFilterCreator;
@@ -23,7 +24,7 @@ public class ParticipantTableController extends AbstractTableController {
 	public ParticipantTableController(Target target) {
 		super("Deltakere");
 		this.target = target;
-		view = new DefaultTablePanel(this, new ParticipantFilterCreator());
+		view = new DefaultTablePanel(this, new ParticipantFilterCreator(target));
 	}
 
 	@Override
@@ -42,16 +43,12 @@ public class ParticipantTableController extends AbstractTableController {
 	}
 
 	
-	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		System.err.println("RETREIVE");
-		if (target != null) {
-			return target.getParticipants();
-		}
-		else {
-			return super.retrieve(predicates);
-		}
-	}    
+//	@Override
+//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		else {
+//			return super.retrieve(predicates);
+//		}
+//	}    
 //	public List<Participant> allModels() {
 ////		List<Participant> models = new LinkedList<Participant>();
 ////		for (Model model : tableModel.allModels()) {
@@ -67,6 +64,15 @@ public class ParticipantTableController extends AbstractTableController {
 //	protected List<? extends Model> retrieve(Predicate[] predicates) {
 //		return allModels();
 //	}
+	@Override
+	public List<JButton> buttons() {
+		if (target == null) {
+			return new LinkedList<JButton>();
+		}
+		else {
+			return super.buttons();
+		}
+	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {

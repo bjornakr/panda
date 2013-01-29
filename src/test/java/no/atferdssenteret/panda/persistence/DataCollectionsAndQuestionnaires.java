@@ -8,8 +8,10 @@ import javax.persistence.Query;
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.util.TestUtil;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,14 +32,9 @@ public class DataCollectionsAndQuestionnaires {
 
 	@Test
 	public void creatingDataCollectionWillCreateQuestionnairesForThatDataCollectionType() {
-
-
 		DataCollection dataCollection = createTestDataCollection();
 		dataCollection.setDefaultQuestionnaires();
-		JPATransactor.getInstance().entityManager().getTransaction().begin();
-		JPATransactor.getInstance().entityManager().persist(dataCollection);
-		JPATransactor.getInstance().entityManager().getTransaction().commit();
-
+		JPATransactor.getInstance().persist(dataCollection.getTarget());
 		assertNotNull("DataCollection has " + questionnaireCBCL + ": ", dataCollection.getQuestionnaire(questionnaireCBCL));
 		assertNotNull("DataCollection has " + questionnaireTRF + ": ", dataCollection.getQuestionnaire(questionnaireTRF));
 	}
@@ -45,12 +42,9 @@ public class DataCollectionsAndQuestionnaires {
 	@Test
 	public void updatingDataCollectionWillSaveQuestionnaires() {
 		DataCollection dataCollection = createTestDataCollection();
-		JPATransactor.getInstance().entityManager().getTransaction().begin();
-		JPATransactor.getInstance().entityManager().persist(dataCollection);
-		JPATransactor.getInstance().entityManager().getTransaction().commit();
 		dataCollection.setDefaultQuestionnaires();
-		JPATransactor.getInstance().entityManager().getTransaction().begin();
-		JPATransactor.getInstance().entityManager().getTransaction().commit();
+		JPATransactor.getInstance().persist(dataCollection.getTarget());
+		JPATransactor.getInstance().update();
 
 		Query query = JPATransactor.getInstance().entityManager().createQuery(
 				"SELECT COUNT(q) FROM Questionnaire q WHERE q.dataCollection.id = " +
@@ -60,6 +54,7 @@ public class DataCollectionsAndQuestionnaires {
 
 	private DataCollection createTestDataCollection() {
 		DataCollection dataCollection = new DataCollection();
+		TestUtil.createParticipatingTarget().addDataCollection(dataCollection);
 		dataCollection.setType("T1");
 		dataCollection.setTargetDate(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
 		dataCollection.setProgressStatus(DataCollection.ProgressStatuses.NOT_INITIATED);

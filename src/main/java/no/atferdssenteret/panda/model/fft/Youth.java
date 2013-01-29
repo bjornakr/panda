@@ -6,39 +6,72 @@ import no.atferdssenteret.panda.model.Target;
 
 @Entity
 public class Youth extends Target {
-    public enum Genders {MALE, FEMALE}
-    public enum TreatmentGroups {INTERVENTION, CONTROL, NOT_YET_RANDOMIZED}
-    public enum Regions {TRONDHEIM, SANDVIKA, STAVANGER, SKIEN}
+	public enum Genders {
+		MALE("Gutt"),
+		FEMALE("Jente");
 
-    private Genders gender;
-    private TreatmentGroups treatmentGroup;
-    private Regions region;
+		private String name;
 
-    public Regions getRegion() {
-	return region;
-    }
-    
-    public void setRegion(Regions region) {
-	this.region = region;
-    }
-    
-    public String toString() {
-	return this.getClass().toString();
-    }
+		private Genders(String name) {
+			this.name = name;
+		}
 
-    public TreatmentGroups getTreatmentGroup() {
-	return treatmentGroup;
-    }
+		@Override
+		public String toString() {
+			return name;
+		}
 
-    public void setTreatmentGroup(TreatmentGroups treatmentGroup) {
-	this.treatmentGroup = treatmentGroup;
-    }
+	}
 
-    public Genders getGender() {
-	return gender;
-    }
+	public enum TreatmentGroups {
+		INTERVENTION("Intervensjon"),
+		CONTROL("Kontroll"),
+		NOT_YET_RANDOMIZED("Ikke randomisert");
 
-    public void setGender(Genders gender) {
-	this.gender = gender;
-    }
+		private String name;
+
+		private TreatmentGroups(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+
+	}
+
+	public static String[] Regions = {"Trondheim", "Sandvika", "Stavanger", "Skien"};
+
+	private Genders gender;
+	private TreatmentGroups treatmentGroup;
+	private String region;
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String toString() {
+		return this.getClass().toString();
+	}
+
+	public TreatmentGroups getTreatmentGroup() {
+		return treatmentGroup;
+	}
+
+	public void setTreatmentGroup(TreatmentGroups treatmentGroup) {
+		this.treatmentGroup = treatmentGroup;
+	}
+
+	public Genders getGender() {
+		return gender;
+	}
+
+	public void setGender(Genders gender) {
+		this.gender = gender;
+	}
 }

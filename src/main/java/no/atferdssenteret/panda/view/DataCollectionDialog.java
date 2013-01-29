@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.model.User;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
@@ -29,6 +30,7 @@ public class DataCollectionDialog extends JDialog {
 	private DefaultTextField txtTargetDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
 	private JComboBox cboxProgressStatuses = new JComboBox(DataCollection.ProgressStatuses.values());
 	private DefaultTextField txtProgressDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
+	private JComboBox cboxDataCollector = new JComboBox(User.dataCollectors().toArray());
 	private DefaultTablePanel questionnaireView;
 
 	public DataCollectionDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireView) {
@@ -50,6 +52,8 @@ public class DataCollectionDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Måldato"), txtTargetDate));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Framdrift"), cboxProgressStatuses));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtProgressDate));
+		cboxDataCollector.insertItemAt(null, 0);
+		labelsAndFields.add(new LabelFieldPair(new JLabel("DataCollector"), cboxDataCollector));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(createQuestionnairePanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(2));	
@@ -90,6 +94,10 @@ public class DataCollectionDialog extends JDialog {
 		return txtProgressDate.getText();
 	}
 	
+	public Object getDataCollector() {
+		return cboxDataCollector.getSelectedItem();
+	}
+	
 	public void setType(String type) {
 		cboxTypes.setSelectedItem(type);
 	}
@@ -104,5 +112,9 @@ public class DataCollectionDialog extends JDialog {
 	
 	public void setProgressDate(Date progressDate) {
 		txtProgressDate.setText(progressDate);
+	}
+	
+	public void setDataCollector(User dataCollector) {
+		cboxDataCollector.setSelectedItem(dataCollector);
 	}
 }

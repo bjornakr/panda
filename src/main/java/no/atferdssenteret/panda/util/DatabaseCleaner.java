@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.persistence;
+package no.atferdssenteret.panda.util;
 
 import java.sql.SQLException;
 
@@ -10,12 +10,11 @@ import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.Target;
-
-import com.sun.corba.se.spi.orb.DataCollector;
+import no.atferdssenteret.panda.model.User;
 
 public class DatabaseCleaner {
 	private static final Class<?>[] ENTITY_TYPES = {
-		QuestionnaireEvent.class, Questionnaire.class, DataCollection.class, DataCollector.class, Participant.class, Target.class
+		QuestionnaireEvent.class, Questionnaire.class, DataCollection.class, Participant.class, Target.class, User.class
 	};
 	private final EntityManager entityManager;
 

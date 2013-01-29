@@ -1,12 +1,13 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.Predicate;
+import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.DataCollectionController;
-import no.atferdssenteret.panda.filter.DataCollectionFilter;
+import no.atferdssenteret.panda.filter.DataCollectionFilterCreator;
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Target;
@@ -23,7 +24,7 @@ public class DataCollectionTableController extends AbstractTableController {
 	public DataCollectionTableController(Target target) {
 		super("Datainnsamlinger");
 		this.target = target;
-		view = new DefaultTablePanel(this, new DataCollectionFilter());
+		view = new DefaultTablePanel(this, new DataCollectionFilterCreator(target));
 	}
 
 	@Override
@@ -56,17 +57,16 @@ public class DataCollectionTableController extends AbstractTableController {
 //		return query.getResultList();
 //	}
 //	
-//
+
 	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		if (target != null) {
-			return target.getDataCollections();
+	public List<JButton> buttons() {
+		if (target == null) {
+			return new LinkedList<JButton>();
 		}
 		else {
-			return super.retrieve(predicates);
+			return super.buttons();
 		}
-	}    
-
+	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {

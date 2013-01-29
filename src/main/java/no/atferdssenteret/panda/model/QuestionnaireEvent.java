@@ -10,7 +10,27 @@ import javax.persistence.Id;
 
 @Entity
 public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent> {    
-	public enum Types {PERSONAL_INTERVIEW, RECIEVED_FOR_PROCESSING, GIVEN_UP, LOST, PROCESSED}
+	public enum Types {
+		FILLED_OUT_WITH_DATACOLLECTOR_PRESENT("Fylt ut med datainnsamler tilstede"),
+		TELEPHONE_INTERVIEW("Telefonintervju"),
+		MAILED_TO_RESPONDENT("Sendt per post til deltaker"),
+		SENT_FOR_PROCESSING("Sendt per post til databehandler"),
+		SENT_REMINDER("Purret"),
+		RECIEVED("Mottatt"),
+		GIVEN_UP("Gitt opp"),
+		LOST("Mistet"),
+		OTHER("Annet");
+		
+		private String name;
+
+		Types(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +75,7 @@ public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent>
 	}
 
 	public boolean isConclusive() {
-		return (type == Types.PROCESSED || type == Types.GIVEN_UP || type == Types.LOST);
+		return (type == Types.RECIEVED || type == Types.GIVEN_UP || type == Types.LOST);
 	}
 
 	public Date getDate() {

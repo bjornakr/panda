@@ -3,8 +3,6 @@ package no.atferdssenteret.panda.controller;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
@@ -12,6 +10,7 @@ import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.User;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DataCollectionDialog;
 
@@ -20,13 +19,17 @@ public class DataCollectionController extends ApplicationController {
 	private DataCollectionDialog view;
 	private QuestionnaireTableController questionnaireTableController;
 	private Target target;
-	//    private QuestionnaireTable questionnaireTable = new QuestionnaireTable();
 
 	public DataCollectionController(Window parentWindow, DataCollection model, Target target) {
 		super(model);
-		this.model = model;
+		if (model != null) {
+			this.model = model;
+		}
+		else {
+			this.model = new DataCollection();
+		}
 		this.target = target;
-		questionnaireTableController = new QuestionnaireTableController(model);
+		questionnaireTableController = new QuestionnaireTableController(this.model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
 		view.initializeTypeComboBox();
 		if (getMode() == Mode.EDIT) {
@@ -60,13 +63,13 @@ public class DataCollectionController extends ApplicationController {
 		view.setTargetDate(model.getTargetDate());
 		view.setProgressStatus(model.getProgressStatus());
 		view.setProgressDate(model.getProgressDate());
+		view.setDataCollector(model.getDataCollector());
 		questionnaireTableController.tableModel().setModels(model.getQuestionnaires());
 	}
 
 	@Override
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
-			model = new DataCollection();
 			model.setTarget(target);
 			target.addDataCollection(model);
 		}
@@ -75,21 +78,19 @@ public class DataCollectionController extends ApplicationController {
 		model.setProgressStatus((DataCollection.ProgressStatuses)view.getProgressStatus());
 		model.setProgressDate(StringUtil.parseDate(view.getProgressDate()));
 		model.setQuestionnaires(questionnaireTableController.currentModels());
-		System.err.println("questionnaireTableController.allModels().size(): " + model.getQuestionnaires().size());
+		model.setDataCollector((User)view.getDataCollector());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		super.actionPerformed(event);
 		if (event.getActionCommand().equals("TYPE_COMBO_BOX") && getMode() == Mode.CREATE) {
-			List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 			for (String questionnaireName : QuestionnairesForDataCollectionType.getInstance().getQuestionnaireNamesFor((String)view.getType())) {
 				Questionnaire questionnaire = new Questionnaire();
 				questionnaire.setName(questionnaireName);
-				questionnaires.add(questionnaire);
+				model.addQuestionnaire(questionnaire);
 			}
-//			questionnaireTableController.updateTableModel();
-			questionnaireTableController.tableModel().setModels(questionnaires);
+			questionnaireTableController.tableModel().setModels(model.getQuestionnaires());
 		}
 	}
 }

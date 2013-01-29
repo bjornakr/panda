@@ -12,10 +12,10 @@ import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
 import no.atferdssenteret.panda.controller.table.ParticipantTableController;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.TabsAndTablesPanel;
-import no.atferdssenteret.panda.view.YouthPanel;
+import no.atferdssenteret.panda.view.YouthFocusPanel;
 
 public class YouthOverviewController extends AbstractTabsAndTablesController {
-	private YouthPanel view;
+	private YouthFocusPanel view;
 	private Youth model;
 	private List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
 
@@ -24,7 +24,7 @@ public class YouthOverviewController extends AbstractTabsAndTablesController {
 
 		createTableControllers();
 		TabsAndTablesPanel tabsAndTablesPanel = new TabsAndTablesPanel(this, tableControllers);
-		view = new YouthPanel(this, model, tabsAndTablesPanel);
+		view = new YouthFocusPanel(this, model, tabsAndTablesPanel);
 	}
 
 	@Override

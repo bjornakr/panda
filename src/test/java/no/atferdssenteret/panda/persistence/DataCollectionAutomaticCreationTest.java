@@ -17,8 +17,9 @@ import javax.persistence.TypedQuery;
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.DataCollectionRule;
 import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.DataCollector;
 import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.TestUtil;
@@ -151,7 +152,7 @@ public class DataCollectionAutomaticCreationTest {
 
 	@Test
 	public void GeneratedDataCollectionsAreAssignedToSameDataCollectorAsTarget() {
-		DataCollector dataCollector = new DataCollector();
+		User dataCollector = new User();
 		dataCollector.setFirstName("Robby");
 		persist(dataCollector);	
 		DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(1));
