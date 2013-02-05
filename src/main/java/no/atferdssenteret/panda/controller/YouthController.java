@@ -25,6 +25,9 @@ public class YouthController extends ApplicationController {
 			view.setFirstName("Ingatorre");
 			view.setLastName("Andolini");
 		}
+		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+			view.restrictAccess();
+		}
 		view.setVisible(true);
 	}    
 

@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.model;
 
+import java.sql.Date;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
+import no.atferdssenteret.panda.controller.MainController;
 
 @Entity
-public class Questionnaire implements Model {
+public class Questionnaire implements Model, TargetBelonging {
 
 	public enum Statuses {RECIEVED("Mottatt"),
 		NOT_RECIEVED("Ikke motatt"),
@@ -31,17 +38,35 @@ public class Questionnaire implements Model {
 		}
 	}
 
+//	@OrderBy("dataCollection, name")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(nullable = false)
+	@OrderBy("name")
 	private String name;
+	@JoinColumn(nullable = false)
 	private DataCollection dataCollection;
-	private Statuses status;
-
+	private Statuses status = Statuses.NOT_RECIEVED;
 	@OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<QuestionnaireEvent> questionnaireEvents = new LinkedList<QuestionnaireEvent>();
+	private Date created;
+	private Date updated;
+	private String createdBy;
+	private String updatedBy;
+	
+	@PrePersist
+	protected void onCreate() {
+		created = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
+	}
 
+	@PreUpdate
+	protected void onUpdate() {
+		updated = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -131,4 +156,48 @@ public class Questionnaire implements Model {
 	public Target target() {
 		return dataCollection.getTarget();
 	}
+	
+	
+	@Override
+	public void validate() {
+		
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	@Override
+	public long getTargetId() {
+		return getDataCollection().getTarget().getId();
+	}
+
 }

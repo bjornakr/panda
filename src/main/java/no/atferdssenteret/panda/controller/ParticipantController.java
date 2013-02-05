@@ -22,6 +22,9 @@ public class ParticipantController extends ApplicationController {
 		if (getMode() == Mode.EDIT) {
 			transferModelToView();
 		}
+		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+			view.restrictAccess();
+		}
 		view.setVisible(true);
 	}    
 
@@ -47,7 +50,8 @@ public class ParticipantController extends ApplicationController {
 		view.setRole(model.getRole());
 		view.setStatus(model.getStatus());
 		view.setPhoneNo(model.getPhoneNo());
-		view.seteMail(model.getEMail());
+		view.setEMail(model.getEMail());
+		view.setAddress(model.getAddress());
 		view.setContactInfo(model.getContactInfo());
 		view.setComment(model.getComment());
 	}
@@ -56,7 +60,6 @@ public class ParticipantController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model = new Participant();
-//			model.setTarget(target);
 			target.addParticipant(model);
 		}
 		model.setFirstName(StringUtil.groomString(view.getFirstName()));
@@ -64,7 +67,8 @@ public class ParticipantController extends ApplicationController {
 		model.setRole((String)view.getRole());
 		model.setStatus((ParticipationStatuses)view.getStatus());
 		model.setPhoneNo(StringUtil.groomString(view.getPhoneNo()));
-		model.setEMail(StringUtil.groomString(view.geteMail()));
+		model.setEMail(StringUtil.groomString(view.getEMail()));
+		model.setAddress(StringUtil.groomString(view.getAddress()));
 		model.setContactInfo(StringUtil.groomString(view.getContactInfo()));
 		model.setComment(StringUtil.groomString(view.getComment()));
 	}

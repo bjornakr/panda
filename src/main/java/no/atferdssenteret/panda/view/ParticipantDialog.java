@@ -16,6 +16,7 @@ import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class ParticipantDialog extends JDialog {
@@ -28,6 +29,7 @@ public class ParticipantDialog extends JDialog {
 	private DefaultTextArea txtContactInfo = new DefaultTextArea();
 	private DefaultTextField txtTlfNo = new DefaultTextField();
 	private DefaultTextField txtEmail = new DefaultTextField();
+	private DefaultTextArea txtAddress = new DefaultTextArea();
 	private DefaultTextArea txtComment = new DefaultTextArea();
 
 
@@ -44,17 +46,27 @@ public class ParticipantDialog extends JDialog {
 
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Deltaker"), cboxRoles));
+		cboxStatuses.setSelectedItem(ParticipationStatuses.WAITING_FOR_CONSENT);
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Status"), cboxStatuses));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
+		JLabel labFirstName = new JLabel("Fornavn");
+		GuiUtil.setNotNullFlag(labFirstName);
+		labelsAndFields.add(new LabelFieldPair(labFirstName, txtFirstName));
+		JLabel labLastName = new JLabel("Etternavn");
+		GuiUtil.setNotNullFlag(labLastName);
+		labelsAndFields.add(new LabelFieldPair(labLastName, txtLastName));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Tlf. nr"), txtTlfNo));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("E-post"), txtEmail));
+		labelsAndFields.add(new LabelFieldPair(new JLabel("Adresse"), txtAddress));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Kontaktinformasjon"), txtContactInfo));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Kommentar"), txtComment));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(1));
 	}
 
+	public void restrictAccess() {
+		cboxStatuses.setEnabled(false);
+	}
+	
 	public String getFirstName() {
 		return txtFirstName.getText();
 	}
@@ -87,12 +99,20 @@ public class ParticipantDialog extends JDialog {
 		txtTlfNo.setText(tlfNo);
 	}
 
-	public String geteMail() {
+	public String getEMail() {
 		return txtEmail.getText();
 	}
 
-	public void seteMail(String eMail) {
+	public void setEMail(String eMail) {
 		txtEmail.setText(eMail);
+	}
+	
+	public String getAddress() {
+		return txtAddress.getText();
+	}
+	
+	public void setAddress(String address) {
+		txtAddress.setText(address);
 	}
 
 	public String getComment() {

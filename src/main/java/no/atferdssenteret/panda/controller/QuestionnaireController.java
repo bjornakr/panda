@@ -7,6 +7,7 @@ import no.atferdssenteret.panda.controller.table.QuestionnaireEventTableControll
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.QuestionnaireDialog;
 
 public class QuestionnaireController extends ApplicationController {
@@ -59,14 +60,20 @@ public class QuestionnaireController extends ApplicationController {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-//		super.actionPerformed(event);
+		//		super.actionPerformed(event);
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
-			transferUserInputToModel();
-			if (getMode() == Mode.EDIT) {
-				JPATransactor.getInstance().transaction().begin();
-				JPATransactor.getInstance().transaction().commit();
-			}	    
-			view.dispose();
+			try {
+				transferUserInputToModel();
+				model.validate();
+				if (getMode() == Mode.EDIT) {
+					JPATransactor.getInstance().transaction().begin();
+					JPATransactor.getInstance().transaction().commit();
+				}	    
+				view.dispose();
+			}
+			catch (IllegalStateException e) {
+				new ErrorMessageDialog(e.getMessage(), null, view());
+			}
 		}
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
 			view().dispose();

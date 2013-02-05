@@ -8,21 +8,23 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.util.DateUtil;
+import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
-public class DataCollection implements Model {
+public class DataCollection implements Model, TargetBelonging, Comparable<DataCollection> {
 	public enum Statuses {
 		PLANNED("Ubehandlet"),
 		CONCLUDED("Avklart"),
@@ -65,33 +67,36 @@ public class DataCollection implements Model {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)    
 	private long id;
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="target_id", nullable=false)
+	@JoinColumn(nullable = false)
 	private Target target;
 	@Column(nullable = false)
 	private String type;
 	@Column(nullable = false)
+	@OrderBy("targetDate")
 	private Date targetDate;
 	@Column(nullable = false)
 	private ProgressStatuses progressStatus;
 	private Date progressDate;
 	private Date created;
 	private Date updated;
-
-	@OneToMany(mappedBy="dataCollection", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private String createdBy;
+	private String updatedBy;
+	
+	@OneToMany(mappedBy="dataCollection", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 	@ManyToOne(cascade = {CascadeType.DETACH})
 	private User dataCollector;
 
-
 	@PrePersist
 	protected void onCreate() {
-		setCreated(new Date(System.currentTimeMillis()));
+		created = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		setUpdated(new Date(System.currentTimeMillis()));
+		updated = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
 	}
 
 
@@ -221,4 +226,47 @@ public class DataCollection implements Model {
 		}
 		return Statuses.PLANNED;
 	}
+	
+	public void validate() {
+		if (target == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Target"));
+		}
+		else if (type == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Type"));
+		}
+		else if (targetDate == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Måldato"));
+		}
+		else if (progressStatus == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Framdrift"));
+		}
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	@Override
+	public long getTargetId() {
+		return target.getId();
+	}
+	
+	@Override
+	public int compareTo(DataCollection other) {
+		return targetDate.compareTo(other.getTargetDate());
+		
+	}
+
 }

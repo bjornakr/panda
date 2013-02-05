@@ -7,6 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
+import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
 public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent> {    
@@ -35,19 +41,36 @@ public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent>
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@JoinColumn(nullable=false)
 	private Questionnaire questionnaire;
 	@Column(nullable = false)
 	private Date date;
 	@Column(nullable = false)
 	private Types type;
 	private String comment;
-
+	private Date created;
+	private Date updated;
+	private String createdBy;
+	private String updatedBy;
+	
 	public QuestionnaireEvent() {	
 		// Dummy constructor for JPA
 	}
 
 	public QuestionnaireEvent(Types type) {
 		this.type = type;
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		created = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		updated = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
 	}
 
 	public long getId() {
@@ -101,5 +124,43 @@ public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent>
 	@Override
 	public int compareTo(QuestionnaireEvent questionnaireEvent2) {
 		return (date.after(questionnaireEvent2.getDate())) ? 0 : 1;
+	}
+	
+	public void validate() {
+		if (date == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Dato"));
+		}
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 }

@@ -38,7 +38,7 @@ public class DefaultTablePanel extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private AbstractTableController controller;
-//	private List<JButton> buttons = new LinkedList<JButton>();
+	//	private List<JButton> buttons = new LinkedList<JButton>();
 	private List<Filter> filters;
 	private List<JComboBox> filterComboBoxes;
 	//    private AbstractOverviewTableModel tableModel;
@@ -155,8 +155,8 @@ public class DefaultTablePanel extends JPanel implements Observer {
 		buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
 		buttonPanel.add(labNoOfSelectedRows);
 		buttonPanel.add(Box.createHorizontalGlue());
-//		buttons = ButtonUtil.createCRUDButtons(controller);
-//		buttons = 
+		//		buttons = ButtonUtil.createCRUDButtons(controller);
+		//		buttons = 
 		buttonPanel.add(ButtonUtil.createButtonPanel(controller.buttons()));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		return buttonPanel;
@@ -214,7 +214,7 @@ public class DefaultTablePanel extends JPanel implements Observer {
 		return (Window)SwingUtilities.getRoot(this);
 	}
 
-//	public List<JButton> buttons() {
-//		return buttons;
-//	}
+	//	public List<JButton> buttons() {
+	//		return buttons;
+	//	}
 }

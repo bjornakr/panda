@@ -4,22 +4,20 @@ import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
-public class DataCollectionTable extends DefaultAbstractTableModel {
+public class DataCollectionTableForTargetFocus extends DefaultAbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private final static int NO_OF_FIELDS = 7;
-	private final static int TARGET_ID = 0;
-	private final static int STATUS = 1;
-	private final static int TARGET_DATE = 2;
-	private final static int TYPE = 3;
-	private final static int PROGRESS_STATUS = 4;
-	private final static int PROGRESS_DATE = 5;
-	private final static int DATA_COLLECTOR = 6;
+	private final static int NO_OF_FIELDS = 6;
+	private final static int STATUS = 0;
+	private final static int TARGET_DATE = 1;
+	private final static int TYPE = 2;
+	private final static int PROGRESS_STATUS = 3;
+	private final static int PROGRESS_DATE = 4;
+	private final static int DATA_COLLECTOR = 5;
 
 	@Override
 	protected String[] headerColumns() {
 		String[] headerColumns = new String[NO_OF_FIELDS];
-		headerColumns[TARGET_ID] = "ID";
 		headerColumns[STATUS] = "Status";
 		headerColumns[TARGET_DATE] = "Måldato";
 		headerColumns[TYPE] = "Type";
@@ -33,7 +31,6 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 	protected Object[] dataColumns(Model model) {
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
 		DataCollection dataCollection = (DataCollection)model;
-		dataColumns[TARGET_ID] = dataCollection.getTarget().formattedIdWithLetterAppendix();
 		dataColumns[STATUS] = dataCollection.status();
 		dataColumns[TARGET_DATE] = dataCollection.getTargetDate();
 		dataColumns[TYPE] = dataCollection.getType();
@@ -46,7 +43,6 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 	@Override
 	protected ColumnSizes[] columnSizes() {
 		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[TARGET_ID] = ColumnSizes.SMALL;
 		columnSizes[STATUS] = ColumnSizes.SMALL;
 		columnSizes[TARGET_DATE] = ColumnSizes.SMALL;
 		columnSizes[TYPE] = ColumnSizes.SMALL;
@@ -55,4 +51,5 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 		columnSizes[DATA_COLLECTOR] = ColumnSizes.WIDE;
 		return columnSizes;
 	}
+	
 }

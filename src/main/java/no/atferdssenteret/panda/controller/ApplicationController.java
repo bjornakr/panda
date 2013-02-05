@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.view.ErrorMessageDialog;
 
 public abstract class ApplicationController implements ActionListener {
 	public enum Mode {CREATE, EDIT};
@@ -49,16 +50,22 @@ public abstract class ApplicationController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
-			transferUserInputToModel();
-			if (mode == Mode.CREATE) {
-				System.out.println("Persisting: " + model().toString());
-				JPATransactor.getInstance().persist(model());
+			try {
+				transferUserInputToModel();
+				model().validate();
+				if (mode == Mode.CREATE) {
+					JPATransactor.getInstance().persist(model());
+				}
+				else if (mode == Mode.EDIT) {
+					model().validate();
+					JPATransactor.getInstance().transaction().begin();
+					JPATransactor.getInstance().transaction().commit();
+				}
+				view().dispose();
 			}
-			else if (mode == Mode.EDIT) {
-				JPATransactor.getInstance().transaction().begin();
-				JPATransactor.getInstance().transaction().commit();
-			}	    
-			view().dispose();
+			catch (Exception e) {
+				new ErrorMessageDialog(e.getMessage(), null, view());
+			}
 		}
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
 			view().dispose();

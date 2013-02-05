@@ -30,7 +30,6 @@ public class TestUtil {
 	public static DataCollectionRule createDataCollectionRuleT1WhenTargetCreated(int noOfMonthsDelay) {
 		return new DataCollectionRule(
 				"T1",
-				DataCollectionRule.ApplicationTimes.WHEN_TARGET_CREATED,
 				Calendar.MONTH, noOfMonthsDelay, 
 				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE);
 	}
@@ -38,7 +37,6 @@ public class TestUtil {
 	public static DataCollectionRule createDataCollectionRuleT2WhenTargetUpdated(int noOfMonthsDelay) {
 		return new DataCollectionRule(
 				"T2",
-				DataCollectionRule.ApplicationTimes.WHEN_TARGET_UPDATED,
 				Calendar.MONTH, noOfMonthsDelay,
 				DataCollectionRule.TargetDates.AFTER_TREATMENT_START);
 	}
@@ -46,7 +44,6 @@ public class TestUtil {
 	public static DataCollectionRule createDataCollectionRuleT3WhenTargetUpdated(int noOfMonthsDelay) {
 		return new DataCollectionRule(
 				"T3",
-				DataCollectionRule.ApplicationTimes.WHEN_TARGET_UPDATED,
 				Calendar.MONTH, noOfMonthsDelay,
 				DataCollectionRule.TargetDates.AFTER_TREATMENT_START);
 	}

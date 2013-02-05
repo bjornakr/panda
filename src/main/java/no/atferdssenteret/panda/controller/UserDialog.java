@@ -13,9 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 
 import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.User.AccessLevel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class UserDialog extends JDialog {
@@ -39,10 +41,16 @@ public class UserDialog extends JDialog {
 		setLayout(new GridBagLayout());
 		
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Brukernavn"), txtUsername));
+		JLabel labUserName = new JLabel("Brukernavn");
+		GuiUtil.setNotNullFlag(labUserName);
+		labelsAndFields.add(new LabelFieldPair(labUserName, txtUsername));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Adgangsnivå"), cboxAccessLevel));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
+		JLabel labFirstName = new JLabel("Fornavn");
+		GuiUtil.setNotNullFlag(labFirstName);
+		labelsAndFields.add(new LabelFieldPair(labFirstName, txtFirstName));
+		JLabel labLastName = new JLabel("Etternavn");
+		GuiUtil.setNotNullFlag(labLastName);
+		labelsAndFields.add(new LabelFieldPair(labLastName, txtLastName));
 		JButton butPassword = new JButton("Passord");
 		butPassword.setActionCommand(CMD_SET_PASSWORD);
 		JPasswordField txtPassword = new JPasswordField(10);
@@ -51,6 +59,13 @@ public class UserDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(butPassword, txtPassword));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(1));
+	}
+	
+	public void restrictAccess() {
+		System.err.println(cboxAccessLevel.getItemCount());
+		cboxAccessLevel.removeItem(AccessLevel.SUPER_USER);
+		cboxAccessLevel.removeItem(AccessLevel.ADMINISTRATOR);
+		System.err.println(cboxAccessLevel.getItemCount());
 	}
 
 	public String getUserName() {
@@ -85,6 +100,9 @@ public class UserDialog extends JDialog {
 		txtLastName.setText(lastName);
 	}
 
+	
+	
+	
 //	public char[] getPassword() {
 //		return butPassword;
 //	}

@@ -25,6 +25,7 @@ public class CreationOfYouthTarget {
 	public void persistExtensionOfTarget() {
 		Youth youth = new Youth();
 		youth.setStatus(ParticipationStatuses.PARTICIPATING);
+		youth.setGender(Youth.Genders.FEMALE);
 		youth.setFirstName("Glufsur");
 		youth.setLastName("Slufsidottir");
 		youth.setRegion(Youth.Regions[0]);

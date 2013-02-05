@@ -3,14 +3,12 @@ package no.atferdssenteret.panda.view;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Observable;
 
-public abstract class DefaultAbstractTableModel extends AbstractTableModel implements Observable {
+public abstract class DefaultAbstractTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	protected enum ColumnSizes {
@@ -32,8 +30,6 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel imple
 	//    protected String[] headerColumns;
 	//    protected int[] columnSizes;
 	private List<TableRow> rows = new ArrayList<TableRow>();
-
-	private List<Observer> observers = new LinkedList<Observer>();
 
 	protected abstract String[] headerColumns();
 	protected abstract Object[] dataColumns(Model model);
@@ -118,7 +114,7 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel imple
 	protected void setRows(List<TableRow> rows) {
 		this.rows = rows;
 		fireTableDataChanged();
-		notifyObservers();
+//		notifyObservers();
 	}
 
 	public void addRow(Model model) {
@@ -145,15 +141,15 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel imple
 		return models;
 	}
 
-	@Override
-	public void addObserver(Observer o) {
-		observers.add(o);
-	}
-
-	@Override
-	public void notifyObservers() {
-		for (Observer observer : observers) {
-			observer.update(null, null);
-		}
-	}
+//	@Override
+//	public void addObserver(Observer o) {
+//		observers.add(o);
+//	}
+//
+//	@Override
+//	public void notifyObservers() {
+//		for (Observer observer : observers) {
+//			observer.update(null, null);
+//		}
+//	}
 }

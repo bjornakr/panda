@@ -14,12 +14,12 @@ import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.TabsAndTablesPanel;
 import no.atferdssenteret.panda.view.YouthFocusPanel;
 
-public class YouthOverviewController extends AbstractTabsAndTablesController {
+public class YouthFocusController extends AbstractTabsAndTablesController {
 	private YouthFocusPanel view;
 	private Youth model;
 	private List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
 
-	public YouthOverviewController(Window parentWindow, Youth model) {
+	public YouthFocusController(Window parentWindow, Youth model) {
 		this.model = model;
 
 		createTableControllers();
@@ -43,7 +43,7 @@ public class YouthOverviewController extends AbstractTabsAndTablesController {
 
 	@Override
 	public String title() {
-		return "U ID " + model.formattedIdWithLetterAppendix();
+		return model.formattedIdWithLetterAppendix();
 	}
 
 	@Override

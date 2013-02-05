@@ -3,19 +3,18 @@ package no.atferdssenteret.panda.filter;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.DataCollection_;
+import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Questionnaire_;
 
 public class QuestionnaireFilter implements FilterCreator {
-	private final CriteriaQuery<Questionnaire> criteriaQuery = criteriaBuilder.createQuery(Questionnaire.class);
-	private final Root<Questionnaire> root = criteriaQuery.from(Questionnaire.class);
+	private final Root<Questionnaire> root = new ModelRootFactory().root(Questionnaire.class);
 	private final Path<String> dcPath = root.join(Questionnaire_.dataCollection).get(DataCollection_.type);
 	
 	@Override

@@ -38,6 +38,9 @@ public class DataCollectionController extends ApplicationController {
 		else if (getMode() == Mode.CREATE) {
 			view.setTargetDate(new Date(System.currentTimeMillis()));
 		}
+		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+			view.restrictAccess();
+		}
 		
 		view.setVisible(true);
 	}
@@ -85,6 +88,7 @@ public class DataCollectionController extends ApplicationController {
 	public void actionPerformed(ActionEvent event) {
 		super.actionPerformed(event);
 		if (event.getActionCommand().equals("TYPE_COMBO_BOX") && getMode() == Mode.CREATE) {
+			model.getQuestionnaires().clear();
 			for (String questionnaireName : QuestionnairesForDataCollectionType.getInstance().getQuestionnaireNamesFor((String)view.getType())) {
 				Questionnaire questionnaire = new Questionnaire();
 				questionnaire.setName(questionnaireName);

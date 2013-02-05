@@ -7,6 +7,7 @@ import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.filter.YouthFilterCreator;
 import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.User;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.table.YouthTable;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
@@ -19,8 +20,15 @@ public class YouthTableController extends AbstractTableController {
 	private YouthTable tableModel = new YouthTable();
 
 	public YouthTableController(MainController mainController) {
-		super("Targets");
+		super("Ungdommer");
 		this.mainController = mainController;
+		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+			super.restrictAccessToButton(ButtonUtil.COMMAND_CREATE);
+			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
+		}
+		if (MainController.session.user().getAccessLevel() != User.AccessLevel.SUPER_USER) {
+			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
+		}
 		view = new DefaultTablePanel(this, new YouthFilterCreator());
 	}
 
@@ -68,7 +76,8 @@ public class YouthTableController extends AbstractTableController {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			YouthController youthController = new YouthController(view.getWindow(), null);
 			if (youthController.model() != null) {
-//				tableModel.addRow(youthController.model());
+				Target target = (Target)youthController.model();
+				DataCollectionManager.getInstance().notifyTargetUpdated(target);
 				updateTableModel();
 			}
 		}

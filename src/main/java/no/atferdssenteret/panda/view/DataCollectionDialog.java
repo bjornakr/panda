@@ -49,7 +49,9 @@ public class DataCollectionDialog extends JDialog {
 
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Datainnsamling"), cboxTypes));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Måldato"), txtTargetDate));
+		JLabel labTargetDate = new JLabel("Måldato");
+		GuiUtil.setNotNullFlag(labTargetDate);
+		labelsAndFields.add(new LabelFieldPair(labTargetDate, txtTargetDate));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Framdrift"), cboxProgressStatuses));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtProgressDate));
 		cboxDataCollector.insertItemAt(null, 0);
@@ -69,6 +71,13 @@ public class DataCollectionDialog extends JDialog {
 		return questionnairePanel;
 	}
 	
+	public void restrictAccess() {
+		cboxTypes.setEnabled(false);
+		cboxDataCollector.setEnabled(false);
+		txtTargetDate.setEnabled(false);
+		cboxDataCollector.setEnabled(false);
+		
+	}
 	
 	public Object getType() {
 		return cboxTypes.getSelectedItem();

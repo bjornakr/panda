@@ -2,6 +2,7 @@ package no.atferdssenteret.panda.model;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,46 +12,60 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.DataCollectionManager;
+import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
-public class Target implements Model {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Target implements Model, TargetBelonging {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(nullable = false)
 	private ParticipationStatuses status;
+	@Column(nullable = false)
 	private String firstName;
+	@Column(nullable = false)
 	private String lastName;
 	private Date treatmentStart;
 	private String comment;
 	private Date created;
 	private Date updated;
+	private String createdBy;
+	private String updatedBy;
 
-	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+	@OrderBy("targetDate")
 	private final List<DataCollection> dataCollections = new LinkedList<DataCollection>();
-	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Participant> participants = new LinkedList<Participant>();
 	@ManyToOne(cascade = {CascadeType.DETACH})
 	private User dataCollector;
 
 	@PrePersist
 	protected void onCreate() {
-		setCreated(new Date(System.currentTimeMillis()));
-		DataCollectionManager.getInstance().notifyTargetCreated(this);
+		created = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
+//		DataCollectionManager.getInstance().notifyTargetUpdated(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		setUpdated(new Date(System.currentTimeMillis()));
-		//	DataCollectionManager.getInstance().notifyTargetUpdated(this);
+		updated = new Date(System.currentTimeMillis());
+		updatedBy = MainController.session.user().getUserName();
+//		DataCollectionManager.getInstance().notifyTargetUpdated(this);
 	}
-
+	
 	public long getId() {
 		return id;
 	}
@@ -77,7 +92,7 @@ public class Target implements Model {
 		return letterId;
 	}
 
-	
+
 	public ParticipationStatuses getStatus() {
 		return status;
 	}
@@ -110,9 +125,9 @@ public class Target implements Model {
 	}
 
 	public void setTreatmentStart(Date treatmentStart) {
-		if (this.treatmentStart != null && !this.treatmentStart.equals(treatmentStart)) {
-			DataCollectionManager.getInstance().notifyTargetUpdated(this);
-		}
+//		if (this.treatmentStart != null && !this.treatmentStart.equals(treatmentStart)) {
+//			DataCollectionManager.getInstance().notifyTargetUpdated(this);
+//		}
 		this.treatmentStart = treatmentStart;
 	}
 
@@ -121,7 +136,7 @@ public class Target implements Model {
 		dataCollections.add(dataCollection);
 	}
 
-	public List<DataCollection> getDataCollections() {
+	public Collection<DataCollection> getDataCollections() {
 		return dataCollections;
 	}
 
@@ -166,7 +181,7 @@ public class Target implements Model {
 
 	public void setDataCollector(User dataCollector) {
 		this.dataCollector = dataCollector;
-		DataCollectionManager.getInstance().notifyTargetUpdated(this);
+//		DataCollectionManager.getInstance().notifyTargetUpdated(this);
 	}
 
 	public List<Participant> getParticipants() {
@@ -191,5 +206,50 @@ public class Target implements Model {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public static boolean targetIdExists(long id) {
+		return (JPATransactor.getInstance().entityManager().find(Target.class, id) != null);
+	}
+
+	public void validate() {
+		if (status == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Status"));
+		}
+		else if (firstName == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Fornavn"));
+		}
+		else if (lastName == null) {
+			throw new IllegalStateException(StandardMessages.missingField("Etternavn"));
+		}
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	public long getTargetId() {
+		return id;
+	}
+	
+	public boolean hasDataCollection(String dataCollectionType) {
+		for (DataCollection dataCollection : dataCollections) {
+			if (dataCollection.getType().equals(dataCollectionType)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

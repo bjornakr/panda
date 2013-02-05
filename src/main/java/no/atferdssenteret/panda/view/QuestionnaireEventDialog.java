@@ -16,6 +16,7 @@ import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class QuestionnaireEventDialog extends JDialog {
@@ -36,7 +37,9 @@ public class QuestionnaireEventDialog extends JDialog {
 	private void layoutContent() {
 		setLayout(new GridBagLayout());
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtDate));
+		JLabel labDate = new JLabel("Dato");
+		GuiUtil.setNotNullFlag(labDate);
+		labelsAndFields.add(new LabelFieldPair(labDate, txtDate));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Hendelse"), cboxType));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Kommentar"), txtComment));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));

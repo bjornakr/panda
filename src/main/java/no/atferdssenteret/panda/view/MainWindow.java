@@ -18,6 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GuiUtil;
 
 public class MainWindow extends JFrame {
@@ -52,9 +53,9 @@ public class MainWindow extends JFrame {
 	private JPanel createTargetLinkPanel() {
 		txtTargetLink = new JTextField(4);
 		txtTargetLink.addActionListener(controller);
-		txtTargetLink.setActionCommand("GOTO_CHILD");
-		JButton butChildLink = new JButton("OK");
-		butChildLink.setActionCommand("GOTO_CHILD");
+		txtTargetLink.setActionCommand(ButtonUtil.COMMAND_GOTO);
+		JButton butChildLink = new JButton(new ImageIcon("resources/gfx/arrow_right.png"));
+		butChildLink.setActionCommand(ButtonUtil.COMMAND_GOTO);
 		butChildLink.addActionListener(controller);
 
 		JPanel targetLinkPanel = new JPanel();
@@ -64,7 +65,7 @@ public class MainWindow extends JFrame {
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.LINE_START;
 		c.insets = new Insets(0, 10, 0, 10);
-		targetLinkPanel.add(new JLabel("Gå til barn: "), c);
+		targetLinkPanel.add(new JLabel("Gå til: "), c);
 
 		txtTargetLink.setBorder(BorderFactory.createEtchedBorder());
 		txtTargetLink.setFont(GuiUtil.valueFont());
@@ -135,5 +136,13 @@ public class MainWindow extends JFrame {
 		tabbedPane.setTabComponentAt(newTabIndex, new ButtonTabComponent(tabbedPane, controller));
 		tabbedPane.setBackgroundAt(newTabIndex, new Color(0x74FF00));
 		tabbedPane.setSelectedIndex(newTabIndex);
+	}
+
+	public String targetIdFromGotoField() {
+		return txtTargetLink.getText();
+	}
+	
+	public void setTargetGotoField(String id) {
+		txtTargetLink.setText(id);
 	}
 }

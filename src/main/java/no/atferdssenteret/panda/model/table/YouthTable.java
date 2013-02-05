@@ -25,8 +25,8 @@ public class YouthTable extends DefaultAbstractTableModel {
 	@Override
 	protected String[] headerColumns() {
 		String[] headerColumns = new String[NO_OF_FIELDS];
-		headerColumns[TARGET_ID_NUM] = "ID-kode(1)";
-		headerColumns[TARGET_ID_STR] = "ID-kode(2)";
+		headerColumns[TARGET_ID_NUM] = "ID (1)";
+		headerColumns[TARGET_ID_STR] = "ID (2)";
 		headerColumns[STATUS] = "Status";
 		headerColumns[REGION] = "Region";
 		headerColumns[DATA_COLLECTOR] = "Datainnsamler";

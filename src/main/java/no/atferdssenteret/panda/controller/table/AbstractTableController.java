@@ -6,31 +6,37 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observer;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Observable;
+import no.atferdssenteret.panda.model.ModelRootFactory;
+import no.atferdssenteret.panda.model.TargetBelonging;
+import no.atferdssenteret.panda.model.table.TableObserver;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
+import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
-public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener, Observable {
+public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener {
 	private String title;
-	private List<Observer> observers;
+	private List<TableObserver> tableObservers;
 	private List<JButton> buttons;
+	private List<JButton> restrictedButtons = new LinkedList<JButton>();
 
 	public AbstractTableController(String title) {
 		this.title = title;
-		observers  = new LinkedList<Observer>();	
+		tableObservers  = new LinkedList<TableObserver>();
+		buttons = ButtonUtil.createCRUDButtons(this);
+		System.err.println("0");
 	}
 
 	public abstract DefaultTablePanel view();
@@ -61,49 +67,75 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		System.err.println("Predicates.size(): " + predicates.length);
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
 		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
+		//		Root<DataCollection> root = criteriaQuery.from(DataCollection.class);
 		criteriaQuery.where(predicates);
+		if (orderAttribute() != null) {
+			Root<? extends Model> root = new ModelRootFactory().root(getModelClass());
+			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderAttribute())));
+		}
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 
-	
-	
+//		protected SingularAttribute<Model, ?> orderAttribute() {
+//			return null;
+//		}
+
+	protected String orderAttribute() {
+		return null;
+	}
+
 	protected abstract Class<? extends Model> getModelClass();
 
 	public abstract void evaluateActionEvent(ActionEvent event);
 
-	@Override
-	public void addObserver(Observer o) {
-		observers.add(o);
+	public void addTableObserver(TableObserver o) {
+		tableObservers.add(o);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() instanceof JComboBox) {
-			updateTableModel();
-		}
+		try {
+			if (event.getSource() instanceof JComboBox) {
+				updateTableModel();
+			}
 
-		if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-			JPATransactor.getInstance().transaction().begin();
-			JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
-			JPATransactor.getInstance().transaction().commit();
-			tableModel().deleteRow(modelForSelectedTableRow());
+			if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+				JPATransactor.getInstance().transaction().begin();
+				JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
+				JPATransactor.getInstance().transaction().commit();
+				tableModel().deleteRow(modelForSelectedTableRow());
+			}
+			evaluateActionEvent(event);
 		}
-
-		evaluateActionEvent(event);
+		catch (Exception e) {
+			e.printStackTrace();
+			new ErrorMessageDialog(e.getMessage(), null, view().getWindow());
+		}
 	}
-	
+
 	public List<JButton> buttons() {
-		if (buttons == null) {
-			buttons = ButtonUtil.createCRUDButtons(this);
-		}
+		buttons.removeAll(restrictedButtons);
 		return buttons;
+	}
+
+	public void restrictAccessToButton(String actionCommand) {
+		for (JButton button : buttons) {
+			if (button.getActionCommand().equals(actionCommand)) {
+				button.setEnabled(false);
+				restrictedButtons.add(button);
+			}
+		}
 	}
 
 	protected void setButtonEnabledStates() {
 		boolean hasSelection = view().selectedTableRow() >= 0;
 		for (JButton button : buttons()) {
+			if (restrictedButtons.contains(button)) {
+				continue;
+			}
 			if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
 				button.setEnabled(hasSelection);
 			}
@@ -119,6 +151,12 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
 		setButtonEnabledStates();
+		view().updateTableCounters();
+		if (modelForSelectedTableRow() instanceof TargetBelonging) {
+			notifyTableObservers(TableObserver.TableAction.TARGET_ID_SELECTED,
+					((TargetBelonging)modelForSelectedTableRow()).getTargetId());
+		}
+		// find selected target id (if it is in table)
 	}
 
 	public Model modelForSelectedTableRow() {
@@ -132,7 +170,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (event.getClickCount() >= 2) {
-			evaluateActionEvent(new ActionEvent(event.getSource(), event.getID(), ButtonUtil.COMMAND_DOUBLE_CLICK));
+			actionPerformed(new ActionEvent(event.getSource(), event.getID(), ButtonUtil.COMMAND_DOUBLE_CLICK));
 		}
 	}
 	@Override
@@ -148,10 +186,9 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	public void mouseReleased(MouseEvent arg0) {
 	}
 
-	@Override
-	public void notifyObservers() {
-		for (Observer o : observers) {
-			o.update(null, null);
+	public void notifyTableObservers(TableObserver.TableAction tableAction, long targetId) {
+		for (TableObserver o : tableObservers) {
+			o.tableActionPerformed(tableAction, targetId);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.criteria.Predicate;
 import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.ParticipantController;
@@ -12,18 +13,25 @@ import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.table.ParticipantTable;
+import no.atferdssenteret.panda.model.table.ParticipantTableForTargetFocus;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class ParticipantTableController extends AbstractTableController {
 	private DefaultTablePanel view;
-	private ParticipantTable tableModel = new ParticipantTable();
+	private DefaultAbstractTableModel tableModel;
 	private Target target;
 
 	public ParticipantTableController(Target target) {
 		super("Deltakere");
 		this.target = target;
+		if (target == null) {
+			tableModel = new ParticipantTable();
+		}
+		else {
+			tableModel = new ParticipantTableForTargetFocus();
+		}
 		view = new DefaultTablePanel(this, new ParticipantFilterCreator(target));
 	}
 
@@ -42,6 +50,16 @@ public class ParticipantTableController extends AbstractTableController {
 		return null;
 	}
 
+	@Override
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		if (target != null) {
+			return target.getParticipants();
+		}
+		else {
+			return super.retrieve(predicates);
+		}
+	}
+	
 	
 //	@Override
 //	protected List<? extends Model> retrieve(Predicate[] predicates) {

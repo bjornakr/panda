@@ -4,19 +4,18 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.DataCollection_;
+import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.util.DateUtil;
 
 public class DataCollectionFilterCreator implements FilterCreator {
-	private final CriteriaQuery<DataCollection> criteriaQuery = criteriaBuilder.createQuery(DataCollection.class);
-	private final Root<DataCollection> root = criteriaQuery.from(DataCollection.class);
+	private final Root<DataCollection> root = new ModelRootFactory().root(DataCollection.class);
 	private Target target;
 	
 	public DataCollectionFilterCreator() {

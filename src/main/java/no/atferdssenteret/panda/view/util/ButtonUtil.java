@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.RootPaneContainer;
 
 public class ButtonUtil {
+	public final static String COMMAND_GOTO = "GOTO";
     public final static String COMMAND_CREATE = "CREATE";
     public final static String COMMAND_EDIT = "EDIT";
     public final static String COMMAND_DELETE = "DELETE";

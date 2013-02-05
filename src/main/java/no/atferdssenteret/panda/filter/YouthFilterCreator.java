@@ -3,16 +3,15 @@ package no.atferdssenteret.panda.filter;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.fft.Youth_;
 
 public class YouthFilterCreator implements FilterCreator {
-	private final CriteriaQuery<Youth> criteriaQuery = criteriaBuilder.createQuery(Youth.class);
-	private final Root<Youth> root = criteriaQuery.from(Youth.class);
+	private final Root<Youth> root = new ModelRootFactory().root(Youth.class);
 	
 	@Override
 	public List<Filter> createFilters() {
@@ -30,6 +29,7 @@ public class YouthFilterCreator implements FilterCreator {
 		for (ParticipationStatuses status : ParticipationStatuses.values()) {
 			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Youth_.status), status)));
 		}
+		
 		return new Filter("Status", filterUnits);
 	}
 	

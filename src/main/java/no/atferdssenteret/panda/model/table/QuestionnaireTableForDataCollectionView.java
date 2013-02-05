@@ -2,6 +2,7 @@ package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.QuestionnaireEvent;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTableModel {
@@ -29,8 +30,11 @@ public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTabl
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
 		dataColumns[NAME] = questionnaire.getName();
 		dataColumns[STATUS] = questionnaire.calculateStatus();
-		dataColumns[LAST_EVENT] = questionnaire.lastEvent();
-		dataColumns[EVENT_DATE] = questionnaire.lastEvent().getDate();
+		QuestionnaireEvent lastEvent = questionnaire.lastEvent();
+		if (lastEvent != null) {
+			dataColumns[LAST_EVENT] = questionnaire.lastEvent();
+			dataColumns[EVENT_DATE] = questionnaire.lastEvent().getDate();
+		}
 		return dataColumns;
 	}
 

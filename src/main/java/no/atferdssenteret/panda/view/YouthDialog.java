@@ -18,6 +18,7 @@ import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
+import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class YouthDialog extends JDialog {
@@ -52,6 +53,7 @@ public class YouthDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Gruppe"), cboxTreatmentGroups));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Status"), cboxStatuses));
 		cboxDataCollectors.insertItemAt(null, 0);
+		cboxDataCollectors.setSelectedIndex(0);
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Datainnsamler"), cboxDataCollectors));
 
 		c = new GridBagConstraints();
@@ -62,8 +64,12 @@ public class YouthDialog extends JDialog {
 
 		labelsAndFields = new LinkedList<LabelFieldPair>();
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Kjønn"), cboxGenders));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Fornavn"), txtFirstName));
-		labelsAndFields.add(new LabelFieldPair(new JLabel("Etternavn"), txtLastName));
+		JLabel labFirstName = new JLabel("Fornavn");
+		GuiUtil.setNotNullFlag(labFirstName);
+		labelsAndFields.add(new LabelFieldPair(labFirstName, txtFirstName));
+		JLabel labLastName = new JLabel("Etternavn");
+		GuiUtil.setNotNullFlag(labLastName);
+		labelsAndFields.add(new LabelFieldPair(labLastName, txtLastName));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Region"), cboxRegions));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Behandlingsstart"), txtTreatmentStart));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Kommentar"), txtComment));
@@ -83,6 +89,14 @@ public class YouthDialog extends JDialog {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), c);
+	}
+	
+	public void restrictAccess() {
+		cboxTreatmentGroups.setEnabled(false);
+		cboxStatuses.setEnabled(false);
+		cboxDataCollectors.setEnabled(false);
+		cboxRegions.setEnabled(false);
+		txtTreatmentStart.setEditable(false);
 	}
 
 	public String getFirstName() {

@@ -3,9 +3,10 @@ package no.atferdssenteret.panda.filter;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.Participant_;
@@ -13,8 +14,7 @@ import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Target;
 
 public class ParticipantFilterCreator implements FilterCreator {
-	private final CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
-	private final Root<Participant> root = criteriaQuery.from(Participant.class);
+	private final Root<Participant> root = new ModelRootFactory().root(Participant.class);
 	private Target target;
 
 	public ParticipantFilterCreator() {
@@ -41,7 +41,11 @@ public class ParticipantFilterCreator implements FilterCreator {
 		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
 		filterUnits.add(defaultFilterUnit());
 		for (String role : ParticipantRoles.values()) {
-			filterUnits.add(new FilterUnit(role, criteriaBuilder.equal(root.get(Participant_.role), role)));
+			Predicate predicate = criteriaBuilder.equal(root.get(Participant_.role), role);
+			if (target != null) {
+				predicate = criteriaBuilder.and(predicate, currentTarget());
+			}
+			filterUnits.add(new FilterUnit(role, predicate));
 		}
 		return new Filter("Rolle", filterUnits);
 	}
@@ -50,7 +54,12 @@ public class ParticipantFilterCreator implements FilterCreator {
 		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
 		filterUnits.add(defaultFilterUnit());
 		for (ParticipationStatuses status : ParticipationStatuses.values()) {
-			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Participant_.status), status)));
+			Predicate predicate = criteriaBuilder.equal(root.get(Participant_.status), status);
+			if (target != null) {
+				predicate = criteriaBuilder.and(predicate, currentTarget());
+			}
+			filterUnits.add(new FilterUnit(status.toString(), predicate));
+//			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Participant_.status), status)));
 		}
 		return new Filter("Status", filterUnits);
 	}
@@ -63,6 +72,10 @@ public class ParticipantFilterCreator implements FilterCreator {
 			return new FilterUnit("Alle", criteriaBuilder.equal(root.get(Participant_.target), target));
 		}
 
+	}
+	
+	private Predicate currentTarget() {
+		return criteriaBuilder.equal(root.get(Participant_.target), target);
 	}
 
 }

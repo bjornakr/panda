@@ -7,6 +7,7 @@ import java.sql.Date;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
 import no.atferdssenteret.panda.util.StringUtil;
+import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.QuestionnaireEventDialog;
 
 public class QuestionnaireEventController extends ApplicationController {
@@ -42,7 +43,7 @@ public class QuestionnaireEventController extends ApplicationController {
 	public Window view() {
 		return view;
 	}
-	
+
 	@Override
 	public void transferModelToView() {
 		System.out.println(model.getDate());
@@ -64,8 +65,14 @@ public class QuestionnaireEventController extends ApplicationController {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
-			transferUserInputToModel();
-			view.dispose();
+			try {
+				transferUserInputToModel();
+				model.validate();
+				view.dispose();
+			}
+			catch (IllegalStateException e) {
+				new ErrorMessageDialog(e.getMessage(), null, view());
+			}
 		}
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
 			view().dispose();

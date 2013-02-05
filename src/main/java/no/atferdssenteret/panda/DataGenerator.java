@@ -19,23 +19,23 @@ public class DataGenerator {
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		createDataCollectionRules();
 		
-		JPATransactor.getInstance().transaction().begin();
-		for (int i = 0; i < 100; i ++) {
+		for (int i = 0; i < 1000; i ++) {
 			Youth youth = createYouth();
 			List<Participant> participants = new LinkedList<Participant>();
-			for (int j = 0; j < new Random().nextInt(3); j++) {
+			for (int j = 0; j <= new Random().nextInt(3); j++) {
 				participants.add(createParticipant());
 			}
 			youth.setParticipants(participants);
+			JPATransactor.getInstance().transaction().begin();
 			JPATransactor.getInstance().entityManager().persist(youth);
+			JPATransactor.getInstance().transaction().commit();
+			DataCollectionManager.getInstance().notifyTargetUpdated(youth);
 		}
-		JPATransactor.getInstance().transaction().commit();
 	}
 
 	private void createDataCollectionRules() {
 		DataCollectionManager.getInstance().addRule(new DataCollectionRule(
 				"T1",
-				DataCollectionRule.ApplicationTimes.WHEN_TARGET_CREATED,
 				Calendar.MONTH, 0, 
 				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE));
 	}
@@ -44,7 +44,8 @@ public class DataGenerator {
 		Youth youth = new Youth();
 		youth.setFirstName(createFirstName());
 		youth.setLastName(createLastName());
-		youth.setStatus(pickRandom(ParticipationStatuses.values()));
+//		youth.setStatus(pickRandom(ParticipationStatuses.values()));
+		youth.setStatus(ParticipationStatuses.PARTICIPATING);
 		youth.setRegion(pickRandom(Youth.Regions));
 		youth.setGender(pickRandom(Youth.Genders.values()));
 		youth.setTreatmentGroup(pickRandom(Youth.TreatmentGroups.values()));
@@ -93,7 +94,28 @@ public class DataGenerator {
 		return namepart1[new Random().nextInt(namepart1.length)] + namepart2[new Random().nextInt(namepart2.length)];
 	}
 
+	private static void setupQuestionnaires() {
+		String questionnaireCBCL = "CBCL";
+		String questionnaireTRF = "TRF";
+		String questionnaireTeacher = "Teacher";
+		String questionnaireInt = "Interventionist";
+		String questionnaireAll = "Alliance";
+		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireInt);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireAll);
+	}
+	
 	public static void main(String[] args) throws SQLException {
+		setupQuestionnaires();
 		new DataGenerator();
 	}
 }
