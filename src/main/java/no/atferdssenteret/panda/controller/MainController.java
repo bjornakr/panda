@@ -22,6 +22,7 @@ import no.atferdssenteret.panda.controller.table.ParticipantTableController;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.controller.table.UserTableController;
 import no.atferdssenteret.panda.controller.table.YouthTableController;
+import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
@@ -176,23 +177,16 @@ public class MainController extends AbstractTabsAndTablesController implements A
 
 
 	private static void setupQuestionnaires() {
-		String questionnaireCBCL = "CBCL";
-		String questionnaireTRF = "TRF";
-		String questionnaireTeacher = "Teacher";
-		String questionnaireInt = "Interventionist";
-		String questionnaireAll = "Alliance";
 		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
-		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireInt);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireAll);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.PARENT);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.YOUTH);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.TEACHER);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.PARENT);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.YOUTH);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.TEACHER);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.PARENT);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.YOUTH);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.TEACHER);
 	}
 
 	@Override

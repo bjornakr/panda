@@ -4,16 +4,23 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.ParticipantController;
 import no.atferdssenteret.panda.filter.ParticipantFilterCreator;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Participant;
+import no.atferdssenteret.panda.model.Participant_;
 import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.Target_;
 import no.atferdssenteret.panda.model.table.ParticipantTable;
 import no.atferdssenteret.panda.model.table.ParticipantTableForTargetFocus;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -56,7 +63,7 @@ public class ParticipantTableController extends AbstractTableController {
 			return target.getParticipants();
 		}
 		else {
-			return super.retrieve(predicates);
+			return retrieveForAllTargets(predicates);
 		}
 	}
 	
@@ -107,8 +114,19 @@ public class ParticipantTableController extends AbstractTableController {
 		}
 	}
 
-	@Override
-	protected Class<? extends Model> getModelClass() {
-		return Participant.class;
+//	@Override
+//	protected Class<? extends Model> getModelClass() {
+//		return Participant.class;
+//	}
+	
+	protected List<? extends Model> retrieveForAllTargets(Predicate[] predicates) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
+		criteriaQuery.where(predicates);
+		Root<Participant> root = criteriaQuery.from(Participant.class);
+		Join<Participant, Target> joinParticipantTarget = root.join(Participant_.target);
+		criteriaQuery.orderBy(criteriaBuilder.asc(joinParticipantTarget.get(Target_.id)),
+				criteriaBuilder.asc(root.get(Participant_.role)));
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

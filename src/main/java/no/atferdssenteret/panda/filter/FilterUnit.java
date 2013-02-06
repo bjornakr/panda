@@ -1,12 +1,17 @@
 package no.atferdssenteret.panda.filter;
 
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.SingularAttribute;
 
-public class FilterUnit {
+import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.util.JPATransactor;
+
+public class FilterUnit<T extends Model> {
 	private final String name;
-	private final Predicate predicate;
+	
 
-	public FilterUnit(String name, Predicate predicate) {
+	public FilterUnit(String name, SingularAttribute<T, ?> singularAttribute, Object value) {
 		this.name = name;
 		this.predicate = predicate;
 	}
@@ -18,6 +23,10 @@ public class FilterUnit {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public Predicate predicate(Root<T> root, SingularAttribute<T, ? extends Object> sa) {
+		return JPATransactor.getInstance().criteriaBuilder().equal(root.get(sa), 7);
 	}
 	
 }

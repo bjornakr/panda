@@ -46,7 +46,6 @@ public class DataCollectionManager {
 	//	}
 
 	public void notifyTargetUpdated(Target target) {
-		System.err.println("HUP!");
 		currentTarget = target;
 		deleteUntouchedDataCollections(target);
 

@@ -5,6 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import no.atferdssenteret.panda.model.Model;
 
@@ -12,6 +14,8 @@ public class JPATransactor {
 	private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("targets");
 	private final EntityManager entityManager = entityManagerFactory.createEntityManager();
 	private static JPATransactor transactor; 
+	private static CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+
 
 	//    public JPATransactor(EntityManager entityManager) {
 	//	this.entityManager = entityManager;
@@ -60,5 +64,13 @@ public class JPATransactor {
 	public void update() {
 		entityManager.getTransaction().begin();
 		entityManager.getTransaction().commit();
+	}
+	
+	public CriteriaBuilder criteriaBuilder() {
+		return criteriaBuilder;
+	}
+	
+	public CriteriaQuery<? extends Model> criteriaQuery(Class<? extends Model> c) {
+		return criteriaBuilder.createQuery(c);
 	}
 }

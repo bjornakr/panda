@@ -4,15 +4,25 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.QuestionnaireController;
-import no.atferdssenteret.panda.filter.QuestionnaireFilter;
+import no.atferdssenteret.panda.filter.QuestionnaireFilterCreator;
 import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.model.DataCollection_;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.Questionnaire_;
+import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.Target_;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
 import no.atferdssenteret.panda.model.table.QuestionnaireTableForDataCollectionView;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -28,7 +38,7 @@ public class QuestionnaireTableController extends AbstractTableController {
 		
 		if (dataCollection == null) {
 			tableModel = new QuestionnaireTable();
-			view = new DefaultTablePanel(this, new QuestionnaireFilter());
+			view = new DefaultTablePanel(this, new QuestionnaireFilterCreator());
 		}
 		else {
 			tableModel = new QuestionnaireTableForDataCollectionView();
@@ -110,19 +120,41 @@ public class QuestionnaireTableController extends AbstractTableController {
 			if (questionnaireController.model() != null) {
 				tableModel.addRow(questionnaireController.model());
 			}
-//			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
 			new QuestionnaireController(view.getWindow(), model);
-			tableModel.update(model);
-//			updateTableModel();
+			if (dataCollection == null) {
+				updateTableModel();
+			}
+			else {
+				tableModel.update(model);
+			}
 		}
 	}
 
+//	@Override
+//	protected Class<? extends Model> getModelClass() {
+//		return Questionnaire.class;
+//	}
+//	
+//	@Override
+//	protected String orderAttribute() {
+//		return "dataCollection.type";
+//	}
+	
 	@Override
-	protected Class<? extends Model> getModelClass() {
-		return Questionnaire.class;
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+		CriteriaQuery<Questionnaire> criteriaQuery = criteriaBuilder.createQuery(Questionnaire.class);
+		criteriaQuery.where(predicates);
+		Root<Questionnaire> root = criteriaQuery.from(Questionnaire.class);
+		Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton = root.join(Questionnaire_.dataCollection);
+		Join<DataCollection, Target> joinQuestionnaireTarget = joinQuestionnaireDataColleciton.join(DataCollection_.target);
+		criteriaQuery.orderBy(criteriaBuilder.asc(joinQuestionnaireTarget.get(Target_.id)),
+				criteriaBuilder.asc(joinQuestionnaireDataColleciton.get(DataCollection_.type)),
+				criteriaBuilder.asc(root.get(Questionnaire_.name)));
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

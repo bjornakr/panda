@@ -7,17 +7,13 @@ import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.model.table.TableObserver;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -31,12 +27,13 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	private List<TableObserver> tableObservers;
 	private List<JButton> buttons;
 	private List<JButton> restrictedButtons = new LinkedList<JButton>();
+//	public final static CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+
 
 	public AbstractTableController(String title) {
 		this.title = title;
 		tableObservers  = new LinkedList<TableObserver>();
 		buttons = ButtonUtil.createCRUDButtons(this);
-		System.err.println("0");
 	}
 
 	public abstract DefaultTablePanel view();
@@ -66,28 +63,23 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		view().revalidate();
 	}
 
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-		System.err.println("Predicates.size(): " + predicates.length);
-		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
-		//		Root<DataCollection> root = criteriaQuery.from(DataCollection.class);
-		criteriaQuery.where(predicates);
-		if (orderAttribute() != null) {
-			Root<? extends Model> root = new ModelRootFactory().root(getModelClass());
-			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderAttribute())));
-		}
-		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
-	}
-
-//		protected SingularAttribute<Model, ?> orderAttribute() {
-//			return null;
+	protected abstract List<? extends Model> retrieve(Predicate[] predicates);
+//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
+//		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
+//		criteriaQuery.where(predicates);
+//		if (orderAttribute() != null) {
+//			Root<? extends Model> root = new ModelRootFactory().root(getModelClass());
+//			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderAttribute())));
 //		}
+//		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+//	}
 
-	protected String orderAttribute() {
-		return null;
-	}
+//	protected String orderAttribute() {
+//		return null;
+//	}
 
-	protected abstract Class<? extends Model> getModelClass();
+//	protected abstract Class<? extends Model> getModelClass();
 
 	public abstract void evaluateActionEvent(ActionEvent event);
 

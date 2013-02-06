@@ -13,7 +13,7 @@ import no.atferdssenteret.panda.model.Questionnaire;
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Questionnaire_;
 
-public class QuestionnaireFilter implements FilterCreator {
+public class QuestionnaireFilterCreator implements FilterCreator {
 	private final Root<Questionnaire> root = new ModelRootFactory().root(Questionnaire.class);
 	private final Path<String> dcPath = root.join(Questionnaire_.dataCollection).get(DataCollection_.type);
 	

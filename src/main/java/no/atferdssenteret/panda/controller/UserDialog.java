@@ -62,10 +62,8 @@ public class UserDialog extends JDialog {
 	}
 	
 	public void restrictAccess() {
-		System.err.println(cboxAccessLevel.getItemCount());
 		cboxAccessLevel.removeItem(AccessLevel.SUPER_USER);
 		cboxAccessLevel.removeItem(AccessLevel.ADMINISTRATOR);
-		System.err.println(cboxAccessLevel.getItemCount());
 	}
 
 	public String getUserName() {

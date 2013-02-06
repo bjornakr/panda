@@ -1,10 +1,19 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.controller.UserController;
+import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.User_;
 import no.atferdssenteret.panda.model.table.UserTable;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -33,10 +42,10 @@ public class UserTableController extends AbstractTableController {
 		return null;
 	}
 
-	@Override
-	protected Class<User> getModelClass() {
-		return User.class;
-	}
+//	@Override
+//	protected Class<User> getModelClass() {
+//		return User.class;
+//	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
@@ -52,5 +61,14 @@ public class UserTableController extends AbstractTableController {
 			new UserController(view.getWindow(), (User)modelForSelectedTableRow());
 			updateTableModel();
 		}
+	}
+	
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+		CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+		criteriaQuery.where(predicates);
+		Root<User> root = criteriaQuery.from(User.class);
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(User_.userName)));
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

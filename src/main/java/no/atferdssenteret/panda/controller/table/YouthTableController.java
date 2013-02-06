@@ -1,15 +1,23 @@
 package no.atferdssenteret.panda.controller.table;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.filter.YouthFilterCreator;
+import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.model.User;
 import no.atferdssenteret.panda.model.fft.Youth;
+import no.atferdssenteret.panda.model.fft.Youth_;
 import no.atferdssenteret.panda.model.table.YouthTable;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -93,8 +101,17 @@ public class YouthTableController extends AbstractTableController {
 		}
 	}
 
-	@Override
-	protected Class<Youth> getModelClass() {
-		return Youth.class;
+//	@Override
+//	protected Class<Youth> getModelClass() {
+//		return Youth.class;
+//	}
+	
+	protected List<? extends Model> retrieve(Predicate[] predicates) {
+//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+		CriteriaQuery<? extends Model> criteriaQuery = JPATransactor.getInstance().criteriaQuery(Youth.class);
+		criteriaQuery.where(predicates);
+		Root<Youth> root = criteriaQuery.from(Youth.class);
+		criteriaQuery.orderBy(JPATransactor.getInstance().criteriaBuilder().asc(root.get(Youth_.id)));
+		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

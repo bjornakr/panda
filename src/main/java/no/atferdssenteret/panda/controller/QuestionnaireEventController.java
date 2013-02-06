@@ -46,7 +46,6 @@ public class QuestionnaireEventController extends ApplicationController {
 
 	@Override
 	public void transferModelToView() {
-		System.out.println(model.getDate());
 		view.setDate(model.getDate());
 		view.setType(model.getType());
 		view.setComment(model.getComment());	

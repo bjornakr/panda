@@ -3,7 +3,6 @@ package no.atferdssenteret.panda.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -30,13 +29,12 @@ import no.atferdssenteret.panda.util.JPATransactor;
 //}
 
 public class ModelRootFactory {
-//	private static Map<Class<T>, Root<T>> modelMap = new HashMap<Class<T>, Root<T>>();
 	@SuppressWarnings("rawtypes")
 	private static Map<Class, Root> modelMap = new HashMap<Class, Root>();
 	
 	private <T extends Model> Root<T> createModelRoot(Class<T> modelClass) {
-		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(modelClass);
+//		CriteriaQuery<? extends Model> criteriaQuery = JPATransactor.getInstance().criteriaBuilder().createQuery(modelClass);
+		CriteriaQuery<? extends Model> criteriaQuery = JPATransactor.getInstance().entityManager().getCriteriaBuilder().createQuery(modelClass);
 		return criteriaQuery.from(modelClass);
 	}
 	

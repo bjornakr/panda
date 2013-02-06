@@ -47,8 +47,10 @@ public class Questionnaire implements Model, TargetBelonging {
 	private String name;
 	@JoinColumn(nullable = false)
 	private DataCollection dataCollection;
+	@Column(nullable = false)
 	private Statuses status = Statuses.NOT_RECIEVED;
 	@OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OrderBy("date")
 	private List<QuestionnaireEvent> questionnaireEvents = new LinkedList<QuestionnaireEvent>();
 	private Date created;
 	private Date updated;
@@ -140,7 +142,7 @@ public class Questionnaire implements Model, TargetBelonging {
 	}
 
 	public String toString() {
-		return "Q: " + name;
+		return this.getClass() + " " + name;
 	}
 
 	public QuestionnaireEvent lastEvent() {
