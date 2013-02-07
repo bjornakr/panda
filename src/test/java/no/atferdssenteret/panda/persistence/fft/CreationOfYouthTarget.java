@@ -28,7 +28,7 @@ public class CreationOfYouthTarget {
 		youth.setGender(Youth.Genders.FEMALE);
 		youth.setFirstName("Glufsur");
 		youth.setLastName("Slufsidottir");
-		youth.setRegion(Youth.Regions[0]);
+		youth.setRegion(Youth.regions[0]);
 		youth.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
 		JPATransactor.getInstance().transaction().begin();
 		JPATransactor.getInstance().entityManager().persist(youth);

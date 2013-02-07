@@ -1,63 +1,41 @@
 package no.atferdssenteret.panda.filter;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.fft.Youth_;
 
 public class YouthFilterCreator implements FilterCreator {
-	private final Root<Youth> root = new ModelRootFactory().root(Youth.class);
-	
+
 	@Override
-	public List<Filter> createFilters() {
-		List<Filter> filters = new LinkedList<Filter>();
-		filters.add(createStatusFilter());
-		filters.add(createTreatmentGroupFilter());
-		filters.add(createRegionFilter());
-		filters.add(createGenderFilter());
+	public Filter[] createFilters() {
+		Filter[] filters = new Filter[4];
+		filters[0] = new Filter("Status", ParticipationStatuses.values());
+		filters[1] = new Filter("Gruppe", Youth.TreatmentGroups.values());
+		filters[2] = new Filter("Region", Youth.regions);
+		filters[3] = new Filter("Kjønn", Youth.Genders.values());
 		return filters;
 	}
-
-	private Filter createStatusFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(includeAllFilterUnit);
-		for (ParticipationStatuses status : ParticipationStatuses.values()) {
-			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Youth_.status), status)));
-		}
-		
-		return new Filter("Status", filterUnits);
-	}
 	
-	private Filter createTreatmentGroupFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(includeAllFilterUnit);
-		for (Youth.TreatmentGroups treatmentsGroup : Youth.TreatmentGroups.values()) {
-			filterUnits.add(new FilterUnit(treatmentsGroup.toString(), criteriaBuilder.equal(root.get(Youth_.treatmentGroup), treatmentsGroup)));
+	public static Predicate createPredicate(Object value, Root<Youth> root) {
+		if (value instanceof ParticipationStatuses) {
+			return criteriaBuilder.equal(root.get(Youth_.status), value);
 		}
-		return new Filter("Gruppe", filterUnits);
-	}
-
-	private Filter createRegionFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(includeAllFilterUnit);
-		for (String item : Youth.Regions) {
-			filterUnits.add(new FilterUnit(item.toString(), criteriaBuilder.equal(root.get(Youth_.region), item)));
+		else if (value instanceof Youth.TreatmentGroups) {
+			return criteriaBuilder.equal(root.get(Youth_.treatmentGroup), value);
 		}
-		return new Filter("Region", filterUnits);
-	}
-	
-	
-	private Filter createGenderFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(includeAllFilterUnit);
-		for (Youth.Genders item : Youth.Genders.values()) {
-			filterUnits.add(new FilterUnit(item.toString(), criteriaBuilder.equal(root.get(Youth_.gender), item)));
+		else if (Arrays.asList(Youth.regions).contains(value)) {
+			return criteriaBuilder.equal(root.get(Youth_.region), value);
 		}
-		return new Filter("Kjønn", filterUnits);
+		else if (value instanceof Youth.Genders) {
+			return criteriaBuilder.equal(root.get(Youth_.gender), value);
+		}
+		else {
+			return criteriaBuilder.conjunction();
+		}
 	}
 }

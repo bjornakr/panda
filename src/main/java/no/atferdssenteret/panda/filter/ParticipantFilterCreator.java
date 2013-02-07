@@ -1,81 +1,34 @@
 package no.atferdssenteret.panda.filter;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.model.ModelRootFactory;
 import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.Participant_;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Target;
 
 public class ParticipantFilterCreator implements FilterCreator {
-	private final Root<Participant> root = new ModelRootFactory().root(Participant.class);
-	private Target target;
 
-	public ParticipantFilterCreator() {
-	}
-
-	/**
-	 * This constructor will filter out all cases except the specified target.
-	 * 
-	 * @param target The target
-	 */
-	public ParticipantFilterCreator(Target target) {
-		this.target = target;
-	}
-
-	@Override
-	public List<Filter> createFilters() {
-		List<Filter> filters = new LinkedList<Filter>();
-		filters.add(createRoleFilter());
-		filters.add(createStatusFilter());
+	public Filter[] createFilters() {
+		Filter[] filters = new Filter[2];
+		filters[0] = new Filter("Rolle", ParticipantRoles.values());
+		filters[1] = new Filter("Status", ParticipationStatuses.values());
 		return filters;
 	}
 
-	private Filter createRoleFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(defaultFilterUnit());
-		for (String role : ParticipantRoles.values()) {
-			Predicate predicate = criteriaBuilder.equal(root.get(Participant_.role), role);
-			if (target != null) {
-				predicate = criteriaBuilder.and(predicate, currentTarget());
-			}
-			filterUnits.add(new FilterUnit(role, predicate));
-		}
-		return new Filter("Rolle", filterUnits);
-	}
 
-	private Filter createStatusFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(defaultFilterUnit());
-		for (ParticipationStatuses status : ParticipationStatuses.values()) {
-			Predicate predicate = criteriaBuilder.equal(root.get(Participant_.status), status);
-			if (target != null) {
-				predicate = criteriaBuilder.and(predicate, currentTarget());
-			}
-			filterUnits.add(new FilterUnit(status.toString(), predicate));
-//			filterUnits.add(new FilterUnit(status.toString(), criteriaBuilder.equal(root.get(Participant_.status), status)));
+	public static Predicate createPredicate(Object value, Root<Participant> root) {
+		if (Arrays.asList(ParticipantRoles.values()).contains(value)) {
+			return criteriaBuilder.equal(root.get(Participant_.role), value);
 		}
-		return new Filter("Status", filterUnits);
-	}
-
-	private FilterUnit defaultFilterUnit() {
-		if (target == null) {
-			return includeAllFilterUnit;
+		else if (value instanceof ParticipationStatuses) {
+			return criteriaBuilder.equal(root.get(Participant_.status), value);
 		}
 		else {
-			return new FilterUnit("Alle", criteriaBuilder.equal(root.get(Participant_.target), target));
+			return criteriaBuilder.conjunction();
 		}
-
 	}
-	
-	private Predicate currentTarget() {
-		return criteriaBuilder.equal(root.get(Participant_.target), target);
-	}
-
 }

@@ -214,7 +214,6 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(DateUtil.today());
 		calendar.add(Calendar.DAY_OF_MONTH, -7);
-		System.out.println("Comparing: " + calendar.getTime() + " and " + targetDate);
 		if (calendar.getTime().after(targetDate)) {
 			return Statuses.DELAYED;
 		}

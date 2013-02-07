@@ -1,89 +1,80 @@
 package no.atferdssenteret.panda.filter;
 
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.DataCollection_;
-import no.atferdssenteret.panda.model.ModelRootFactory;
-import no.atferdssenteret.panda.model.Target;
 import no.atferdssenteret.panda.util.DateUtil;
+import no.atferdssenteret.panda.util.JPATransactor;
+
 
 public class DataCollectionFilterCreator implements FilterCreator {
-	private final Root<DataCollection> root = new ModelRootFactory().root(DataCollection.class);
-	private Target target;
+	public enum Statuses {
+		FORTHCOMING_AND_DELAYED("Aktuelle og forsinkede"),
+		CONCLUDED("Avklart");
+		
+		private String name;
+
+		Statuses(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
 	
-	public DataCollectionFilterCreator() {
-	}
-
-	/**
-	 * This constructor will filter out all cases except the specified target.
-	 * 
-	 * @param target The target
-	 */
-	public DataCollectionFilterCreator(Target target) {
-		this.target = target;
-	}
-
-	@Override
-	public List<Filter> createFilters() {
-		List<Filter> filters = new LinkedList<Filter>();
-		filters.add(createStatusFilter());
-		filters.add(createTypeFiter());
-		filters.add(createProgressStatusFilter());
+	private static CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+	
+	public Filter[] createFilters() {
+		Filter[] filters = new Filter[3];
+		filters[0] = new Filter("Status", DataCollectionFilterCreator.Statuses.values());
+		filters[1] = new Filter("Type", DataCollectionTypes.values());
+		filters[2] = new Filter("Framdrift", DataCollection.ProgressStatuses.values());
 		return filters;
 	}
 
-	private Filter createStatusFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(includeAllFilterUnit);
-		filterUnits.add(new FilterUnit("Aktuelle og forsinkede", createForthcomingAndDelayedPredicate()));
-		filterUnits.add(new FilterUnit("Avklarte", createConcludedPredicate()));
-		return new Filter("Status", filterUnits);
+	public static Predicate createPredicate(Object value, Root<DataCollection> root) {
+		if (value instanceof DataCollectionFilterCreator.Statuses) {
+			return createStatusPredicate((DataCollectionFilterCreator.Statuses)value, root);
+		}
+		else if (Arrays.asList(DataCollectionTypes.values()).contains(value)) {
+			return criteriaBuilder.equal(root.get(DataCollection_.type), value);
+		}
+		else if (value instanceof DataCollection.ProgressStatuses) {
+			return criteriaBuilder.equal(root.get(DataCollection_.progressStatus), value);
+		}
+		else {
+			return criteriaBuilder.conjunction();
+		}
 	}
 
-	private Filter createTypeFiter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(defaultFilterUnit());
-		for (String type : DataCollectionTypes.values()) {
-			filterUnits.add(new FilterUnit(type, criteriaBuilder.equal(root.get(DataCollection_.type), type)));
+	private static Predicate createStatusPredicate(DataCollectionFilterCreator.Statuses value, Root<DataCollection> root) {
+		if (value == DataCollectionFilterCreator.Statuses.CONCLUDED) {
+			return createConcludedPredicate(root);
 		}
-		return new Filter("Type", filterUnits);
-	}
-	
-	private Filter createProgressStatusFilter() {
-		List<FilterUnit> filterUnits = new LinkedList<FilterUnit>();
-		filterUnits.add(defaultFilterUnit());
-		for (DataCollection.ProgressStatuses progressStatus : DataCollection.ProgressStatuses.values()) {
-			filterUnits.add(new FilterUnit(progressStatus.toString(), criteriaBuilder.equal(root.get(DataCollection_.progressStatus), progressStatus)));
+		else if (value == DataCollectionFilterCreator.Statuses.FORTHCOMING_AND_DELAYED) {
+			return createForthcomingAndDelayedPredicate(root);
 		}
-		return new Filter("Framdrift", filterUnits);
+		throw new IllegalArgumentException();
 	}
-	
-	private Predicate createConcludedPredicate() {
+
+	private static Predicate createConcludedPredicate(Root<DataCollection> root) {
 		Predicate givenUpPredicate = criteriaBuilder.equal(root.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.GIVEN_UP);
 		Predicate concludedPredicate = criteriaBuilder.equal(root.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.PERFORMED);
 		return criteriaBuilder.or(givenUpPredicate, concludedPredicate);
 	}
-	
-	private Predicate createForthcomingAndDelayedPredicate() {
+
+	private static Predicate createForthcomingAndDelayedPredicate(Root<DataCollection> root) {
 		Predicate isWithinTimeFrame = criteriaBuilder.lessThanOrEqualTo(root.get(DataCollection_.targetDate),
 				DateUtil.addTime(DateUtil.today(), Calendar.MONTH, 1));
-		Predicate notConcluded = criteriaBuilder.not(createConcludedPredicate());
+		Predicate notConcluded = criteriaBuilder.not(createConcludedPredicate(root));
 		return criteriaBuilder.and(isWithinTimeFrame, notConcluded);
-	}
-	
-	private FilterUnit defaultFilterUnit() {
-		if (target == null) {
-			return includeAllFilterUnit;
-		}
-		else {
-			return new FilterUnit("Alle", criteriaBuilder.equal(root.get(DataCollection_.target), target));
-		}
 	}
 }

@@ -145,16 +145,26 @@ public class QuestionnaireTableController extends AbstractTableController {
 //	}
 	
 	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<Questionnaire> criteriaQuery = criteriaBuilder.createQuery(Questionnaire.class);
-		criteriaQuery.where(predicates);
 		Root<Questionnaire> root = criteriaQuery.from(Questionnaire.class);
 		Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton = root.join(Questionnaire_.dataCollection);
 		Join<DataCollection, Target> joinQuestionnaireTarget = joinQuestionnaireDataColleciton.join(DataCollection_.target);
+		criteriaQuery.where(extractPredicatesFromFilterValues(filterValues, root, joinQuestionnaireDataColleciton));
 		criteriaQuery.orderBy(criteriaBuilder.asc(joinQuestionnaireTarget.get(Target_.id)),
 				criteriaBuilder.asc(joinQuestionnaireDataColleciton.get(DataCollection_.type)),
 				criteriaBuilder.asc(root.get(Questionnaire_.name)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
+	
+	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues,
+			Root<Questionnaire> root, Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton) {
+		Predicate[] predicates = new Predicate[filterValues.size()];
+		for (int i = 0; i < filterValues.size(); i++) {
+			predicates[i] = QuestionnaireFilterCreator.createPredicate(filterValues.get(i),
+					root, joinQuestionnaireDataColleciton);
+		}
+		return predicates;
 	}
 }

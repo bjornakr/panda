@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.Predicate;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.event.ListSelectionEvent;
@@ -27,8 +26,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	private List<TableObserver> tableObservers;
 	private List<JButton> buttons;
 	private List<JButton> restrictedButtons = new LinkedList<JButton>();
-//	public final static CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-
 
 	public AbstractTableController(String title) {
 		this.title = title;
@@ -55,31 +52,14 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 
 	public void updateTableModel() {
 		view().setWaitingState();
-		Predicate[] predicates = new Predicate[view().selectedFilterPredicates().size()];
-		view().selectedFilterPredicates().toArray(predicates);
-		tableModel().setModels(retrieve(predicates));
+		tableModel().setModels(retrieve(view().selectedFilterValues()));
+		view().updateTableCounters();
 		setButtonEnabledStates();
 		view().endWaitingState();
 		view().revalidate();
 	}
 
-	protected abstract List<? extends Model> retrieve(Predicate[] predicates);
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-//		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
-//		criteriaQuery.where(predicates);
-//		if (orderAttribute() != null) {
-//			Root<? extends Model> root = new ModelRootFactory().root(getModelClass());
-//			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderAttribute())));
-//		}
-//		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
-//	}
-
-//	protected String orderAttribute() {
-//		return null;
-//	}
-
-//	protected abstract Class<? extends Model> getModelClass();
+	protected abstract List<? extends Model> retrieve(List<Object> filterValues);
 
 	public abstract void evaluateActionEvent(ActionEvent event);
 

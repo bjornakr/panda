@@ -6,14 +6,13 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Participant;
-import no.atferdssenteret.panda.model.Participant_;
 import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.QuestionnaireEvent_;
 import no.atferdssenteret.panda.model.table.QuestionnaireEventTable;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
@@ -44,18 +43,18 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		return null;
 	}
 
-//	public List<QuestionnaireEvent> allModels() {
-//		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
-//		for (Model model : tableModel.allModels()) {
-//			models.add((QuestionnaireEvent)model);
-//		}
-//		return models;
-//	}
-//
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		return allModels();
-//	}
+	//	public List<QuestionnaireEvent> allModels() {
+	//		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
+	//		for (Model model : tableModel.allModels()) {
+	//			models.add((QuestionnaireEvent)model);
+	//		}
+	//		return models;
+	//	}
+	//
+	//	@Override
+	//	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	//		return allModels();
+	//	}
 
 	public List<QuestionnaireEvent> currentModels() {
 		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
@@ -81,17 +80,16 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		}
 	}
 
-//	@Override
-//	protected Class<? extends Model> getModelClass() {
-//		return QuestionnaireEvent.class;
-//	}
-	
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	//	@Override
+	//	protected Class<? extends Model> getModelClass() {
+	//		return QuestionnaireEvent.class;
+	//	}
+
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
-		criteriaQuery.where(predicates);
-		Root<Participant> root = criteriaQuery.from(Participant.class);
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(Participant_.id)));
+		Root<QuestionnaireEvent> root = criteriaQuery.from(QuestionnaireEvent.class);
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(QuestionnaireEvent_.date)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

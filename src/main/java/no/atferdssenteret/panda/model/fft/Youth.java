@@ -46,7 +46,7 @@ public class Youth extends Target {
 
 	}
 
-	public static String[] Regions = {"Trondheim", "Sandvika", "Stavanger", "Skien"};
+	public static String[] regions = {"Trondheim", "Sandvika", "Stavanger", "Skien"};
 
 	@Column(nullable = false)
 	private Genders gender;

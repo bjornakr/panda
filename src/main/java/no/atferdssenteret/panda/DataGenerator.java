@@ -47,7 +47,7 @@ public class DataGenerator {
 		youth.setLastName(createLastName());
 //		youth.setStatus(pickRandom(ParticipationStatuses.values()));
 		youth.setStatus(ParticipationStatuses.PARTICIPATING);
-		youth.setRegion(pickRandom(Youth.Regions));
+		youth.setRegion(pickRandom(Youth.regions));
 		youth.setGender(pickRandom(Youth.Genders.values()));
 		youth.setTreatmentGroup(pickRandom(Youth.TreatmentGroups.values()));
 		return youth;

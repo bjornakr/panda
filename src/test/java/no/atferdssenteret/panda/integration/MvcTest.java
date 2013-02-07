@@ -80,7 +80,7 @@ public class MvcTest {
 		youth.setFirstName("Doodlestick");
 		youth.setLastName("Jones");
 		youth.setComment("Hey Dr. Ukulele man");
-		youth.setRegion(Youth.Regions[0]);
+		youth.setRegion(Youth.regions[0]);
 		youth.setStatus(ParticipationStatuses.PARTICIPATING);
 		youth.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
 		youth.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));

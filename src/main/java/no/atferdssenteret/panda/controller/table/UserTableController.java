@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.controller.UserController;
@@ -63,10 +62,9 @@ public class UserTableController extends AbstractTableController {
 		}
 	}
 	
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-		criteriaQuery.where(predicates);
 		Root<User> root = criteriaQuery.from(User.class);
 		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(User_.userName)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();

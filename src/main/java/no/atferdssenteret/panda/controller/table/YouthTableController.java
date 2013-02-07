@@ -106,12 +106,19 @@ public class YouthTableController extends AbstractTableController {
 //		return Youth.class;
 //	}
 	
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaQuery<? extends Model> criteriaQuery = JPATransactor.getInstance().criteriaQuery(Youth.class);
-		criteriaQuery.where(predicates);
 		Root<Youth> root = criteriaQuery.from(Youth.class);
+		criteriaQuery.where(extractPredicatesFromFilterValues(filterValues, root));
 		criteriaQuery.orderBy(JPATransactor.getInstance().criteriaBuilder().asc(root.get(Youth_.id)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
+	
+	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues, Root<Youth> root) {
+		Predicate[] predicates = new Predicate[filterValues.size()];
+		for (int i = 0; i < filterValues.size(); i++) {
+			predicates[i] = YouthFilterCreator.createPredicate(filterValues.get(i), root);
+		}
+		return predicates;
 	}
 }

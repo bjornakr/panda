@@ -39,7 +39,7 @@ public class ParticipantTableController extends AbstractTableController {
 		else {
 			tableModel = new ParticipantTableForTargetFocus();
 		}
-		view = new DefaultTablePanel(this, new ParticipantFilterCreator(target));
+		view = new DefaultTablePanel(this, new ParticipantFilterCreator());
 	}
 
 	@Override
@@ -58,12 +58,12 @@ public class ParticipantTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		if (target != null) {
 			return target.getParticipants();
 		}
 		else {
-			return retrieveForAllTargets(predicates);
+			return retrieveForAllTargets(filterValues);
 		}
 	}
 	
@@ -119,14 +119,22 @@ public class ParticipantTableController extends AbstractTableController {
 //		return Participant.class;
 //	}
 	
-	protected List<? extends Model> retrieveForAllTargets(Predicate[] predicates) {
+	protected List<? extends Model> retrieveForAllTargets(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
-		criteriaQuery.where(predicates);
 		Root<Participant> root = criteriaQuery.from(Participant.class);
+		criteriaQuery.where(extractPredicatesFromFilterValues(filterValues, root));
 		Join<Participant, Target> joinParticipantTarget = root.join(Participant_.target);
 		criteriaQuery.orderBy(criteriaBuilder.asc(joinParticipantTarget.get(Target_.id)),
 				criteriaBuilder.asc(root.get(Participant_.role)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
+	
+	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues, Root<Participant> root) {
+		Predicate[] predicates = new Predicate[filterValues.size()];
+		for (int i = 0; i < filterValues.size(); i++) {
+			predicates[i] = ParticipantFilterCreator.createPredicate(filterValues.get(i), root);
+		}
+		return predicates;
 	}
 }

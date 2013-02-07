@@ -1,40 +1,44 @@
 package no.atferdssenteret.panda.filter;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+
 
 public class Filter {
 	private final String name;
-	private final List<FilterUnit> filterUnits;
-	private FilterUnit defaultFilterUnit;
-
-	public Filter(String name, List<FilterUnit> filterUnits) {
+	private final Object[] filterValues;
+	private final Object defaultValue;
+	
+	public Filter(String name, Object[] filterValues, Object defaultValue) {
 		this.name = name;
-		this.filterUnits = filterUnits;
-//		this.options.add(0, new CustomCondition("Alle", "TRUE")); // Adding this for the "no-filter" option.
+		this.filterValues = valuesIncludingNoFilter(filterValues);
+		this.defaultValue = defaultValue;
 	}
-
-	public Filter(String displayName, List<FilterUnit> options, FilterUnit defaultFilterUnit) {
-		this(displayName, options);
-		this.defaultFilterUnit = defaultFilterUnit;
+	
+	public Filter(String name, Object[] values) {
+		this(name, values, null);
 	}
-
-	public List<FilterUnit> filterUnits() {
-		return filterUnits;
-	}
-
+	
 	public String name() {
 		return name;
 	}
-
-//	public void setDefaultCondition(FilterUnit defaultCondition) {	
-//		this.defaultFilterUnit = defaultCondition;
-//	}
-
-
-	public FilterUnit defaultFilterUnit() {
-		if (defaultFilterUnit != null) {
-			return defaultFilterUnit;
+	
+	public Object[] values() {
+		return filterValues;
+	}
+	
+	public Object defaultValue() {
+		if (defaultValue == null) {
+			return filterValues[0];
 		}
-		return filterUnits.get(0);
+		return defaultValue;
+	}
+	
+	private Object[] valuesIncludingNoFilter(Object[] filterValues) {
+		List<Object> valuesIncludingNoFilter = new LinkedList<Object>();
+		valuesIncludingNoFilter.add("Alle");
+		valuesIncludingNoFilter.addAll(Arrays.asList(filterValues));
+		return valuesIncludingNoFilter.toArray();
 	}
 }

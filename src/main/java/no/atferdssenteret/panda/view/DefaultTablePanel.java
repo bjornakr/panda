@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.persistence.criteria.Predicate;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,17 +30,14 @@ import javax.swing.table.TableRowSorter;
 import no.atferdssenteret.panda.controller.table.AbstractTableController;
 import no.atferdssenteret.panda.filter.Filter;
 import no.atferdssenteret.panda.filter.FilterCreator;
-import no.atferdssenteret.panda.filter.FilterUnit;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class DefaultTablePanel extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private AbstractTableController controller;
-	//	private List<JButton> buttons = new LinkedList<JButton>();
-	private List<Filter> filters;
+	private Filter[] filters;
 	private List<JComboBox> filterComboBoxes;
-	//    private AbstractOverviewTableModel tableModel;
 	private JTable table;
 	private TableRowSorter<AbstractTableModel> sorter;
 	private JScrollPane tableScroller;
@@ -51,7 +47,6 @@ public class DefaultTablePanel extends JPanel implements Observer {
 
 	public DefaultTablePanel(AbstractTableController controller, FilterCreator filterCreator) {
 		this.controller = controller;
-		//	this.tableModel = tableModel;
 		if (filterCreator != null) {
 			this.filters = filterCreator.createFilters();
 		}
@@ -65,19 +60,14 @@ public class DefaultTablePanel extends JPanel implements Observer {
 		add(createButtonPanel(), BorderLayout.PAGE_END);
 	}
 
-	public List<Predicate> selectedFilterPredicates() {
-		List<Predicate> filterUnits = new LinkedList<Predicate>();
+	public List<Object> selectedFilterValues() {
+		List<Object> filterUnits = new LinkedList<Object>();
 
 		for (JComboBox filterBox : filterComboBoxes) {
-			//			FilterUnit condition = (FilterUnit)(filterBox.getSelectedItem());	    
-			//			if (!condition.getSQLcondition().equals("TRUE")) {
-			FilterUnit filterUnit = (FilterUnit)(filterBox.getSelectedItem()); 
-			filterUnits.add(filterUnit.predicate());
-			//			}
+			filterUnits.add(filterBox.getSelectedItem());
 		}
-		return filterUnits;
+		return filterUnits;		
 	}
-
 
 	private JPanel createFilterPanel() {	
 		JPanel filterPanel = new JPanel(new GridBagLayout());
@@ -100,18 +90,18 @@ public class DefaultTablePanel extends JPanel implements Observer {
 
 			gbc.anchor = GridBagConstraints.LINE_END;
 			gbc.fill = GridBagConstraints.NONE;
-			gbc.insets = new Insets(5, 5, 5, 2); // ver_y, ver_x, hor_y, hor_x
+			gbc.insets = new Insets(5, 5, 5, 2);
 			filterPanel.add(new JLabel(filter.name() + ": "), gbc);
 			gbc.gridx++;
 
 			gbc.anchor = GridBagConstraints.LINE_START;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.insets = new Insets(5, 0, 5, 15); // ver_y, ver_x, hor_y, hor_x 
+			gbc.insets = new Insets(5, 0, 5, 15);
 
-			JComboBox filterBox = new JComboBox(filter.filterUnits().toArray());
-			filterBox.setSelectedItem(filter.defaultFilterUnit());
+			JComboBox filterBox = new JComboBox(filter.values());
+			filterBox.setSelectedItem(filter.defaultValue());
 
-			filterComboBoxes.add(filterBox); // Storing combobox for later retrieval
+			filterComboBoxes.add(filterBox);
 			filterBox.addActionListener(controller);
 			filterPanel.add(filterBox, gbc);
 			gbc.gridx++;
@@ -122,7 +112,6 @@ public class DefaultTablePanel extends JPanel implements Observer {
 
 
 	private JScrollPane createTable() {
-		System.out.println(controller.tableModel());
 		sorter = new TableRowSorter<AbstractTableModel>(controller.tableModel());
 		table = new JTable(controller.tableModel());
 		table.setRowSorter(sorter);
@@ -135,7 +124,6 @@ public class DefaultTablePanel extends JPanel implements Observer {
 		tableScroller = new JScrollPane(table,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
 		return tableScroller;
 	}
 
@@ -155,8 +143,6 @@ public class DefaultTablePanel extends JPanel implements Observer {
 		buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
 		buttonPanel.add(labNoOfSelectedRows);
 		buttonPanel.add(Box.createHorizontalGlue());
-		//		buttons = ButtonUtil.createCRUDButtons(controller);
-		//		buttons = 
 		buttonPanel.add(ButtonUtil.createButtonPanel(controller.buttons()));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		return buttonPanel;
@@ -213,8 +199,4 @@ public class DefaultTablePanel extends JPanel implements Observer {
 	public Window getWindow() {
 		return (Window)SwingUtilities.getRoot(this);
 	}
-
-	//	public List<JButton> buttons() {
-	//		return buttons;
-	//	}
 }

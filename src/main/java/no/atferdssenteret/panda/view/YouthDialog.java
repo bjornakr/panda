@@ -29,7 +29,7 @@ public class YouthDialog extends JDialog {
 	private JComboBox cboxDataCollectors = new JComboBox(User.dataCollectors().toArray());
 	private JComboBox cboxStatuses = new JComboBox(ParticipationStatuses.values());
 	private JComboBox cboxTreatmentGroups = new JComboBox(Youth.TreatmentGroups.values());
-	private JComboBox cboxRegions = new JComboBox(Youth.Regions);
+	private JComboBox cboxRegions = new JComboBox(Youth.regions);
 	private JComboBox cboxGenders = new JComboBox(Youth.Genders.values());
 	private DefaultTextField txtTreatmentStart = new DefaultTextField(DefaultTextField.DATE_WIDTH);
 	private DefaultTextArea txtComment = new DefaultTextArea();

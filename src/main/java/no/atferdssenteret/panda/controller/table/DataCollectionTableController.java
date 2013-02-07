@@ -39,7 +39,7 @@ public class DataCollectionTableController extends AbstractTableController {
 		else {
 			tableModel = new DataCollectionTableForTargetFocus();			
 		}
-		view = new DefaultTablePanel(this, new DataCollectionFilterCreator(target));
+		view = new DefaultTablePanel(this, new DataCollectionFilterCreator());
 	}
 
 	@Override
@@ -58,12 +58,12 @@ public class DataCollectionTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieve(Predicate[] predicates) {
+	protected List<? extends Model> retrieve(List<Object> filterUnits) {
 		if (target != null) {
 			return new LinkedList<DataCollection>(target.getDataCollections());
 		}
 		else {
-			return retrieveForAllTargets(predicates);
+			return retrieveForAllTargets(filterUnits);
 		}
 	}
 	//	public List<DataCollection> allModels() {
@@ -109,30 +109,23 @@ public class DataCollectionTableController extends AbstractTableController {
 		}
 	}
 
-//	@Override
-//	protected Class<? extends Model> getModelClass() {
-//		return DataCollection.class;
-//	}
-
-	//	@Override
-	//	protected SingularAttribute<? extends Model, ?> orderAttribute() {
-	//		return DataCollection_.targetDate;
-	//	}
-
-//	@Override
-//	protected String orderAttribute() {
-//		return "targetDate";
-//	}
-
-	protected List<? extends Model> retrieveForAllTargets(Predicate[] predicates) {
+	protected List<? extends Model> retrieveForAllTargets(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<DataCollection> criteriaQuery = JPATransactor.getInstance().criteriaBuilder().createQuery(DataCollection.class);
-		criteriaQuery.where(predicates);
 		Root<DataCollection> root = criteriaQuery.from(DataCollection.class);
+		criteriaQuery.where(extractPredicatesFromFilterValues(filterValues, root));
 		Join<DataCollection, Target> joinDataCollectionTarget = root.join(DataCollection_.target);
 		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(DataCollection_.targetDate)),
 				criteriaBuilder.asc(joinDataCollectionTarget.get(Target_.id)),
 				criteriaBuilder.asc(root.get(DataCollection_.type)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
+	}
+	
+	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues, Root<DataCollection> root) {
+		Predicate[] predicates = new Predicate[filterValues.size()];
+		for (int i = 0; i < filterValues.size(); i++) {
+			predicates[i] = DataCollectionFilterCreator.createPredicate(filterValues.get(i), root);
+		}
+		return predicates;
 	}
 }
