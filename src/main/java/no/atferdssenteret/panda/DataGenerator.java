@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
+import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -20,7 +20,7 @@ public class DataGenerator {
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		createDataCollectionRules();
 		
-		for (int i = 0; i < 100; i ++) {
+		for (int i = 0; i < 600; i ++) {
 			Youth youth = createYouth();
 			List<Participant> participants = new LinkedList<Participant>();
 			for (int j = 0; j <= new Random().nextInt(3); j++) {

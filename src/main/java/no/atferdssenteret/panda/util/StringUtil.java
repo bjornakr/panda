@@ -127,6 +127,7 @@ public class StringUtil {
 
 		if (result != null) {
 			result = result + padding + s.substring(substringStart);
+			result.replace("\n", "<br>");
 			return "<html>" + result + "</html>";
 		}
 		return s;

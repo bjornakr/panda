@@ -13,8 +13,6 @@ public abstract class ApplicationController implements ActionListener {
 	public static final String COMMAND_SAVE = "SAVE";
 	public static final String COMMAND_CANCEL = "CANCEL";
 	private Mode mode;
-	//    private Model model;
-	//    private boolean databaseHasChanged = false;
 
 	public ApplicationController(Model model) {
 		if (model == null) {
@@ -29,14 +27,6 @@ public abstract class ApplicationController implements ActionListener {
 		return mode;
 	}
 
-	//    public boolean databaseHasChanged() {
-	//	return databaseHasChanged;
-	//    }
-	//
-	//    public void setDatabaseHasChanged(boolean databaseHasChanged) {
-	//	this.databaseHasChanged = databaseHasChanged;
-	//    }
-
 	public abstract String title();
 
 	public abstract Model model();
@@ -50,26 +40,44 @@ public abstract class ApplicationController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
-			try {
-				transferUserInputToModel();
-				model().validate();
-				if (mode == Mode.CREATE) {
-					JPATransactor.getInstance().persist(model());
-				}
-				else if (mode == Mode.EDIT) {
-					model().validate();
-					JPATransactor.getInstance().transaction().begin();
-					JPATransactor.getInstance().transaction().commit();
-				}
-				view().dispose();
-			}
-			catch (Exception e) {
-				new ErrorMessageDialog(e.getMessage(), null, view());
-			}
+			save();
 		}
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
 			view().dispose();
 		}
 	}
+
+	private void save() {
+		try {
+			mergeModelIfDetached();
+			performTransaction();
+			view().dispose();
+		}
+		catch (Exception e) {
+			JPATransactor.getInstance().transaction().rollback();
+			e.printStackTrace();
+			new ErrorMessageDialog(e.getMessage(), null, view());
+		}
+	}
+
+	private void performTransaction() {
+		JPATransactor.getInstance().transaction().begin();
+		transferUserInputToModel();
+		model().validate();
+		if (mode == Mode.CREATE) {
+			JPATransactor.getInstance().entityManager().persist(model());
+		}
+		JPATransactor.getInstance().transaction().commit();
+	}
+
+	private void mergeModelIfDetached() {
+		if (model() != null) {
+			if (!JPATransactor.getInstance().entityManager().contains(model())) {
+				setModel(JPATransactor.getInstance().entityManager().merge(model()));
+			}
+		}
+	}
+
+	protected abstract void setModel(Model model);
 }
 

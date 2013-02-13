@@ -4,8 +4,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.JPATransactor;
 
 public class DataCollectionManager {
@@ -47,6 +47,7 @@ public class DataCollectionManager {
 
 	public void notifyTargetUpdated(Target target) {
 		currentTarget = target;
+		JPATransactor.getInstance().transaction().begin();
 		deleteUntouchedDataCollections(target);
 
 		if (target.isParticipating()) {
@@ -62,7 +63,6 @@ public class DataCollectionManager {
 				}
 			}
 		}
-		JPATransactor.getInstance().transaction().begin();
 		JPATransactor.getInstance().transaction().commit();
 	}
 
@@ -79,7 +79,9 @@ public class DataCollectionManager {
 	private void deleteUntouchedDataCollections(Target target) {
 		List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 		for (DataCollection dataCollection : target.getDataCollections()) {
-			if (dataCollection.getProgressStatus() == DataCollection.ProgressStatuses.NOT_INITIATED) {
+			//			if (dataCollection.getProgressStatus() == DataCollection.ProgressStatuses.NOT_INITIATED
+			//					&& dataCollection.hasNoQuestonnaireEvents()) {
+			if (dataCollection.untouched()) {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}

@@ -1,7 +1,7 @@
 package no.atferdssenteret.panda.model.table;
 
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class DataCollectionTable extends DefaultAbstractTableModel {

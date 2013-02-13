@@ -30,6 +30,7 @@ public class ErrorMessageDialog extends JDialog {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		JLabel labMessage = new JLabel(StringUtil.splitString(message, 80, 0));
+//		JLabel labMessage = new JLabel(message);
 		labMessage.setIcon(new ImageIcon("graphics/icons/cross.png"));
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;

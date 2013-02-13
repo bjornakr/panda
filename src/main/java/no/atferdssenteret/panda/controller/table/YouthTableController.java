@@ -12,8 +12,8 @@ import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.filter.YouthFilterCreator;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.fft.Youth_;
 import no.atferdssenteret.panda.model.table.YouthTable;
@@ -55,30 +55,6 @@ public class YouthTableController extends AbstractTableController {
 		return null;
 	}
 
-//	public List<Youth> allModels() {
-//		TypedQuery<Youth> query = JPATransactor.getInstance().entityManager().createQuery("SELECT y FROM Youth y", Youth.class);
-//		return query.getResultList();
-//
-//		//	List<Youth> models = new LinkedList<Youth>();
-//		//	for (Model model : tableModel.allModels()) {
-//		//	    models.add((Youth)model);
-//		//	}
-//		//	return models;
-//	}
-
-//	@Override
-//	protected List<? extends Model> retrieveModelsForCurrentConditions() {
-//		return allModels();
-//	}
-	
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-//		CriteriaQuery<Youth> criteriaQuery = criteriaBuilder.createQuery(Youth.class);
-//		criteriaQuery.where(predicates);
-//		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
-//	}
-
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
@@ -97,15 +73,9 @@ public class YouthTableController extends AbstractTableController {
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			mainController.addYouthTab((Youth)modelForSelectedTableRow());
-			//	    new YouthOverviewController(view().getWindow(), (Youth)modelForSelectedTableRow());
 		}
 	}
 
-//	@Override
-//	protected Class<Youth> getModelClass() {
-//		return Youth.class;
-//	}
-	
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaQuery<? extends Model> criteriaQuery = JPATransactor.getInstance().criteriaQuery(Youth.class);
 		Root<Youth> root = criteriaQuery.from(Youth.class);
@@ -121,4 +91,6 @@ public class YouthTableController extends AbstractTableController {
 		}
 		return predicates;
 	}
+	
+	
 }

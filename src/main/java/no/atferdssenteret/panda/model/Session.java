@@ -1,5 +1,7 @@
 package no.atferdssenteret.panda.model;
 
+import no.atferdssenteret.panda.model.entity.User;
+
 public class Session {
 	private User user;
 	

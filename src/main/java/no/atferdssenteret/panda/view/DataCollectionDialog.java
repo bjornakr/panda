@@ -13,9 +13,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
@@ -23,6 +23,8 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class DataCollectionDialog extends JDialog {
+	public final static String CBOX_TYPE = "CBOX_TYPE";
+	public final static String CBOX_PROGRESS_DATE = "CBOX_PROGRESS_DATE";	
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
 	private String[] types = DataCollectionTypes.values();
@@ -37,8 +39,10 @@ public class DataCollectionDialog extends JDialog {
 		this.actionListener = actionListener;
 		this.questionnaireView = questionnaireView;
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		cboxTypes.setActionCommand("TYPE_COMBO_BOX");
+		cboxTypes.setActionCommand(CBOX_TYPE);
 		cboxTypes.addActionListener(this.actionListener);
+		cboxProgressStatuses.setActionCommand(CBOX_PROGRESS_DATE);
+		cboxProgressStatuses.addActionListener(actionListener);
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

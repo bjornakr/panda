@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.DefaultTextField;

@@ -1,7 +1,7 @@
 package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class UserTable extends DefaultAbstractTableModel {

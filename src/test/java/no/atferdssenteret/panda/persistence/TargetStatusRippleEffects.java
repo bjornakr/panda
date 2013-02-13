@@ -6,7 +6,7 @@ import java.text.ParseException;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;

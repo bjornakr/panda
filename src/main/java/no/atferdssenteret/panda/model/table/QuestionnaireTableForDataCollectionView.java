@@ -1,8 +1,8 @@
 package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTableModel {

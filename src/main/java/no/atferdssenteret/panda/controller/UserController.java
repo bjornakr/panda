@@ -4,7 +4,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
@@ -76,5 +76,10 @@ public class UserController extends ApplicationController {
 			throw new IllegalArgumentException("Brukernavnet \"" + model.getUserName() + "\" er allerede registrert.");
 		}
 		super.actionPerformed(e);
+	}
+	
+	@Override
+	protected void setModel(Model model) {
+		this.model = (User)model;
 	}
 }

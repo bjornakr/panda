@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.DataCollection.ProgressStatuses;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection.ProgressStatuses;
 import no.atferdssenteret.panda.util.DateUtil;
 
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class DataCollectionTest {
 
 
 		ProgressStatuses[] progressStatusesThatShouldResultInConcludedState =
-			{DataCollection.ProgressStatuses.GIVEN_UP, DataCollection.ProgressStatuses.PERFORMED};
+			{DataCollection.ProgressStatuses.GIVEN_UP, DataCollection.ProgressStatuses.COMPLETED};
 		for (DataCollection.ProgressStatuses status : progressStatusesThatShouldResultInConcludedState) {
 			dc.setProgressStatus(status);
 			cal.setTime(DateUtil.today());
@@ -38,12 +38,12 @@ public class DataCollectionTest {
 	}
 
 	@Test
-	public void dataCollectionsShouldBeForthcomingWhenOneMonthOrLessInTheFuture() {
+	public void dataCollectionsShouldBeForthcomingWhenLessThanThirtyDaysInTheFuture() {
 		DataCollection dc = new DataCollection();
 		dc.setProgressStatus(DataCollection.ProgressStatuses.NOT_INITIATED);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(DateUtil.today());
-		calendar.add(Calendar.MONTH, 1);
+		calendar.add(Calendar.DAY_OF_YEAR, 29);
 		dc.setTargetDate(DateUtil.sqlDate(calendar.getTime()));
 		assertEquals(DataCollection.Statuses.FORTHCOMING, dc.status());
 		
@@ -61,13 +61,13 @@ public class DataCollectionTest {
 	}
 	
 	@Test
-	public void dataCollectionsMoreThanOneMonthAheadInTimeAreReportedPlanned() {
+	public void dataCollectionsMoreThanThirtyDaysAheadInTimeAreReportedPlanned() {
 		DataCollection dc = new DataCollection();
 		dc.setProgressStatus(DataCollection.ProgressStatuses.NOT_INITIATED);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(DateUtil.today());
-		calendar.add(Calendar.MONTH, 1);
-		calendar.add(Calendar.DAY_OF_YEAR, 1);
+		calendar.add(Calendar.DAY_OF_YEAR, 31);
+//		calendar.add(Calendar.DAY_OF_YEAR, 1);
 		dc.setTargetDate(DateUtil.sqlDate(calendar.getTime()));
 		assertEquals(DataCollection.Statuses.PLANNED, dc.status());		
 	}

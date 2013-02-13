@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -16,11 +17,17 @@ import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.model.table.TableObserver;
 import no.atferdssenteret.panda.util.JPATransactor;
+import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
+/**
+ * This is the basic controller for the table view.
+ * Extend it to provide functionality for a specific model. 
+ *
+ */
 public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener {
 	private String title;
 	private List<TableObserver> tableObservers;
@@ -51,6 +58,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	public void updateTableModel() {
+//		JPATransactor.getInstance().entityManager().clear();
 		view().setWaitingState();
 		tableModel().setModels(retrieve(view().selectedFilterValues()));
 		view().updateTableCounters();
@@ -67,33 +75,12 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		tableObservers.add(o);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		try {
-			if (event.getSource() instanceof JComboBox) {
-				updateTableModel();
-			}
-
-			if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-				JPATransactor.getInstance().transaction().begin();
-				JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
-				JPATransactor.getInstance().transaction().commit();
-				tableModel().deleteRow(modelForSelectedTableRow());
-			}
-			evaluateActionEvent(event);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			new ErrorMessageDialog(e.getMessage(), null, view().getWindow());
-		}
-	}
-
 	public List<JButton> buttons() {
 		buttons.removeAll(restrictedButtons);
 		return buttons;
 	}
 
-	public void restrictAccessToButton(String actionCommand) {
+	protected void restrictAccessToButton(String actionCommand) {
 		for (JButton button : buttons) {
 			if (button.getActionCommand().equals(actionCommand)) {
 				button.setEnabled(false);
@@ -121,6 +108,55 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	@Override
+	public void actionPerformed(ActionEvent event) {
+		try {
+			if (event.getSource() instanceof JComboBox) {
+				// A filter has been activated
+				updateTableModel();
+			}
+			if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+				processDeleteCommand();
+			}
+			evaluateActionEvent(event);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			new ErrorMessageDialog(StringUtil.splitString(e.getMessage(), 80, 0), null, view().getWindow());
+		}
+	}
+
+	private void processDeleteCommand() {
+		final String delete = "Slett";
+		final String cancel = "Avbryt";
+		String[] options = {delete, cancel};
+
+		int answer = JOptionPane.showOptionDialog(view(),
+				StringUtil.splitString("Bekreft sletting av\n" + modelForSelectedTableRow().referenceName(), 80, 0),
+				"Slett " + title, JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.WARNING_MESSAGE,
+				null, options, options[1]);
+
+		if (answer >= 0 && options[answer].equals(delete)) {
+			try {
+				deleteModelForSelectedTableRow();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(view(), "Sletting mislyktes.\n\nAlle referanser til\n" +
+						modelForSelectedTableRow().referenceName() + "\n" +
+						"i andre deler av systemet må fjernes først.");
+			}
+		}
+	}
+
+	private void deleteModelForSelectedTableRow() {
+		JPATransactor.getInstance().transaction().begin();
+		JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
+		JPATransactor.getInstance().transaction().commit();
+		tableModel().deleteRow(modelForSelectedTableRow());
+	}
+
+	@Override
 	public void valueChanged(ListSelectionEvent event) {
 		setButtonEnabledStates();
 		view().updateTableCounters();
@@ -128,7 +164,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 			notifyTableObservers(TableObserver.TableAction.TARGET_ID_SELECTED,
 					((TargetBelonging)modelForSelectedTableRow()).getTargetId());
 		}
-		// find selected target id (if it is in table)
 	}
 
 	public Model modelForSelectedTableRow() {

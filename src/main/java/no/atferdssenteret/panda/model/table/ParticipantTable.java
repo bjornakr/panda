@@ -1,7 +1,7 @@
 package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Participant;
+import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class ParticipantTable extends DefaultAbstractTableModel {

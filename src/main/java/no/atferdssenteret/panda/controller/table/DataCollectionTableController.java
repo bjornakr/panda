@@ -13,11 +13,11 @@ import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.filter.DataCollectionFilterCreator;
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.DataCollection_;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.Target_;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection_;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.Target_;
 import no.atferdssenteret.panda.model.table.DataCollectionTable;
 import no.atferdssenteret.panda.model.table.DataCollectionTableForTargetFocus;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -58,34 +58,11 @@ public class DataCollectionTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected List<? extends Model> retrieve(List<Object> filterUnits) {
-		if (target != null) {
-			return new LinkedList<DataCollection>(target.getDataCollections());
-		}
-		else {
-			return retrieveForAllTargets(filterUnits);
-		}
-	}
-	//	public List<DataCollection> allModels() {
-	//		//	List<DataCollection> models = new LinkedList<DataCollection>();
-	//		TypedQuery<DataCollection> query = JPATransactor.getInstance().entityManager().createQuery("SELECT dc FROM DataCollection dc", DataCollection.class);
-	//		return query.getResultList(); //List<DataCollection>
-	//		//	for (Model model : tableModel.allModels()) {
-	//		//	    models.add((DataCollection)model);
-	//		//	}
-	//		//	return models;
-	//	}
-	//	
-	//	public List<DataCollection> modelsForTarget(long targetId) {
-	//		TypedQuery<DataCollection> query = JPATransactor.getInstance().entityManager().createQuery("SELECT dc FROM DataCollection dc WHERE dc.target.id = " + targetId, DataCollection.class);
-	//		return query.getResultList();
-	//	}
-	//	
-
-	@Override
 	public List<JButton> buttons() {
 		if (target == null) {
-			return new LinkedList<JButton>();
+			List<JButton> buttons = new LinkedList<JButton>();
+			buttons.add(ButtonUtil.editButton(this));
+			return buttons;
 		}
 		else {
 			return super.buttons();
@@ -96,10 +73,6 @@ public class DataCollectionTableController extends AbstractTableController {
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			new DataCollectionController(view.getWindow(), null, target);
-			//			if (dataCollectionController.model() != null) {
-			//				//		target.addDataCollection((DataCollection)dataCollectionController.model());
-			//				tableModel.addRow(dataCollectionController.model());
-			//			}
 			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
@@ -109,7 +82,8 @@ public class DataCollectionTableController extends AbstractTableController {
 		}
 	}
 
-	protected List<? extends Model> retrieveForAllTargets(List<Object> filterValues) {
+	@Override
+	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<DataCollection> criteriaQuery = JPATransactor.getInstance().criteriaBuilder().createQuery(DataCollection.class);
 		Root<DataCollection> root = criteriaQuery.from(DataCollection.class);
@@ -122,9 +96,13 @@ public class DataCollectionTableController extends AbstractTableController {
 	}
 	
 	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues, Root<DataCollection> root) {
-		Predicate[] predicates = new Predicate[filterValues.size()];
+		int predicatesSize = filterValues.size() + (target == null ? 0 : 1);
+		Predicate[] predicates = new Predicate[predicatesSize];
 		for (int i = 0; i < filterValues.size(); i++) {
 			predicates[i] = DataCollectionFilterCreator.createPredicate(filterValues.get(i), root);
+		}
+		if (target != null) {
+			predicates[predicates.length-1] = JPATransactor.getInstance().criteriaBuilder().equal(root.get(DataCollection_.target), target);
 		}
 		return predicates;
 	}

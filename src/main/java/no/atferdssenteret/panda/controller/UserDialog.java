@@ -12,8 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 
-import no.atferdssenteret.panda.model.User;
-import no.atferdssenteret.panda.model.User.AccessLevel;
+import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.model.entity.User.AccessLevel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextField;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;

@@ -1,7 +1,7 @@
 package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class QuestionnaireEventTable extends DefaultAbstractTableModel {
@@ -31,7 +31,7 @@ public class QuestionnaireEventTable extends DefaultAbstractTableModel {
 		dataColumns[DATE] = questionnaireEvent.getDate();
 		dataColumns[TYPE] = questionnaireEvent.getType();
 		dataColumns[COMMENT] = questionnaireEvent.getComment();
-		dataColumns[SIGNATURE] = null;
+		dataColumns[SIGNATURE] = questionnaireEvent.getUpdatedBy();
 		return dataColumns;
 	}
 

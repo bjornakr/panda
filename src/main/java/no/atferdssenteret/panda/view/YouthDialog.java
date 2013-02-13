@@ -12,7 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;

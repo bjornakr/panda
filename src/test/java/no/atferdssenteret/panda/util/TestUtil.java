@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import no.atferdssenteret.panda.DataCollectionRule;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.Target;
 
 public class TestUtil {
 

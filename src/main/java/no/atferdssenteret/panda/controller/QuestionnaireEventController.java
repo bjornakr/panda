@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.sql.Date;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.QuestionnaireEventDialog;
@@ -76,5 +76,10 @@ public class QuestionnaireEventController extends ApplicationController {
 		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
 			view().dispose();
 		}
+	}
+	
+	@Override
+	protected void setModel(Model model) {
+		this.model = (QuestionnaireEvent)model;
 	}
 }

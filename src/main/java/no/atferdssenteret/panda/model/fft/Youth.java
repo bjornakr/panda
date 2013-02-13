@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
@@ -63,10 +63,6 @@ public class Youth extends Target {
 		this.region = region;
 	}
 
-	public String toString() {
-		return this.getClass().toString();
-	}
-
 	public TreatmentGroups getTreatmentGroup() {
 		return treatmentGroup;
 	}
@@ -94,5 +90,10 @@ public class Youth extends Target {
 		else if (region == null) {
 			throw new IllegalStateException(StandardMessages.missingField("Region"));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return formattedIdWithLetterAppendix() + " - " + getFirstName() + " " + getLastName();
 	}
 }

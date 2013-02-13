@@ -12,12 +12,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.DataCollectionManager;
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
-import no.atferdssenteret.panda.model.DataCollection_;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.Target_;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection_;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.Target_;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;

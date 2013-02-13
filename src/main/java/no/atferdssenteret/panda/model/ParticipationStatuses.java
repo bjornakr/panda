@@ -1,9 +1,9 @@
 package no.atferdssenteret.panda.model;
 
 public enum ParticipationStatuses {
-	PARTICIPATING("Deltar"),
 	WAITING_FOR_CONSENT("Venter på samtykke"),
 	NEVER_PARTICIPATED("Har aldri deltatt"),
+	PARTICIPATING("Deltar"),
 	DATA_COLLECTION_TERMINATED("Datainnsamling avsluttet"),
 	CONSENT_WITHDRAWN("Trukket seg");
 

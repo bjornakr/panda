@@ -13,13 +13,14 @@ import javax.swing.JButton;
 
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.filter.QuestionnaireFilterCreator;
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.DataCollection_;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.model.Questionnaire_;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.Target_;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection_;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.Questionnaire_;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.Target_;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
 import no.atferdssenteret.panda.model.table.QuestionnaireTableForDataCollectionView;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -28,6 +29,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class QuestionnaireTableController extends AbstractTableController {
+	private final static String COMMAND_REGISTER_QUESTIONNAIRE = "REGISTER_QUESTIONNAIRE";
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
 	private DataCollection dataCollection;
@@ -60,40 +62,6 @@ public class QuestionnaireTableController extends AbstractTableController {
 	protected String getWarningBeforeDelete() {
 		return null;
 	}
-//
-//	public List<Questionnaire> retrieveAllModels() {
-//		TypedQuery<Questionnaire> query = JPATransactor.getInstance().entityManager().createQuery(
-//				"SELECT q FROM Questionnaire q", Questionnaire.class);
-//		return query.getResultList();
-//	}
-//
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		return retrieveAllModels();
-//	}
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		if (dataCollection != null) {
-//			return dataCollection.getQuestionnaires();
-//		}
-//		else {
-//			return super.retrieve(predicates);
-//		}
-//	}    
-	
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
-//		CriteriaQuery<? extends Model> criteriaQuery = criteriaBuilder.createQuery(getModelClass());
-//		Root<Questionnaire> qRoot = criteriaQuery.from(Questionnaire.class);
-////		Root<QuestionnaireEvent> qeRoot = criteriaQuery.from(QuestionnaireEvent.class);
-////		criteriaQuery.multiselect(qRoot, qeRoot);
-////		criteriaQuery.where(criteriaBuilder.equal(qRoot.get(Questionnaire_.id), qeRoot.get(QuestionnaireEvent_.questionnaire)));
-////		criteriaQuery.where(predicates);
-//		Join<Questionnaire, QuestionnaireEvent> join = qRoot.join(Questionnaire_.questionnaireEvents);
-//		criteriaQuery.multiselect(join);
-//	}
-	
 	
 	public List<Questionnaire> currentModels() {
 		List<Questionnaire> models = new LinkedList<Questionnaire>();
@@ -106,10 +74,27 @@ public class QuestionnaireTableController extends AbstractTableController {
 	@Override
 	public List<JButton> buttons() {
 		if (dataCollection == null) {
-			return new LinkedList<JButton>();
+			List<JButton> buttons = new LinkedList<JButton>();
+			buttons.add(ButtonUtil.editButton(this));
+			JButton butRegisterRecievedQuestionnaire = new JButton("Registrer mottatt skjema");
+			butRegisterRecievedQuestionnaire.setActionCommand(COMMAND_REGISTER_QUESTIONNAIRE);
+			butRegisterRecievedQuestionnaire.addActionListener(this);
+			buttons.add(butRegisterRecievedQuestionnaire);
+			return buttons;
 		}
 		else {
 			return super.buttons();
+		}
+	}
+	
+	@Override
+	protected void setButtonEnabledStates() {
+		super.setButtonEnabledStates();
+		boolean hasSelection = view().selectedTableRow() >= 0;
+		for (JButton button : buttons()) {
+			if (button.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
+				button.setEnabled(hasSelection);
+			}
 		}
 	}
 	
@@ -132,18 +117,19 @@ public class QuestionnaireTableController extends AbstractTableController {
 				tableModel.update(model);
 			}
 		}
+		else if (event.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
+			registerRecievedQuestionnaire();
+		}
 	}
 
-//	@Override
-//	protected Class<? extends Model> getModelClass() {
-//		return Questionnaire.class;
-//	}
-//	
-//	@Override
-//	protected String orderAttribute() {
-//		return "dataCollection.type";
-//	}
-	
+	private void registerRecievedQuestionnaire() {
+		Questionnaire questionnaire = (Questionnaire)modelForSelectedTableRow();
+		JPATransactor.getInstance().transaction().begin();
+		questionnaire.createEvent(QuestionnaireEvent.Types.RECIEVED);
+		JPATransactor.getInstance().transaction().commit();
+		updateTableModel();
+	}
+
 	@Override
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();

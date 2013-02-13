@@ -14,10 +14,10 @@ import javax.swing.JButton;
 import no.atferdssenteret.panda.controller.ParticipantController;
 import no.atferdssenteret.panda.filter.ParticipantFilterCreator;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Participant;
-import no.atferdssenteret.panda.model.Participant_;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.Target_;
+import no.atferdssenteret.panda.model.entity.Participant;
+import no.atferdssenteret.panda.model.entity.Participant_;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.Target_;
 import no.atferdssenteret.panda.model.table.ParticipantTable;
 import no.atferdssenteret.panda.model.table.ParticipantTableForTargetFocus;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -67,32 +67,12 @@ public class ParticipantTableController extends AbstractTableController {
 		}
 	}
 	
-	
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		else {
-//			return super.retrieve(predicates);
-//		}
-//	}    
-//	public List<Participant> allModels() {
-////		List<Participant> models = new LinkedList<Participant>();
-////		for (Model model : tableModel.allModels()) {
-////			models.add((Participant)model);
-////		}
-////		return models;
-//		TypedQuery<Participant> query = JPATransactor.getInstance().entityManager().createQuery("SELECT p FROM Participant p", Participant.class);
-//		return query.getResultList(); //List<DataCollection>
-//
-//	}
-//
-//	@Override
-//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-//		return allModels();
-//	}
 	@Override
 	public List<JButton> buttons() {
 		if (target == null) {
-			return new LinkedList<JButton>();
+			List<JButton> buttons = new LinkedList<JButton>();
+			buttons.add(ButtonUtil.editButton(this));
+			return buttons;
 		}
 		else {
 			return super.buttons();
@@ -114,11 +94,6 @@ public class ParticipantTableController extends AbstractTableController {
 		}
 	}
 
-//	@Override
-//	protected Class<? extends Model> getModelClass() {
-//		return Participant.class;
-//	}
-	
 	protected List<? extends Model> retrieveForAllTargets(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);

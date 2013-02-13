@@ -5,10 +5,10 @@ import java.util.Arrays;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipantRoles;
-import no.atferdssenteret.panda.model.Participant_;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.entity.Participant;
+import no.atferdssenteret.panda.model.entity.Participant_;
 
 public class ParticipantFilterCreator implements FilterCreator {
 

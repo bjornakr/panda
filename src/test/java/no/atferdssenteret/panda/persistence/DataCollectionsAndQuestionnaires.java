@@ -7,7 +7,7 @@ import javax.persistence.Query;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
-import no.atferdssenteret.panda.model.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -34,7 +34,7 @@ public class DataCollectionsAndQuestionnaires {
 	public void creatingDataCollectionWillCreateQuestionnairesForThatDataCollectionType() {
 		DataCollection dataCollection = createTestDataCollection();
 		dataCollection.setDefaultQuestionnaires();
-		JPATransactor.getInstance().persist(dataCollection.getTarget());
+		JPATransactor.getInstance().entityManager().persist(dataCollection.getTarget());
 		assertNotNull("DataCollection has " + questionnaireCBCL + ": ", dataCollection.getQuestionnaire(questionnaireCBCL));
 		assertNotNull("DataCollection has " + questionnaireTRF + ": ", dataCollection.getQuestionnaire(questionnaireTRF));
 	}
@@ -43,8 +43,8 @@ public class DataCollectionsAndQuestionnaires {
 	public void updatingDataCollectionWillSaveQuestionnaires() {
 		DataCollection dataCollection = createTestDataCollection();
 		dataCollection.setDefaultQuestionnaires();
-		JPATransactor.getInstance().persist(dataCollection.getTarget());
-		JPATransactor.getInstance().update();
+		JPATransactor.getInstance().quickPersist(dataCollection.getTarget());
+//		JPATransactor.getInstance().update();
 
 		Query query = JPATransactor.getInstance().entityManager().createQuery(
 				"SELECT COUNT(q) FROM Questionnaire q WHERE q.dataCollection.id = " +

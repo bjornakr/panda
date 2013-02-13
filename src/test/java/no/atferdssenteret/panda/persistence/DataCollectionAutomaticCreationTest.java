@@ -16,9 +16,9 @@ import javax.persistence.TypedQuery;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.DataCollectionRule;
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;

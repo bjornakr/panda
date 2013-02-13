@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import no.atferdssenteret.panda.model.DataCollection;
-import no.atferdssenteret.panda.model.Participant;
-import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.model.QuestionnaireEvent;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.Participant;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.User;
 
 public class DatabaseCleaner {
 	private static final Class<?>[] ENTITY_TYPES = {

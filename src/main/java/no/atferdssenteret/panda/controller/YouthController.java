@@ -4,7 +4,7 @@ import java.awt.Window;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StringUtil;
@@ -74,5 +74,10 @@ public class YouthController extends ApplicationController {
 		model.setDataCollector((User)view.getDataCollector());
 		model.setTreatmentStart(StringUtil.parseDate(view.getTreatmentStart()));
 		model.setComment(StringUtil.groomString(view.getComment()));
+	}
+
+	@Override
+	protected void setModel(Model model) {
+		this.model = (Youth)model;
 	}
 }

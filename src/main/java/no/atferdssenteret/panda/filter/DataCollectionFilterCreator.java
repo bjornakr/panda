@@ -7,9 +7,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
-import no.atferdssenteret.panda.model.DataCollection_;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 
@@ -67,7 +67,7 @@ public class DataCollectionFilterCreator implements FilterCreator {
 
 	private static Predicate createConcludedPredicate(Root<DataCollection> root) {
 		Predicate givenUpPredicate = criteriaBuilder.equal(root.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.GIVEN_UP);
-		Predicate concludedPredicate = criteriaBuilder.equal(root.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.PERFORMED);
+		Predicate concludedPredicate = criteriaBuilder.equal(root.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.COMPLETED);
 		return criteriaBuilder.or(givenUpPredicate, concludedPredicate);
 	}
 

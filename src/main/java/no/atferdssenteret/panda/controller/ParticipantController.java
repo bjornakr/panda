@@ -3,9 +3,9 @@ package no.atferdssenteret.panda.controller;
 import java.awt.Window;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Participant;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.Participant;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
@@ -71,5 +71,10 @@ public class ParticipantController extends ApplicationController {
 		model.setAddress(StringUtil.groomString(view.getAddress()));
 		model.setContactInfo(StringUtil.groomString(view.getContactInfo()));
 		model.setComment(StringUtil.groomString(view.getComment()));
+	}
+	
+	@Override
+	protected void setModel(Model model) {
+		this.model = (Participant)model;
 	}
 }

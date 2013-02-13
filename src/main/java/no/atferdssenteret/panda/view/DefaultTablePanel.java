@@ -32,6 +32,12 @@ import no.atferdssenteret.panda.filter.Filter;
 import no.atferdssenteret.panda.filter.FilterCreator;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
+/**
+ * This is the main view for the overview panels. It implements tables for
+ * any kind of model in the system, and drop-down menus with options for
+ * filtering the table.
+ * 
+ */
 public class DefaultTablePanel extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 

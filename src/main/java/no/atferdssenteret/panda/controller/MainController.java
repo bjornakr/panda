@@ -24,7 +24,7 @@ import no.atferdssenteret.panda.controller.table.UserTableController;
 import no.atferdssenteret.panda.controller.table.YouthTableController;
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Session;
-import no.atferdssenteret.panda.model.Target;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.table.TableObserver;
 import no.atferdssenteret.panda.util.JPATransactor;

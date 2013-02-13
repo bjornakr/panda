@@ -6,11 +6,12 @@ import java.sql.Date;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
-import no.atferdssenteret.panda.model.DataCollection;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Questionnaire;
-import no.atferdssenteret.panda.model.Target;
-import no.atferdssenteret.panda.model.User;
+import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
+import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DataCollectionDialog;
 
@@ -41,7 +42,7 @@ public class DataCollectionController extends ApplicationController {
 		if (!MainController.session.user().hasAccessToRestrictedFields()) {
 			view.restrictAccess();
 		}
-		
+
 		view.setVisible(true);
 	}
 
@@ -74,7 +75,7 @@ public class DataCollectionController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model.setTarget(target);
-			target.addDataCollection(model);
+//			target.addDataCollection(model);
 		}
 		model.setType((String)view.getType());	
 		model.setTargetDate(StringUtil.parseDate(view.getTargetDate()));
@@ -87,14 +88,33 @@ public class DataCollectionController extends ApplicationController {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		super.actionPerformed(event);
-		if (event.getActionCommand().equals("TYPE_COMBO_BOX") && getMode() == Mode.CREATE) {
-			model.getQuestionnaires().clear();
-			for (String questionnaireName : QuestionnairesForDataCollectionType.getInstance().getQuestionnaireNamesFor((String)view.getType())) {
-				Questionnaire questionnaire = new Questionnaire();
-				questionnaire.setName(questionnaireName);
-				model.addQuestionnaire(questionnaire);
-			}
-			questionnaireTableController.tableModel().setModels(model.getQuestionnaires());
+		if (event.getActionCommand().equals(DataCollectionDialog.CBOX_TYPE) && getMode() == Mode.CREATE) {
+			createQuestionnairesForSelectedDataCollectionType();
 		}
+		else if (event.getActionCommand().equals(DataCollectionDialog.CBOX_PROGRESS_DATE) && shouldAutoInsertDate()) {
+			view.setProgressDate(DateUtil.today());
+		}
+	}
+
+
+	private boolean shouldAutoInsertDate() {
+		return StringUtil.groomString(view.getProgressDate()) == null
+				&& (view.getProgressStatus() == DataCollection.ProgressStatuses.APPOINTED
+				|| view.getProgressStatus() == DataCollection.ProgressStatuses.COMPLETED);
+	}
+
+	private void createQuestionnairesForSelectedDataCollectionType() {
+		model.getQuestionnaires().clear();
+		for (String questionnaireName : QuestionnairesForDataCollectionType.getInstance().getQuestionnaireNamesFor((String)view.getType())) {
+			Questionnaire questionnaire = new Questionnaire();
+			questionnaire.setName(questionnaireName);
+			model.addQuestionnaire(questionnaire);
+		}
+		questionnaireTableController.tableModel().setModels(model.getQuestionnaires());
+	}
+
+	@Override
+	protected void setModel(Model model) {
+		this.model = (DataCollection)model;
 	}
 }

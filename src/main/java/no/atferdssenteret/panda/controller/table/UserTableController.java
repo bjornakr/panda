@@ -9,8 +9,8 @@ import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.controller.UserController;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.User;
-import no.atferdssenteret.panda.model.User_;
+import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.model.entity.User_;
 import no.atferdssenteret.panda.model.table.UserTable;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
@@ -40,11 +40,6 @@ public class UserTableController extends AbstractTableController {
 	protected String getWarningBeforeDelete() {
 		return null;
 	}
-
-//	@Override
-//	protected Class<User> getModelClass() {
-//		return User.class;
-//	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {

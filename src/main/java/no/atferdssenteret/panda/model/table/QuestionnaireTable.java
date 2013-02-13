@@ -1,19 +1,20 @@
 package no.atferdssenteret.panda.model.table;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Questionnaire;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class QuestionnaireTable extends DefaultAbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private final static int NO_OF_FIELDS = 5;
+	private final static int NO_OF_FIELDS = 7;
 	private final static int TARGET_ID = 0;
 	private final static int DATA_COLLECTION = 1;
 	private final static int NAME = 2;
 	private final static int STATUS = 3;
 	private final static int LAST_EVENT = 4;
-
+	private final static int LAST_EVENT_DATE = 5;
+	private final static int LAST_EVENT_SIGN = 6;
 
 	@Override
 	protected String[] headerColumns() {
@@ -23,6 +24,8 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		headerColumns[NAME] = "Spørreskjema";
 		headerColumns[STATUS] = "Status";
 		headerColumns[LAST_EVENT] = "Siste hendelse";	
+		headerColumns[LAST_EVENT_DATE] = "Date";	
+		headerColumns[LAST_EVENT_SIGN] = "Signatur";	
 		return headerColumns;
 	}
 
@@ -36,7 +39,11 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		dataColumns[DATA_COLLECTION] = questionnaire.getDataCollection().getType();
 		dataColumns[NAME] = questionnaire.getName();
 		dataColumns[STATUS] = questionnaire.calculateStatus();
-		dataColumns[LAST_EVENT] = questionnaire.lastEvent();
+		if (questionnaire.lastEvent() != null) {
+			dataColumns[LAST_EVENT] = questionnaire.lastEvent().getType();
+			dataColumns[LAST_EVENT_DATE] = questionnaire.lastEvent().getDate();
+			dataColumns[LAST_EVENT_SIGN] = questionnaire.lastEvent().getUpdatedBy();
+		}
 		return dataColumns;
 	}
 
@@ -48,6 +55,8 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		columnSizes[NAME] = ColumnSizes.WIDE;
 		columnSizes[STATUS] = ColumnSizes.WIDE;
 		columnSizes[LAST_EVENT] = ColumnSizes.WIDE;
+		columnSizes[LAST_EVENT_DATE] = ColumnSizes.SMALL;
+		columnSizes[LAST_EVENT_SIGN] = ColumnSizes.SMALL;
 		return columnSizes;
 	}
 }
