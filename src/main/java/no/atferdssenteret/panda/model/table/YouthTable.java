@@ -20,8 +20,6 @@ public class YouthTable extends DefaultAbstractTableModel {
 	private final static int TREATMENT_START = 9;
 	private final static int COMMENT = 10;
 
-
-
 	@Override
 	protected String[] headerColumns() {
 		String[] headerColumns = new String[NO_OF_FIELDS];
@@ -58,19 +56,19 @@ public class YouthTable extends DefaultAbstractTableModel {
 	} 
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[TARGET_ID_NUM] = ColumnSizes.SMALL;
-		columnSizes[TARGET_ID_STR] = ColumnSizes.SMALL;
-		columnSizes[STATUS] = ColumnSizes.WIDE;
-		columnSizes[REGION] = ColumnSizes.NORMAL;
-		columnSizes[DATA_COLLECTOR] = ColumnSizes.WIDE;
-		columnSizes[GENDER] = ColumnSizes.SMALL;
-		columnSizes[FIRST_NAME] = ColumnSizes.NORMAL;
-		columnSizes[LAST_NAME] = ColumnSizes.NORMAL;
-		columnSizes[TREATMENT_GROUP] = ColumnSizes.WIDE;
-		columnSizes[TREATMENT_START] = ColumnSizes.NORMAL;
-		columnSizes[COMMENT] = ColumnSizes.WIDE;
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[TARGET_ID_NUM] = COLUMN_SIZE_SMALL;
+		columnSizes[TARGET_ID_STR] = COLUMN_SIZE_SMALL;
+		columnSizes[STATUS] = COLUMN_SIZE_WIDE;
+		columnSizes[REGION] = COLUMN_SIZE_NORMAL;
+		columnSizes[DATA_COLLECTOR] = COLUMN_SIZE_WIDE;
+		columnSizes[GENDER] = COLUMN_SIZE_SMALL;
+		columnSizes[FIRST_NAME] = COLUMN_SIZE_NORMAL;
+		columnSizes[LAST_NAME] = COLUMN_SIZE_NORMAL;
+		columnSizes[TREATMENT_GROUP] = COLUMN_SIZE_WIDE;
+		columnSizes[TREATMENT_START] = COLUMN_SIZE_NORMAL;
+		columnSizes[COMMENT] = COLUMN_SIZE_WIDE;
 		return columnSizes;
 	}
 }

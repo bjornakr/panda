@@ -48,7 +48,7 @@ public class Participant implements Model, TargetBelonging {
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
 		createdBy = MainController.session.user().getUserName();
-		updatedBy = MainController.session.user().getUserName();
+		onUpdate();
 	}
 
 	@PreUpdate

@@ -34,12 +34,12 @@ public class UserTable extends DefaultAbstractTableModel {
 	} 
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[USERNAME] = ColumnSizes.SMALL;
-		columnSizes[ACCESS_LEVEL] = ColumnSizes.NORMAL;
-		columnSizes[FIRST_NAME] = ColumnSizes.WIDE;
-		columnSizes[LAST_NAME] = ColumnSizes.WIDE;
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[USERNAME] = COLUMN_SIZE_SMALL;
+		columnSizes[ACCESS_LEVEL] = COLUMN_SIZE_NORMAL;
+		columnSizes[FIRST_NAME] = COLUMN_SIZE_WIDE;
+		columnSizes[LAST_NAME] = COLUMN_SIZE_WIDE;
 		return columnSizes;
 	}
 }

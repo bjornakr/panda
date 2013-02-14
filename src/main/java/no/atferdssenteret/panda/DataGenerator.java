@@ -27,10 +27,10 @@ public class DataGenerator {
 				participants.add(createParticipant());
 			}
 			youth.setParticipants(participants);
+			DataCollectionManager.getInstance().generateDataCollections(youth);
 			JPATransactor.getInstance().transaction().begin();
 			JPATransactor.getInstance().entityManager().persist(youth);
 			JPATransactor.getInstance().transaction().commit();
-			DataCollectionManager.getInstance().notifyTargetUpdated(youth);
 		}
 	}
 
@@ -39,6 +39,10 @@ public class DataGenerator {
 				"T1",
 				Calendar.MONTH, 0, 
 				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE));
+		DataCollectionManager.getInstance().addRule(new DataCollectionRule(
+				"T2",
+				Calendar.MONTH, 6, 
+				DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
 	}
 	
 	private Youth createYouth() {

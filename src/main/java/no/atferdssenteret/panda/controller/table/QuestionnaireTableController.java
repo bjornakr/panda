@@ -58,11 +58,6 @@ public class QuestionnaireTableController extends AbstractTableController {
 		return tableModel;
 	}
 
-	@Override
-	protected String getWarningBeforeDelete() {
-		return null;
-	}
-	
 	public List<Questionnaire> currentModels() {
 		List<Questionnaire> models = new LinkedList<Questionnaire>();
 		for (Model model : tableModel.allModels()) {

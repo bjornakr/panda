@@ -60,7 +60,7 @@ public abstract class ApplicationController implements ActionListener {
 		}
 	}
 
-	private void performTransaction() {
+	protected void performTransaction() {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
 		model().validate();

@@ -7,11 +7,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class DateUtil {
-	private static SimpleDateFormat df = new SimpleDateFormat("dd.MM.yy", new Locale("Norwegian"));
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy", new Locale("Norwegian"));
+	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", new Locale("Norwegian"));
 
 	public static Date parseDateFromInternationalDateFormat(String dateString) {
 		try {
-			return new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateString).getTime());
+			return new Date(new SimpleDateFormat("yy-MM-dd").parse(dateString).getTime());
 		}
 		catch (ParseException e) {
 			throw new RuntimeException(e);
@@ -19,12 +20,16 @@ public class DateUtil {
 
 	}
 
-	public static SimpleDateFormat getDefaultDateFormat() {
-		return df;
+	public static SimpleDateFormat dateFormat() {
+		return dateFormat;
+	}
+	
+	public static SimpleDateFormat timestampFormat() {
+		return timestampFormat;
 	}
 
 	public static String getFormattedTodaysDate() {
-		return df.format(today());
+		return dateFormat.format(today());
 	}
 
 	public static String formatDate(Date d) {
@@ -32,7 +37,7 @@ public class DateUtil {
 			return null;
 		}
 
-		return df.format(d);
+		return dateFormat.format(d);
 	}
 
 	public static java.sql.Date formatYear(String year) {

@@ -36,12 +36,12 @@ public class QuestionnaireEventTable extends DefaultAbstractTableModel {
 	}
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[DATE] = ColumnSizes.SMALL;
-		columnSizes[TYPE] = ColumnSizes.WIDE;
-		columnSizes[COMMENT] = ColumnSizes.WIDE;
-		columnSizes[SIGNATURE] = ColumnSizes.NORMAL;  
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[DATE] = COLUMN_SIZE_SMALL;
+		columnSizes[TYPE] = COLUMN_SIZE_WIDE;
+		columnSizes[COMMENT] = COLUMN_SIZE_WIDE;
+		columnSizes[SIGNATURE] = COLUMN_SIZE_NORMAL;  
 		return columnSizes;
 	}
 }

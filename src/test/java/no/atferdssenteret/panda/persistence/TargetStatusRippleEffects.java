@@ -59,12 +59,12 @@ public class TargetStatusRippleEffects {
 		JPATransactor.getInstance().transaction().begin();
 		JPATransactor.getInstance().entityManager().persist(target);
 		JPATransactor.getInstance().transaction().commit();
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		assertEquals("No. of data collections before: ", 1, target.getDataCollections().size());
 		target.setStatus(ParticipationStatuses.WAITING_FOR_CONSENT);
 		JPATransactor.getInstance().transaction().begin();
 		JPATransactor.getInstance().transaction().commit();
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		assertEquals("No. of data collections after: ", 0, target.getDataCollections().size());
 	}
 

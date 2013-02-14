@@ -41,14 +41,14 @@ public class DataCollectionTableForTargetFocus extends DefaultAbstractTableModel
 	}
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[STATUS] = ColumnSizes.SMALL;
-		columnSizes[TARGET_DATE] = ColumnSizes.SMALL;
-		columnSizes[TYPE] = ColumnSizes.SMALL;
-		columnSizes[PROGRESS_STATUS] = ColumnSizes.NORMAL;
-		columnSizes[PROGRESS_DATE] = ColumnSizes.SMALL;
-		columnSizes[DATA_COLLECTOR] = ColumnSizes.WIDE;
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[STATUS] = COLUMN_SIZE_SMALL;
+		columnSizes[TARGET_DATE] = COLUMN_SIZE_SMALL;
+		columnSizes[TYPE] = COLUMN_SIZE_SMALL;
+		columnSizes[PROGRESS_STATUS] = COLUMN_SIZE_NORMAL;
+		columnSizes[PROGRESS_DATE] = COLUMN_SIZE_SMALL;
+		columnSizes[DATA_COLLECTOR] = COLUMN_SIZE_WIDE;
 		return columnSizes;
 	}
 	

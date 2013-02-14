@@ -10,6 +10,7 @@ import no.atferdssenteret.panda.controller.table.AbstractTableController;
 import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController;
 import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
 import no.atferdssenteret.panda.controller.table.ParticipantTableController;
+import no.atferdssenteret.panda.controller.table.TargetNoteTableController;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.TabsAndTablesPanel;
 import no.atferdssenteret.panda.view.YouthFocusPanel;
@@ -38,6 +39,7 @@ public class YouthFocusController extends AbstractTabsAndTablesController {
 		dataCollectionTableController.updateTableModel();
 		tableControllers.add(dataCollectionTableController);
 		tableControllers.add(new ParticipantTableController(model));
+		tableControllers.add(new TargetNoteTableController(model));
 		return tableControllers;
 	}
 

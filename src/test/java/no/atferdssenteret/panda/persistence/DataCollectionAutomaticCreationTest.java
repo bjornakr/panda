@@ -36,21 +36,12 @@ public class DataCollectionAutomaticCreationTest {
 	}
 
 	@Test
-	public void dataCollectionManagerGetsNotifiedWhenTargetIsCreated() throws Exception {
-		Target target = TestUtil.createParticipatingTarget();
-		persist(target);
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
-		assertEquals(target, DataCollectionManager.getInstance().currentTarget());
-	}
-
-
-	@Test
 	public void dataCollectionIsCreatedAfterTargetIsCreatedAccordingToRule() {
 		final int noOfMonths = 3;
 		DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(noOfMonths));
 		Target target = TestUtil.createParticipatingTarget();
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 		assertTrue("Data collection created", existsDataCollectionCreatedFor(target));
 		DataCollection dc = getDataCollection(target, "T1");
 		assertEquals("Data collection type: ", "T1", dc.getType());
@@ -89,11 +80,12 @@ public class DataCollectionAutomaticCreationTest {
 		dcManager.addRule(TestUtil.createDataCollectionRuleT2WhenTargetUpdated(noOfMonthsForT2));
 		dcManager.addRule(TestUtil.createDataCollectionRuleT3WhenTargetUpdated(noOfMonthsForT3));
 		Target target = TestUtil.createParticipatingTarget();
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
 		JPATransactor.getInstance().entityManager().getTransaction().begin();
 		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-03-19"));
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		JPATransactor.getInstance().entityManager().getTransaction().commit();
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 
 		DataCollection dataCollection = getDataCollection(target, "T2");
 		assertNotNull("Data collection T2 exists in database: ", dataCollection);
@@ -113,8 +105,8 @@ public class DataCollectionAutomaticCreationTest {
 				Calendar.MONTH, delayT1, DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
 		Target target = TestUtil.createParticipatingTarget();
 		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-08-25"));
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 		DataCollection dataCollection = getDataCollection(target, "T1");
 		assertEquals("Target date: ", DateUtil.parseDateFromInternationalDateFormat("2013-04-25"), dataCollection.getTargetDate());	
 	}
@@ -124,16 +116,18 @@ public class DataCollectionAutomaticCreationTest {
 		DataCollectionManager dcManager = DataCollectionManager.getInstance();
 		dcManager.addRule(TestUtil.createDataCollectionRuleT2WhenTargetUpdated(6));
 		Target target = TestUtil.createParticipatingTarget();
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
+		
+		JPATransactor.getInstance().transaction().begin();
 		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
-		JPATransactor.getInstance().transaction().begin();
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		JPATransactor.getInstance().transaction().commit();
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
 		JPATransactor.getInstance().transaction().begin();
+		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		JPATransactor.getInstance().transaction().commit();
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 		assertFalse("Duplicate data collections", hasDuplicateDataCollections(target));	
 		DataCollection dataCollection = getDataCollection(target, "T2");
 		assertEquals(DateUtil.parseDateFromInternationalDateFormat("2012-07-02"), dataCollection.getTargetDate());	
@@ -162,8 +156,8 @@ public class DataCollectionAutomaticCreationTest {
 		DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(1));
 		Target target = TestUtil.createParticipatingTarget();
 		target.setDataCollector(dataCollector);
+		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
-		DataCollectionManager.getInstance().notifyTargetUpdated(target);
 		assertTrue("Target has data collections: ", getDataCollections(target).size() > 0);
 		for (DataCollection dataCollection : getDataCollections(target)) {
 			assertEquals("Target's data collector = Data collection's data collector: ",

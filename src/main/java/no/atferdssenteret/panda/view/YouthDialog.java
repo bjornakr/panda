@@ -21,7 +21,7 @@ import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
 import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
-public class YouthDialog extends JDialog {
+public class YouthDialog extends JDialog implements TargetDialog {
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
 	private DefaultTextField txtFirstName = new DefaultTextField(DefaultTextField.STANDARD_TEXT_WIDTH);

@@ -7,12 +7,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.controller.YouthController;
 import no.atferdssenteret.panda.filter.YouthFilterCreator;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.model.fft.Youth_;
@@ -51,24 +49,15 @@ public class YouthTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected String getWarningBeforeDelete() {
-		return null;
-	}
-
-	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			YouthController youthController = new YouthController(view.getWindow(), null);
 			if (youthController.model() != null) {
-				Target target = (Target)youthController.model();
-				DataCollectionManager.getInstance().notifyTargetUpdated(target);
 				updateTableModel();
 			}
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
-			YouthController youthController = new YouthController(view.getWindow(), (Youth)modelForSelectedTableRow());
-			Target target = (Target)youthController.model();
-			DataCollectionManager.getInstance().notifyTargetUpdated(target);
+			new YouthController(view.getWindow(), (Youth)modelForSelectedTableRow());
 			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {

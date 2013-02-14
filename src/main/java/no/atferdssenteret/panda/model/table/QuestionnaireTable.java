@@ -24,7 +24,7 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		headerColumns[NAME] = "Spørreskjema";
 		headerColumns[STATUS] = "Status";
 		headerColumns[LAST_EVENT] = "Siste hendelse";	
-		headerColumns[LAST_EVENT_DATE] = "Date";	
+		headerColumns[LAST_EVENT_DATE] = "Dato";	
 		headerColumns[LAST_EVENT_SIGN] = "Signatur";	
 		return headerColumns;
 	}
@@ -48,15 +48,15 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 	}
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[TARGET_ID] = ColumnSizes.SMALL;
-		columnSizes[DATA_COLLECTION] = ColumnSizes.NORMAL;
-		columnSizes[NAME] = ColumnSizes.WIDE;
-		columnSizes[STATUS] = ColumnSizes.WIDE;
-		columnSizes[LAST_EVENT] = ColumnSizes.WIDE;
-		columnSizes[LAST_EVENT_DATE] = ColumnSizes.SMALL;
-		columnSizes[LAST_EVENT_SIGN] = ColumnSizes.SMALL;
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[TARGET_ID] = COLUMN_SIZE_SMALL;
+		columnSizes[DATA_COLLECTION] = COLUMN_SIZE_NORMAL;
+		columnSizes[NAME] = COLUMN_SIZE_WIDE;
+		columnSizes[STATUS] = COLUMN_SIZE_WIDE;
+		columnSizes[LAST_EVENT] = COLUMN_SIZE_WIDE;
+		columnSizes[LAST_EVENT_DATE] = COLUMN_SIZE_SMALL;
+		columnSizes[LAST_EVENT_SIGN] = COLUMN_SIZE_SMALL;
 		return columnSizes;
 	}
 }

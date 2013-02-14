@@ -53,11 +53,6 @@ public class DataCollectionTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected String getWarningBeforeDelete() {
-		return null;
-	}
-
-	@Override
 	public List<JButton> buttons() {
 		if (target == null) {
 			List<JButton> buttons = new LinkedList<JButton>();

@@ -297,7 +297,7 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		return toString();
 	}
 
-	public boolean untouched() {
+	public boolean isUntouched() {
 		return (progressStatus == ProgressStatuses.NOT_INITIATED
 				&& !hasQuestionnairesWithQuestionnaireEvents());
 	}

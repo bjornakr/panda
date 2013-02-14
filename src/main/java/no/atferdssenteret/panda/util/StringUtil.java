@@ -31,7 +31,7 @@ public class StringUtil {
 		}
 
 
-		SimpleDateFormat df = DateUtil.getDefaultDateFormat();
+		SimpleDateFormat df = DateUtil.dateFormat();
 		try {
 			return new java.sql.Date(df.parse(dateString).getTime());
 		}

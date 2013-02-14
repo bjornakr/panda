@@ -15,6 +15,7 @@
     <class>no.atferdssenteret.panda.model.entity.QuestionnaireEvent</class>
     <class>no.atferdssenteret.panda.model.entity.User</class>
     <class>no.atferdssenteret.panda.model.entity.Participant</class>
+    <class>no.atferdssenteret.panda.model.entity.TargetNote</class>
     <class>no.atferdssenteret.panda.model.fft.Youth</class>
      
     <properties>
@@ -23,7 +24,7 @@
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
       <property name="javax.persistence.jdbc.url"
         value="jdbc:mysql://localhost:3306/panda" />
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+      <!--property name="eclipselink.ddl-generation" value="drop-and-create-tables" /-->
       <property name="eclipselink.ddl-generation.output-mode" value="database" />
       <property name="eclipselink.logging.level" value="FINE" />
       <property name="eclipselink.logging.parameters" value="true"/>

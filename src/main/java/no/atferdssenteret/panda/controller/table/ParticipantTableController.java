@@ -53,11 +53,6 @@ public class ParticipantTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected String getWarningBeforeDelete() {
-		return null;
-	}
-
-	@Override
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		if (target != null) {
 			return target.getParticipants();
@@ -82,14 +77,17 @@ public class ParticipantTableController extends AbstractTableController {
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-			ParticipantController participantController = new ParticipantController(view.getWindow(), null, target);
-			if (participantController.model() != null) {
-				tableModel.addRow(participantController.model());
-			}
+			new ParticipantController(view.getWindow(), null, target);
+			JPATransactor.getInstance().entityManager().refresh(target);
+			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			new ParticipantController(view.getWindow(), (Participant)modelForSelectedTableRow(), target);
+			updateTableModel();
+		}
+		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+			JPATransactor.getInstance().entityManager().refresh(target);
 			updateTableModel();
 		}
 	}

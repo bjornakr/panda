@@ -23,15 +23,12 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
-//	private JTabbedPane tabbedPane; 
 	private JTextField txtTargetLink;
 	private MainController controller;
 	private TabsAndTablesPanel tabsAndTablesPanel;
-//	private List<AbstractTableController> tableControllers;
 
 	public MainWindow(MainController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
 		this.controller = controller;
-//		this.tableControllers = tableControllers;
 		this.tabsAndTablesPanel = tabsAndTablesPanel;
 	}
 
@@ -39,14 +36,12 @@ public class MainWindow extends JFrame {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		add(createTargetLinkPanel(), BorderLayout.PAGE_START);
-//		add(createTabbedPane(), BorderLayout.CENTER);
 		add(tabsAndTablesPanel);
 		
 		pack();
 		setLocationRelativeTo(null);
 		addWindowListener(controller);
 		setTitle(controller.title());
-		//	setIconImage(new ImageIcon("graphics/icons/globe_icon.png").getImage());
 		setVisible(true);
 	}
 
@@ -103,24 +98,6 @@ public class MainWindow extends JFrame {
 
 		return wrapperPanel;
 	}
-
-//	private JTabbedPane createTabbedPane() {
-//		tabbedPane = new JTabbedPane();
-//
-//		for (AbstractTableController tableController : tableControllers) {    
-//			tabbedPane.addTab(tableController.title(), tableController.view());
-//		}	
-//
-//		tabbedPane.addChangeListener(controller);
-//		tabbedPane.setBackground(new Color(0xFFBF00));
-//
-//		return tabbedPane;
-//	}
-
-
-//	public JTabbedPane getTabbedPane() {
-//		return tabbedPane;
-//	}
 
 	public void setSelectedChildID(Integer childID) {
 		txtTargetLink.setText(childID.toString());

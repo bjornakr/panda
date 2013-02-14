@@ -37,11 +37,6 @@ public class UserTableController extends AbstractTableController {
 	}
 
 	@Override
-	protected String getWarningBeforeDelete() {
-		return null;
-	}
-
-	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			UserController userController = new UserController(view.getWindow(), null);

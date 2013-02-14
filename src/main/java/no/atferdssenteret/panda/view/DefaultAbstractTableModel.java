@@ -10,41 +10,15 @@ import no.atferdssenteret.panda.model.Model;
 
 public abstract class DefaultAbstractTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-	
-	protected enum ColumnSizes {
-		SMALL(75), NORMAL(100), WIDE(170);
+	protected static final int COLUMN_SIZE_SMALL = 75;
+	protected static final int COLUMN_SIZE_NORMAL = 100;
+	protected static final int COLUMN_SIZE_WIDE = 170;
 
-		private int value;
-
-		private ColumnSizes(int value) {
-			this.value = value;
-		}
-
-		public int value() {
-			return value;
-		}
-	}
-
-	//    protected DisplayMode displayMode;
-
-	//    protected String[] headerColumns;
-	//    protected int[] columnSizes;
 	private List<TableRow> rows = new ArrayList<TableRow>();
 
 	protected abstract String[] headerColumns();
 	protected abstract Object[] dataColumns(Model model);
-	protected abstract ColumnSizes[] columnSizes();
-
-	//    public AbstractOverviewTableModel() {
-	//	createHeaderColumns();
-	//    }
-
-	//    public AbstractOverviewTableModel(DisplayMode displayMode) {
-	//    public AbstractOverviewTableModel(DisplayMode displayMode) {
-	//	this.displayMode = displayMode;
-	//	headerColumns = createHeaderColumns();
-	//    }
-
+	protected abstract int[] columnSizes();
 
 
 	public void setModels(List<? extends Model> models) {
@@ -108,13 +82,12 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel {
 
 
 	public int getPreferredColumnWidth(int index) {
-		return columnSizes()[index].value;
+		return columnSizes()[index];
 	}
 
 	protected void setRows(List<TableRow> rows) {
 		this.rows = rows;
 		fireTableDataChanged();
-//		notifyObservers();
 	}
 
 	public void addRow(Model model) {
@@ -140,16 +113,4 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel {
 		}
 		return models;
 	}
-
-//	@Override
-//	public void addObserver(Observer o) {
-//		observers.add(o);
-//	}
-//
-//	@Override
-//	public void notifyObservers() {
-//		for (Observer observer : observers) {
-//			observer.update(null, null);
-//		}
-//	}
 }

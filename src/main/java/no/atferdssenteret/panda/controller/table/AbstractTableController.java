@@ -48,8 +48,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		return title;
 	}
 
-	protected abstract String getWarningBeforeDelete();
-
 	public boolean isModelInitialized() {
 		if (tableModel() == null) {
 			return false;
@@ -58,7 +56,6 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	public void updateTableModel() {
-//		JPATransactor.getInstance().entityManager().clear();
 		view().setWaitingState();
 		tableModel().setModels(retrieve(view().selectedFilterValues()));
 		view().updateTableCounters();

@@ -59,6 +59,7 @@ public class DataCollectionDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Framdrift"), cboxProgressStatuses));
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtProgressDate));
 		cboxDataCollector.insertItemAt(null, 0);
+		cboxDataCollector.setSelectedIndex(0);
 		labelsAndFields.add(new LabelFieldPair(new JLabel("DataCollector"), cboxDataCollector));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(createQuestionnairePanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));

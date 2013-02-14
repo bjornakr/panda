@@ -49,14 +49,26 @@ public class Target implements Model, TargetBelonging {
 	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	@OrderBy("targetDate")
 	private final List<DataCollection> dataCollections = new LinkedList<DataCollection>();
+	
 	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Participant> participants = new LinkedList<Participant>();
+	
+	@OneToMany(mappedBy = "target", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OrderBy("created DESC, id DESC")
+	private List<TargetNote> targetNotes = new LinkedList<TargetNote>();
+	
 	@ManyToOne(cascade = {CascadeType.DETACH})
 	private User dataCollector;
 
+	public Target() {
+		// Cannot wait to set the "created" field until persisting,
+		// because it is required by the DataCollectionManager before
+		// it is persisted.
+		created = new Date(System.currentTimeMillis());
+	}
+	
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
 		createdBy = MainController.session.user().getUserName();
 		updatedBy = MainController.session.user().getUserName();
 	}
@@ -258,6 +270,25 @@ public class Target implements Model, TargetBelonging {
 	public String referenceName() {
 		return toString();
 	}
+
+	public List<TargetNote> getTargetNotes() {
+		return targetNotes;
+	}
+
+	public void setTargetNotes(List<TargetNote> targetNotes) {
+		for (TargetNote targetNote : targetNotes) {
+			targetNote.setTarget(this);
+		}
+		this.targetNotes = targetNotes;
+	}
 	
+	public void addTargetNote(TargetNote targetNote) {
+		targetNote.setTarget(this);
+		targetNotes.add(targetNote);
+	}
+
+	public void removeTargetNote(TargetNote targetNote) {
+		targetNotes.remove(targetNote);
+	}
 }
 

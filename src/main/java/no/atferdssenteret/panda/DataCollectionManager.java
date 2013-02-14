@@ -6,11 +6,9 @@ import java.util.List;
 
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Target;
-import no.atferdssenteret.panda.util.JPATransactor;
 
 public class DataCollectionManager {
 	private static DataCollectionManager dataCollectionManager;
-	private Target currentTarget;
 	private final List<DataCollectionRule> dataCollectionRules = new LinkedList<DataCollectionRule>();
 
 	private DataCollectionManager() {
@@ -23,50 +21,28 @@ public class DataCollectionManager {
 		return dataCollectionManager;
 	}
 
-	public Target currentTarget() {
-		return dataCollectionManager.currentTarget;
-	}
-
-	//	public void notifyTargetCreated(Target target) {
-	//		if (!target.isParticipating()) {
-	//			return;
-	//		}
-	//
-	//		dataCollectionManager.currentTarget = target;
-	//		for (DataCollectionRule dataCollectionRule : dataCollectionRules) {
-	//			if (dataCollectionRule.applicationTime() == DataCollectionRule.ApplicationTimes.WHEN_TARGET_CREATED) {
-	//				DataCollection dataCollection = new DataCollection();
-	//				//		dataCollection.setTarget(target);
-	//				dataCollection.setType(dataCollectionRule.dataCollectionType());
-	//				dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
-	//				dataCollection.setDataCollector(target.getDataCollector());
-	//				target.addDataCollection(dataCollection);
-	//			}
-	//		}
-	//	}
-
-	public void notifyTargetUpdated(Target target) {
-		currentTarget = target;
-		JPATransactor.getInstance().transaction().begin();
+	public void generateDataCollections(Target target) {
 		deleteUntouchedDataCollections(target);
-
 		if (target.isParticipating()) {
 			for (DataCollectionRule dataCollectionRule : dataCollectionRules) {
-				if (!target.hasDataCollection(dataCollectionRule.dataCollectionType())) {
-					if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE) {
-						addDataCollectionToTarget(dataCollectionRule, target);
-					}
-					if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TREATMENT_START
-							&& target.getTreatmentStart() != null) {
-						addDataCollectionToTarget(dataCollectionRule, target);
-					}
-				}
+				processDataCollectionRuleForTarget(target, dataCollectionRule);
 			}
 		}
-		JPATransactor.getInstance().transaction().commit();
 	}
 
-	private void addDataCollectionToTarget(DataCollectionRule dataCollectionRule, Target target) {
+	private void processDataCollectionRuleForTarget(Target target, DataCollectionRule dataCollectionRule) {
+		if (!target.hasDataCollection(dataCollectionRule.dataCollectionType())) {
+			if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE) {
+				createDataCollectionForTarget(dataCollectionRule, target);
+			}
+			if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TREATMENT_START
+					&& target.getTreatmentStart() != null) {
+				createDataCollectionForTarget(dataCollectionRule, target);
+			}
+		}
+	}
+
+	private void createDataCollectionForTarget(DataCollectionRule dataCollectionRule, Target target) {
 		DataCollection dataCollection = new DataCollection();
 		dataCollection.setType(dataCollectionRule.dataCollectionType());
 		dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
@@ -79,9 +55,7 @@ public class DataCollectionManager {
 	private void deleteUntouchedDataCollections(Target target) {
 		List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 		for (DataCollection dataCollection : target.getDataCollections()) {
-			//			if (dataCollection.getProgressStatus() == DataCollection.ProgressStatuses.NOT_INITIATED
-			//					&& dataCollection.hasNoQuestonnaireEvents()) {
-			if (dataCollection.untouched()) {
+			if (dataCollection.isUntouched()) {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}

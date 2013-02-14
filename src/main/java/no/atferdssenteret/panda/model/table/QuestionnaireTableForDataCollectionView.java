@@ -39,12 +39,12 @@ public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTabl
 	}
 
 	@Override
-	protected ColumnSizes[] columnSizes() {
-		ColumnSizes[] columnSizes = new ColumnSizes[NO_OF_FIELDS];
-		columnSizes[NAME] = ColumnSizes.WIDE;
-		columnSizes[STATUS] = ColumnSizes.WIDE;
-		columnSizes[LAST_EVENT] = ColumnSizes.WIDE;
-		columnSizes[EVENT_DATE] = ColumnSizes.SMALL;
+	protected int[] columnSizes() {
+		int[] columnSizes = new int[NO_OF_FIELDS];
+		columnSizes[NAME] = COLUMN_SIZE_WIDE;
+		columnSizes[STATUS] = COLUMN_SIZE_WIDE;
+		columnSizes[LAST_EVENT] = COLUMN_SIZE_WIDE;
+		columnSizes[EVENT_DATE] = COLUMN_SIZE_SMALL;
 		return columnSizes;
 	}
 }
