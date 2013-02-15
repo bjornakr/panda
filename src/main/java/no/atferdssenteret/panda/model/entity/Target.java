@@ -21,6 +21,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.TargetBelonging;
@@ -252,9 +253,9 @@ public class Target implements Model, TargetBelonging {
 		return id;
 	}
 	
-	public boolean hasDataCollection(String dataCollectionType) {
+	public boolean hasDataCollection(DataCollectionTypes dataCollectionType) {
 		for (DataCollection dataCollection : dataCollections) {
-			if (dataCollection.getType().equals(dataCollectionType)) {
+			if (dataCollection.getType().equals(dataCollectionType.toString())) {
 				return true;
 			}
 		}

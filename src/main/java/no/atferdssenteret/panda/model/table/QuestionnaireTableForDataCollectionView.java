@@ -32,7 +32,7 @@ public class QuestionnaireTableForDataCollectionView extends DefaultAbstractTabl
 		dataColumns[STATUS] = questionnaire.calculateStatus();
 		QuestionnaireEvent lastEvent = questionnaire.lastEvent();
 		if (lastEvent != null) {
-			dataColumns[LAST_EVENT] = questionnaire.lastEvent();
+			dataColumns[LAST_EVENT] = questionnaire.lastEvent().getType();
 			dataColumns[EVENT_DATE] = questionnaire.lastEvent().getDate();
 		}
 		return dataColumns;

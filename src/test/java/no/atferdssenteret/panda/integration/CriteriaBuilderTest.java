@@ -57,7 +57,7 @@ public class CriteriaBuilderTest {
 		Target t = TestUtil.createNotParticipatingTarget();
 //		List<DataCollection> dcs = new LinkedList<DataCollection>();
 		DataCollection dc = new DataCollection();
-		dc.setType(DataCollectionTypes.T1);
+		dc.setType(DataCollectionTypes.T1.toString());
 		dc.setTargetDate(DateUtil.today());
 		t.addDataCollection(dc);
 		JPATransactor.getInstance().transaction().begin();

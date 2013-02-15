@@ -20,6 +20,7 @@ import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.util.DateUtil;
@@ -204,7 +205,8 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	}
 
 	public void setDefaultQuestionnaires() {
-		setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(type));
+		setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().
+				getQuestionnairesFor(DataCollectionTypes.find(type)));
 	}
 
 	public Statuses status() {

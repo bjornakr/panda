@@ -1,15 +1,17 @@
 package no.atferdssenteret.panda;
 
+import no.atferdssenteret.panda.model.DataCollectionTypes;
+
 
 public class DataCollectionRule {
 //	public enum ApplicationTimes {WHEN_TARGET_CREATED, WHEN_TARGET_UPDATED};
 	public enum TargetDates {AFTER_TARGET_CREATION_DATE, AFTER_TREATMENT_START};
-	private final String dataCollectionType;
+	private final DataCollectionTypes dataCollectionType;
 	private final int timeSpan;
 	private final int timeUnit;
 	private final TargetDates targetDate;
 
-	public DataCollectionRule(String dataCollectionType,
+	public DataCollectionRule(DataCollectionTypes dataCollectionType,
 			int timeUnit, int timeSpan, TargetDates targetDate) {
 		this.dataCollectionType = dataCollectionType;
 //		this.applicationTime = applicationTime;
@@ -30,7 +32,7 @@ public class DataCollectionRule {
 		return timeUnit;
 	}
 
-	public String dataCollectionType() {
+	public DataCollectionTypes dataCollectionType() {
 		return dataCollectionType;
 	}
 

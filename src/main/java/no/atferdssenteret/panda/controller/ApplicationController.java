@@ -54,8 +54,8 @@ public abstract class ApplicationController implements ActionListener {
 			view().dispose();
 		}
 		catch (Exception e) {
-			JPATransactor.getInstance().transaction().rollback();
 			e.printStackTrace();
+			JPATransactor.getInstance().transaction().rollback();
 			new ErrorMessageDialog(e.getMessage(), null, view());
 		}
 	}

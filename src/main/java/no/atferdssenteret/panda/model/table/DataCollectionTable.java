@@ -33,7 +33,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 	protected Object[] dataColumns(Model model) {
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
 		DataCollection dataCollection = (DataCollection)model;
-		dataColumns[TARGET_ID] = dataCollection.getTarget().formattedIdWithLetterAppendix();
+		dataColumns[TARGET_ID] = dataCollection.getTarget().formattedNumericId();
 		dataColumns[STATUS] = dataCollection.status();
 		dataColumns[TARGET_DATE] = dataCollection.getTargetDate();
 		dataColumns[TYPE] = dataCollection.getType();

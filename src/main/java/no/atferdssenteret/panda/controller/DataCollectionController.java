@@ -6,6 +6,7 @@ import java.sql.Date;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
@@ -63,7 +64,7 @@ public class DataCollectionController extends ApplicationController {
 
 	@Override
 	public void transferModelToView() {
-		view.setType(model.getType());
+		view.setType(DataCollectionTypes.find(model.getType()));
 		view.setTargetDate(model.getTargetDate());
 		view.setProgressStatus(model.getProgressStatus());
 		view.setProgressDate(model.getProgressDate());
@@ -77,7 +78,7 @@ public class DataCollectionController extends ApplicationController {
 			model.setTarget(target);
 //			target.addDataCollection(model);
 		}
-		model.setType((String)view.getType());	
+		model.setType(((DataCollectionTypes)view.getType()).toString());	
 		model.setTargetDate(StringUtil.parseDate(view.getTargetDate()));
 		model.setProgressStatus((DataCollection.ProgressStatuses)view.getProgressStatus());
 		model.setProgressDate(StringUtil.parseDate(view.getProgressDate()));

@@ -141,11 +141,21 @@ public class QuestionnaireTableController extends AbstractTableController {
 	
 	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues,
 			Root<Questionnaire> root, Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton) {
-		Predicate[] predicates = new Predicate[filterValues.size()];
+		Predicate[] predicates = new Predicate[filterValues.size()+1];
 		for (int i = 0; i < filterValues.size(); i++) {
 			predicates[i] = QuestionnaireFilterCreator.createPredicate(filterValues.get(i),
 					root, joinQuestionnaireDataColleciton);
 		}
+		predicates[predicates.length-1] = completedDataCollections(joinQuestionnaireDataColleciton);
 		return predicates;
+	}
+	
+	private Predicate completedDataCollections(Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton) {
+		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
+		Predicate completedDataCollecitons = criteriaBuilder.
+		equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.COMPLETED);
+		Predicate initiatedDataCollections = criteriaBuilder.
+				equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.INITIATED);
+		return criteriaBuilder.or(completedDataCollecitons, initiatedDataCollections);
 	}
 }

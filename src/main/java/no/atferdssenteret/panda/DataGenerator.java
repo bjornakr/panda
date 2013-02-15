@@ -1,25 +1,26 @@
 package no.atferdssenteret.panda;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import no.atferdssenteret.panda.config.DataCollectionRulesSetup;
+import no.atferdssenteret.panda.config.QuestionnairesForDataCollectionSetup;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
+import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 
 public class DataGenerator {
 
 	public DataGenerator() throws SQLException {
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
-		createDataCollectionRules();
-		
 		for (int i = 0; i < 600; i ++) {
 			Youth youth = createYouth();
 			List<Participant> participants = new LinkedList<Participant>();
@@ -34,17 +35,6 @@ public class DataGenerator {
 		}
 	}
 
-	private void createDataCollectionRules() {
-		DataCollectionManager.getInstance().addRule(new DataCollectionRule(
-				"T1",
-				Calendar.MONTH, 0, 
-				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE));
-		DataCollectionManager.getInstance().addRule(new DataCollectionRule(
-				"T2",
-				Calendar.MONTH, 6, 
-				DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
-	}
-	
 	private Youth createYouth() {
 		Youth youth = new Youth();
 		youth.setFirstName(createFirstName());
@@ -54,9 +44,17 @@ public class DataGenerator {
 		youth.setRegion(pickRandom(Youth.regions));
 		youth.setGender(pickRandom(Youth.Genders.values()));
 		youth.setTreatmentGroup(pickRandom(Youth.TreatmentGroups.values()));
+		youth.setTreatmentStart(semiRandomTreatmentStartDate());
 		return youth;
 	}
 	
+	private Date semiRandomTreatmentStartDate() {
+		Calendar initTime = Calendar.getInstance();
+		initTime.setTime(DateUtil.today());
+		initTime.add(Calendar.MONTH, new Random().nextInt(12) + 1);
+		return new Date(initTime.getTimeInMillis());
+	}
+
 	private Participant createParticipant() {
 		Participant participant = new Participant();
 		participant.setRole(pickRandom(ParticipantRoles.values()));
@@ -99,21 +97,10 @@ public class DataGenerator {
 		return namepart1[new Random().nextInt(namepart1.length)] + namepart2[new Random().nextInt(namepart2.length)];
 	}
 
-	private static void setupQuestionnaires() {
-		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.TEACHER);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.TEACHER);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.TEACHER);
-	}
 	
 	public static void main(String[] args) throws SQLException {
-		setupQuestionnaires();
+		QuestionnairesForDataCollectionSetup.setup();
+		DataCollectionRulesSetup.setup();
 		new DataGenerator();
 	}
 }

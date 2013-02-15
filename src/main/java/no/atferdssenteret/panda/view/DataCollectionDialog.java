@@ -27,8 +27,7 @@ public class DataCollectionDialog extends JDialog {
 	public final static String CBOX_PROGRESS_DATE = "CBOX_PROGRESS_DATE";	
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
-	private String[] types = DataCollectionTypes.values();
-	private JComboBox cboxTypes = new JComboBox(types);
+	private JComboBox cboxTypes = new JComboBox(DataCollectionTypes.values());
 	private DefaultTextField txtTargetDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
 	private JComboBox cboxProgressStatuses = new JComboBox(DataCollection.ProgressStatuses.values());
 	private DefaultTextField txtProgressDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
@@ -112,7 +111,7 @@ public class DataCollectionDialog extends JDialog {
 		return cboxDataCollector.getSelectedItem();
 	}
 	
-	public void setType(String type) {
+	public void setType(DataCollectionTypes type) {
 		cboxTypes.setSelectedItem(type);
 	}
 	

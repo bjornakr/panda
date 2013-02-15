@@ -5,16 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import no.atferdssenteret.panda.DataCollectionManager;
-import no.atferdssenteret.panda.DataCollectionRule;
-import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import no.atferdssenteret.panda.config.DataCollectionRulesSetup;
+import no.atferdssenteret.panda.config.QuestionnairesForDataCollectionSetup;
 import no.atferdssenteret.panda.controller.table.AbstractTableController;
 import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController;
 import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
@@ -22,7 +20,6 @@ import no.atferdssenteret.panda.controller.table.ParticipantTableController;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.controller.table.UserTableController;
 import no.atferdssenteret.panda.controller.table.YouthTableController;
-import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.fft.Youth;
@@ -155,38 +152,13 @@ public class MainController extends AbstractTabsAndTablesController implements A
 	}
 
 	public static void main(String[] args) {
-		DataCollectionRule dcRule = new DataCollectionRule(
-				"T2",
-				Calendar.MONTH,
-				3,
-				DataCollectionRule.TargetDates.AFTER_TREATMENT_START);
-		DataCollectionManager.getInstance().addRule(dcRule);
-		dcRule = new DataCollectionRule(
-				"T1",
-				Calendar.MONTH,
-				1,
-				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE);
-		DataCollectionManager.getInstance().addRule(dcRule);
-		setupQuestionnaires();
+		QuestionnairesForDataCollectionSetup.setup();
+		DataCollectionRulesSetup.setup();
 		new MainController();
 	}
 
 	private void exit() {
 		System.exit(0);
-	}
-
-
-	private static void setupQuestionnaires() {
-		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T1", QuestionnaireTypes.TEACHER);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T2", QuestionnaireTypes.TEACHER);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.PARENT);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.YOUTH);
-		dcqMap.addQuestionnaireNameForDataCollection("T3", QuestionnaireTypes.TEACHER);
 	}
 
 	@Override

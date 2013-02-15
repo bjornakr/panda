@@ -35,7 +35,7 @@ public class ParticipantTable extends DefaultAbstractTableModel {
 	protected Object[] dataColumns(Model model) {
 		Participant participant = (Participant)model;
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
-		dataColumns[TARGET_ID] = participant.getTarget().formattedIdWithLetterAppendix();
+		dataColumns[TARGET_ID] = participant.getTarget().formattedNumericId();
 		dataColumns[ROLE] = participant.getRole();
 		dataColumns[STATUS] = participant.getStatus();
 		dataColumns[FIRST_NAME] = participant.getFirstName();

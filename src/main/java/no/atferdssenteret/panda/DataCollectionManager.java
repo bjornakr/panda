@@ -44,7 +44,7 @@ public class DataCollectionManager {
 
 	private void createDataCollectionForTarget(DataCollectionRule dataCollectionRule, Target target) {
 		DataCollection dataCollection = new DataCollection();
-		dataCollection.setType(dataCollectionRule.dataCollectionType());
+		dataCollection.setType(dataCollectionRule.dataCollectionType().toString());
 		dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
 		dataCollection.setDataCollector(target.getDataCollector());
 		dataCollection.setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(dataCollectionRule.dataCollectionType()));

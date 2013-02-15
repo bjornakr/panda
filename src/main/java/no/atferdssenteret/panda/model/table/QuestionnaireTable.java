@@ -34,7 +34,7 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		Questionnaire questionnaire = (Questionnaire)model;
 		Object[] dataColumns = new Object[NO_OF_FIELDS];
 		if (questionnaire.getDataCollection() != null) {
-			dataColumns[TARGET_ID] = questionnaire.target().formattedIdWithLetterAppendix();
+			dataColumns[TARGET_ID] = questionnaire.target().formattedNumericId();
 		}
 		dataColumns[DATA_COLLECTION] = questionnaire.getDataCollection().getType();
 		dataColumns[NAME] = questionnaire.getName();

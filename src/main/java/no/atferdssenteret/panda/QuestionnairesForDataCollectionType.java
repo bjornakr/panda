@@ -6,11 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
 
 public class QuestionnairesForDataCollectionType {
 	private static QuestionnairesForDataCollectionType self;
-	private HashMap<String, List<String>> questionnaireNamesForDataCollectionType = new HashMap<String, List<String>>();  
+	private HashMap<DataCollectionTypes, List<String>> questionnaireNamesForDataCollectionType = new HashMap<DataCollectionTypes, List<String>>();  
 
 	private QuestionnairesForDataCollectionType() {	    
 	}
@@ -22,7 +23,7 @@ public class QuestionnairesForDataCollectionType {
 		return self; 
 	}
 
-	public List<Questionnaire> getQuestionnairesFor(String dataCollectionType) {
+	public List<Questionnaire> getQuestionnairesFor(DataCollectionTypes dataCollectionType) {
 		List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 		if (questionnaireNamesForDataCollectionType.get(dataCollectionType) == null) {
 			return questionnaires;
@@ -43,11 +44,11 @@ public class QuestionnairesForDataCollectionType {
 		return questionnaireNames;
 	}
 
-	public void addQuestionnaireNameForDataCollection(String name, String questionnaireName) {
-		List<String> questionnaireNames = questionnaireNamesForDataCollectionType.get(name);
+	public void addQuestionnaireNameForDataCollection(DataCollectionTypes dataCollectionType, String questionnaireName) {
+		List<String> questionnaireNames = questionnaireNamesForDataCollectionType.get(dataCollectionType);
 		if (questionnaireNames == null) {
 			questionnaireNames = new LinkedList<String>();
-			questionnaireNamesForDataCollectionType.put(name, questionnaireNames);
+			questionnaireNamesForDataCollectionType.put(dataCollectionType, questionnaireNames);
 		}
 		questionnaireNames.add(questionnaireName);
 	}
