@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.model.fft;
+package no.atferdssenteret.panda.fft;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

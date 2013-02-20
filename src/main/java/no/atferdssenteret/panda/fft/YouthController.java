@@ -1,10 +1,10 @@
-package no.atferdssenteret.panda.controller;
+package no.atferdssenteret.panda.fft;
 
 import java.awt.Window;
 
+import no.atferdssenteret.panda.controller.TargetController;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.fft.Youth;
-import no.atferdssenteret.panda.view.YouthDialog;
+import no.atferdssenteret.panda.model.Session;
 
 public class YouthController extends TargetController {
 	private Youth model;
@@ -21,7 +21,7 @@ public class YouthController extends TargetController {
 			view.setFirstName("Ingatorre");
 			view.setLastName("Andolini");
 		}
-		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+		if (!Session.currentSession.user().hasAccessToRestrictedFields()) {
 			view.restrictAccess();
 		}
 		view.setVisible(true);

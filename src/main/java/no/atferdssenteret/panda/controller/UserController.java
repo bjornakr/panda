@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -19,15 +20,15 @@ public class UserController extends ApplicationController {
 		this.model = model;
 		view = new UserDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
-			if (MainController.session.user().getAccessLevel().value() <= model.getAccessLevel().value()) {
+			if (Session.currentSession.user().getAccessLevel().value() <= model.getAccessLevel().value()) {
 				throw new RuntimeException("Du har ikke adgang til å endre brukere med likt eller høyere adgangsnivå.");
 			}
 			transferModelToView();
 		}
-		if (MainController.session.user().getAccessLevel().value() < User.AccessLevel.ADMINISTRATOR.value()) {
+		if (Session.currentSession.user().getAccessLevel().value() < User.AccessLevel.ADMINISTRATOR.value()) {
 			throw new IllegalStateException("Access violation. User cannot manage other users.");
 		}
-		if (MainController.session.user().getAccessLevel().value() < User.AccessLevel.SUPER_USER.value()) {
+		if (Session.currentSession.user().getAccessLevel().value() < User.AccessLevel.SUPER_USER.value()) {
 			view.restrictAccess();
 		}
 		view.setVisible(true);

@@ -11,8 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
@@ -36,14 +36,14 @@ public class TargetNote implements Model {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = MainController.session.user().getUserName();
+		createdBy = Session.currentSession.user().getUserName();
 		onUpdate();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 	
 	public long getId() {

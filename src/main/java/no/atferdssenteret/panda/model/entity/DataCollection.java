@@ -19,9 +19,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
-import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StandardMessages;
@@ -93,13 +93,13 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 

@@ -4,6 +4,7 @@ import java.awt.Window;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.StringUtil;
@@ -22,7 +23,7 @@ public class ParticipantController extends ApplicationController {
 		if (getMode() == Mode.EDIT) {
 			transferModelToView();
 		}
-		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+		if (!Session.currentSession.user().hasAccessToRestrictedFields()) {
 			view.restrictAccess();
 		}
 		view.setVisible(true);

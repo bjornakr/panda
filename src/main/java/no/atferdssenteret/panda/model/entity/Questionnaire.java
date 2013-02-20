@@ -1,7 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
 import java.sql.Date;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,8 +16,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent.Types;
 import no.atferdssenteret.panda.util.DateUtil;
@@ -54,7 +53,7 @@ public class Questionnaire implements Model, TargetBelonging {
 	@Column(nullable = false)
 	private Statuses status = Statuses.NOT_RECIEVED;
 	@OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	@OrderBy("date")
+	@OrderBy("date ASC, id ASC")
 	private List<QuestionnaireEvent> questionnaireEvents = new LinkedList<QuestionnaireEvent>();
 	private Date created;
 	private Date updated;
@@ -64,14 +63,14 @@ public class Questionnaire implements Model, TargetBelonging {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = MainController.session.user().getUserName();
-		updatedBy = MainController.session.user().getUserName();
+		createdBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 	
 	public long getId() {
@@ -152,8 +151,9 @@ public class Questionnaire implements Model, TargetBelonging {
 
 	public QuestionnaireEvent lastEvent() {
 		if (questionnaireEvents != null && questionnaireEvents.size() > 0) {
-			Collections.sort(questionnaireEvents);
-			return questionnaireEvents.get(0);
+//			Collections.sort(questionnaireEvents);
+//			return questionnaireEvents.get(0);
+			return questionnaireEvents.get(questionnaireEvents.size()-1);
 		}
 		else {
 			return null;

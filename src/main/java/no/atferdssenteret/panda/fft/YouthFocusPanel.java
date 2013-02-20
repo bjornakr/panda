@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.view;
+package no.atferdssenteret.panda.fft;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -10,8 +10,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DateUtil;
+import no.atferdssenteret.panda.view.TabsAndTablesPanel;
 import no.atferdssenteret.panda.view.util.DefaultTextArea;
 import no.atferdssenteret.panda.view.util.GuiUtil;
 

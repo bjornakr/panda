@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.controller;
+package no.atferdssenteret.panda.fft;
 
 import java.awt.Component;
 import java.awt.Window;
@@ -11,9 +11,7 @@ import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController
 import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
 import no.atferdssenteret.panda.controller.table.ParticipantTableController;
 import no.atferdssenteret.panda.controller.table.TargetNoteTableController;
-import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.TabsAndTablesPanel;
-import no.atferdssenteret.panda.view.YouthFocusPanel;
 
 public class YouthFocusController extends AbstractTabsAndTablesController {
 	private YouthFocusPanel view;
@@ -34,7 +32,6 @@ public class YouthFocusController extends AbstractTabsAndTablesController {
 	}
 
 	private List<AbstractTableController> createTableControllers() {
-		//	List<AbstractTableController> tableControllers = new LinkedList<AbstractTableController>();
 		DataCollectionTableController dataCollectionTableController = new DataCollectionTableController(model);
 		dataCollectionTableController.updateTableModel();
 		tableControllers.add(dataCollectionTableController);

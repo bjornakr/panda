@@ -1,7 +1,6 @@
-package no.atferdssenteret.panda.model.table;
+package no.atferdssenteret.panda.fft;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 
 public class YouthTable extends DefaultAbstractTableModel {

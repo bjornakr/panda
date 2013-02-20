@@ -35,7 +35,7 @@ public class DataCollectionManager {
 			if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE) {
 				createDataCollectionForTarget(dataCollectionRule, target);
 			}
-			if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TREATMENT_START
+			else if (dataCollectionRule.targetDate() == DataCollectionRule.TargetDates.AFTER_TREATMENT_START
 					&& target.getTreatmentStart() != null) {
 				createDataCollectionForTarget(dataCollectionRule, target);
 			}

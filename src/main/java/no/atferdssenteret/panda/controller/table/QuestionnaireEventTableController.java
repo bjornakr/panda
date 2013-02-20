@@ -71,7 +71,8 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			QuestionnaireEvent model = (QuestionnaireEvent)modelForSelectedTableRow();
 			new QuestionnaireEventController(view.getWindow(), model);
-			tableModel.update(model);
+//			tableModel.update(model);
+			updateTableModel();
 		}
 	}
 
@@ -84,7 +85,8 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
 		Root<QuestionnaireEvent> root = criteriaQuery.from(QuestionnaireEvent.class);
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(QuestionnaireEvent_.date)));
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(QuestionnaireEvent_.date)),
+				criteriaBuilder.asc(root.get(QuestionnaireEvent_.id)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

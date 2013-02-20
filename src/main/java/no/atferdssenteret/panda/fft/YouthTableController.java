@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.controller.table;
+package no.atferdssenteret.panda.fft;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -7,14 +7,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.controller.MainController;
-import no.atferdssenteret.panda.controller.YouthController;
-import no.atferdssenteret.panda.filter.YouthFilterCreator;
+import no.atferdssenteret.panda.controller.table.AbstractTableController;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.User;
-import no.atferdssenteret.panda.model.fft.Youth;
-import no.atferdssenteret.panda.model.fft.Youth_;
-import no.atferdssenteret.panda.model.table.YouthTable;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 import no.atferdssenteret.panda.view.DefaultTablePanel;
@@ -28,11 +24,11 @@ public class YouthTableController extends AbstractTableController {
 	public YouthTableController(MainController mainController) {
 		super("Ungdommer");
 		this.mainController = mainController;
-		if (!MainController.session.user().hasAccessToRestrictedFields()) {
+		if (!Session.currentSession.user().hasAccessToRestrictedFields()) {
 			super.restrictAccessToButton(ButtonUtil.COMMAND_CREATE);
 			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
 		}
-		if (MainController.session.user().getAccessLevel() != User.AccessLevel.SUPER_USER) {
+		if (Session.currentSession.user().getAccessLevel() != User.AccessLevel.SUPER_USER) {
 			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
 		}
 		view = new DefaultTablePanel(this, new YouthFilterCreator());

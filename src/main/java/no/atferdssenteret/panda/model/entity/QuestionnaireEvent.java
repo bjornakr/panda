@@ -11,15 +11,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
-public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent> {    
+public class QuestionnaireEvent implements Model {    
 	public enum Types {
 		FILLED_OUT_WITH_DATACOLLECTOR_PRESENT("Fylt ut med datainnsamler tilstede"),
 		TELEPHONE_INTERVIEW("Telefonintervju"),
+		E_MAILED_TO_RESPONDENT("Sendt per e-post til deltaker"),
 		MAILED_TO_RESPONDENT("Sendt per post til deltaker"),
 		SENT_FOR_PROCESSING("Sendt per post til databehandler"),
 		SENT_REMINDER("Purret"),
@@ -65,14 +66,14 @@ public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent>
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = MainController.session.user().getUserName();
-		updatedBy = MainController.session.user().getUserName();
+		createdBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 	public long getId() {
@@ -117,11 +118,6 @@ public class QuestionnaireEvent implements Model, Comparable<QuestionnaireEvent>
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-	
-	@Override
-	public int compareTo(QuestionnaireEvent questionnaireEvent2) {
-		return (date.after(questionnaireEvent2.getDate())) ? 0 : 1;
 	}
 	
 	public void validate() {

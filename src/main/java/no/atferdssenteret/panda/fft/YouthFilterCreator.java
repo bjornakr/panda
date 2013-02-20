@@ -1,13 +1,13 @@
-package no.atferdssenteret.panda.filter;
+package no.atferdssenteret.panda.fft;
 
 import java.util.Arrays;
 
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import no.atferdssenteret.panda.filter.Filter;
+import no.atferdssenteret.panda.filter.FilterCreator;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.fft.Youth;
-import no.atferdssenteret.panda.model.fft.Youth_;
 
 public class YouthFilterCreator implements FilterCreator {
 

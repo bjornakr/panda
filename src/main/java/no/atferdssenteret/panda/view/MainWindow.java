@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -17,17 +19,17 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import no.atferdssenteret.panda.controller.MainController;
+import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GuiUtil;
 
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTargetLink;
-	private MainController controller;
+	private AbstractTabsAndTablesController controller;
 	private TabsAndTablesPanel tabsAndTablesPanel;
 
-	public MainWindow(MainController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
+	public MainWindow(AbstractTabsAndTablesController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
 		this.controller = controller;
 		this.tabsAndTablesPanel = tabsAndTablesPanel;
 	}
@@ -40,7 +42,7 @@ public class MainWindow extends JFrame {
 		
 		pack();
 		setLocationRelativeTo(null);
-		addWindowListener(controller);
+		addWindowListener(new MainWindowListener());
 		setTitle(controller.title());
 		setVisible(true);
 	}
@@ -121,5 +123,37 @@ public class MainWindow extends JFrame {
 	
 	public void setTargetGotoField(String id) {
 		txtTargetLink.setText(id);
+	}
+	
+	private class MainWindowListener implements WindowListener {
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			System.exit(0);
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+		
 	}
 }

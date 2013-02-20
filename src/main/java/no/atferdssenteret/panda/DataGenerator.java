@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import no.atferdssenteret.panda.config.DataCollectionRulesSetup;
-import no.atferdssenteret.panda.config.QuestionnairesForDataCollectionSetup;
+import no.atferdssenteret.panda.fft.Youth;
+import no.atferdssenteret.panda.fft.config.DataCollectionRulesSetup;
+import no.atferdssenteret.panda.fft.config.QuestionnairesForDataCollectionSetup;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.entity.Participant;
-import no.atferdssenteret.panda.model.fft.Youth;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;

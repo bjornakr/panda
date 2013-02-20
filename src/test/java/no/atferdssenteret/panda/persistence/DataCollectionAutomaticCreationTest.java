@@ -17,6 +17,7 @@ import javax.persistence.TypedQuery;
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.DataCollectionRule;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.User;
@@ -32,6 +33,8 @@ public class DataCollectionAutomaticCreationTest {
 
 	@Before
 	public void setup() throws Exception {
+		JPATransactor.getInstance().entityManager().close();
+		Session.createTestSession();
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		DataCollectionManager.getInstance().removeAllRules();
 	}

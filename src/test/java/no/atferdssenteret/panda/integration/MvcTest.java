@@ -6,14 +6,15 @@ import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
-import no.atferdssenteret.panda.controller.YouthController;
+import no.atferdssenteret.panda.controller.TargetController;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
-import no.atferdssenteret.panda.model.fft.Youth;
+import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.EmptyMainWindow;
 
@@ -24,9 +25,9 @@ public class MvcTest {
 
 	public static void main(String[] args) {
 		Window mainWindow = EmptyMainWindow.create();
-		//	testYouth(mainWindow);
+			testTarget(mainWindow);
 		//	testParticipant(mainWindow);
-		testDataCollection(mainWindow);
+//		testDataCollection(mainWindow);
 		//	testQuestionnaire(mainWindow);
 		//	testQuestionnaireEvent(mainWindow);
 		//	JPATransactor.getInstance().persist(model);
@@ -67,25 +68,52 @@ public class MvcTest {
 //		new ParticipantController(mainWindow, null);	
 //	}
 
-	private static void testYouth(Window mainWindow) {
-		Youth model = createYouthModel();
-		new YouthController(mainWindow, model);	
+	private static void testTarget(final Window mainWindow) {
+		final Target model = createTarget();
+		new TargetController(model) {
+			private Model model;
+
+//			public TargetController(Model model) {
+//				super(model);
+//			}
+			
+			@Override
+			public String title() {
+				return "Test";
+			}
+
+			@Override
+			public Model model() {
+				return model;
+			}
+
+			@Override
+			public Window view() {
+				return mainWindow;
+			}
+
+			@Override
+			protected void setModel(Model model) {
+				this.model = model;
+			}
+			
+		};	
 	}
 
 	private static DataCollection createDataCollection() {
 		return null;
 	}
 
-	private static Youth createYouthModel() {
-		Youth youth = new Youth();
-		youth.setFirstName("Doodlestick");
-		youth.setLastName("Jones");
-		youth.setComment("Hey Dr. Ukulele man");
-		youth.setRegion(Youth.regions[0]);
-		youth.setStatus(ParticipationStatuses.PARTICIPATING);
-		youth.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
-		youth.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
-		return youth;
+	private static Target createTarget() {
+		Target target = new Target();
+		target.setFirstName("Doodlestick");
+		target.setLastName("Jones");
+		target.setComment("Hey Dr. Ukulele man");
+//		target.setRegion(Youth.regions[0]);
+		target.setStatus(ParticipationStatuses.PARTICIPATING);
+//		target.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
+		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
+		return target;
 	}
 
 	private static Participant createParticipant() {

@@ -20,10 +20,10 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import no.atferdssenteret.panda.controller.MainController;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StandardMessages;
@@ -70,14 +70,14 @@ public class Target implements Model, TargetBelonging {
 	
 	@PrePersist
 	protected void onCreate() {
-		createdBy = MainController.session.user().getUserName();
-		updatedBy = MainController.session.user().getUserName();
+		createdBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = MainController.session.user().getUserName();
+		updatedBy = Session.currentSession.user().getUserName();
 	}
 	
 	public long getId() {

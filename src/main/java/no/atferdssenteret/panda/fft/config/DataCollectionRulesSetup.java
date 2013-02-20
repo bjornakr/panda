@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.config;
+package no.atferdssenteret.panda.fft.config;
 
 import java.util.Calendar;
 
@@ -25,7 +25,7 @@ public class DataCollectionRulesSetup {
 				Calendar.WEEK_OF_YEAR, 12, 
 				DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
 		DataCollectionManager.getInstance().addRule(new DataCollectionRule(
-				DataCollectionTypes.T2,
+				DataCollectionTypes.T3,
 				Calendar.MONTH, 6, 
 				DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
 	}

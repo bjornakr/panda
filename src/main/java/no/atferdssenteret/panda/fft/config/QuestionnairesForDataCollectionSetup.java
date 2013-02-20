@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.config;
+package no.atferdssenteret.panda.fft.config;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
