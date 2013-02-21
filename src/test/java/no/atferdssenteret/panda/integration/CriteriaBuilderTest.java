@@ -12,7 +12,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.DataCollectionManager;
-import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
@@ -33,7 +32,7 @@ public class CriteriaBuilderTest {
 	public void setup() throws SQLException {
 		JPATransactor.getInstance().entityManager().close();
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
-		DataCollectionManager.getInstance().removeAllRules();
+		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
 		Session.createTestSession();
 	}
 	
@@ -58,9 +57,8 @@ public class CriteriaBuilderTest {
 	@Test
 	public void testQueringForDataCollectionStatus() {
 		Target t = TestUtil.createNotParticipatingTarget();
-//		List<DataCollection> dcs = new LinkedList<DataCollection>();
 		DataCollection dc = new DataCollection();
-		dc.setType(DataCollectionTypes.T1.toString());
+		dc.setType("T1");
 		dc.setTargetDate(DateUtil.today());
 		t.addDataCollection(dc);
 		JPATransactor.getInstance().transaction().begin();

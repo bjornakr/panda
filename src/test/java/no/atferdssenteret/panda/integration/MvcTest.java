@@ -7,7 +7,7 @@ import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.controller.TargetController;
-import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.fft.config.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.entity.DataCollection;
@@ -109,10 +109,7 @@ public class MvcTest {
 		target.setFirstName("Doodlestick");
 		target.setLastName("Jones");
 		target.setComment("Hey Dr. Ukulele man");
-//		target.setRegion(Youth.regions[0]);
 		target.setStatus(ParticipationStatuses.PARTICIPATING);
-//		target.setTreatmentGroup(Youth.TreatmentGroups.INTERVENTION);
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
 		return target;
 	}
 
@@ -135,16 +132,16 @@ public class MvcTest {
 		String questionnaireInt = "Interventionist";
 		String questionnaireAll = "Alliance";
 		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T1, questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T1, questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T1, questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T2, questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T2, questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T2, questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T2, questionnaireInt);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T3, questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T3, questionnaireTRF);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T3, questionnaireTeacher);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T3, questionnaireAll);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T1", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T2", questionnaireInt);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireTeacher);
+		dcqMap.addQuestionnaireNameForDataCollection("T3", questionnaireAll);
 	}
 }

@@ -5,6 +5,8 @@ import java.awt.Window;
 import no.atferdssenteret.panda.controller.TargetController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
+import no.atferdssenteret.panda.util.DateUtil;
+import no.atferdssenteret.panda.util.StringUtil;
 
 public class YouthController extends TargetController {
 	private Youth model;
@@ -49,6 +51,7 @@ public class YouthController extends TargetController {
 		view.setGender(model.getGender());
 		view.setRegion(model.getRegion());
 		view.setTreatmentGroup(model.getTreatmentGroup());
+		view.setTreatmentStart(DateUtil.formatDate(model.getTreatmentStart()));
 	}
 
 	@Override
@@ -60,6 +63,7 @@ public class YouthController extends TargetController {
 		model.setGender((Youth.Genders)view.getGender());
 		model.setRegion((String)view.getRegion());
 		model.setTreatmentGroup((Youth.TreatmentGroups)view.getTreatmentGroup());
+		model.setTreatmentStart(StringUtil.parseDate(view.getTreatmentStart()));
 	}
 
 	@Override

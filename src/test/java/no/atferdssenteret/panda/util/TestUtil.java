@@ -2,9 +2,10 @@ package no.atferdssenteret.panda.util;
 
 import java.util.Calendar;
 
-import no.atferdssenteret.panda.DataCollectionRule;
-import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.DataCollectionGenerator;
+import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Target;
 
 public class TestUtil {
@@ -28,24 +29,33 @@ public class TestUtil {
 		return target;
 	}
 
-	public static DataCollectionRule createDataCollectionRuleT1WhenTargetCreated(int noOfMonthsDelay) {
-		return new DataCollectionRule(
-				DataCollectionTypes.T1,
-				Calendar.MONTH, noOfMonthsDelay, 
-				DataCollectionRule.TargetDates.AFTER_TARGET_CREATION_DATE);
+	public static DataCollectionGenerator createDataCollectionGenerator(String type, int noOfMonthsDelay) {
+		return new TestUtil().new GenericDataCollectionGenerator(type, noOfMonthsDelay);
 	}
 
-	public static DataCollectionRule createDataCollectionRuleT2WhenTargetUpdated(int noOfMonthsDelay) {
-		return new DataCollectionRule(
-				DataCollectionTypes.T2,
-				Calendar.MONTH, noOfMonthsDelay,
-				DataCollectionRule.TargetDates.AFTER_TREATMENT_START);
-	}
+	
+	private class GenericDataCollectionGenerator implements DataCollectionGenerator {
+		private String type;
+		private int noOfMonthsDelay;
+		
+		public GenericDataCollectionGenerator(String type, int noOfMonthsDelay) {
+			this.type = type;
+			this.noOfMonthsDelay = noOfMonthsDelay;
+		}
+		
+		@Override
+		public boolean isApplicable(Target target) {
+			return true;
+		}
 
-	public static DataCollectionRule createDataCollectionRuleT3WhenTargetUpdated(int noOfMonthsDelay) {
-		return new DataCollectionRule(
-				DataCollectionTypes.T3,
-				Calendar.MONTH, noOfMonthsDelay,
-				DataCollectionRule.TargetDates.AFTER_TREATMENT_START);
+		@Override
+		public DataCollection createDataCollection(Target target) {
+			DataCollection dataCollection = new DataCollection();
+			dataCollection.setType(type);
+			dataCollection.setTargetDate(DateUtil.addTime(target.getCreated(), Calendar.MONTH, noOfMonthsDelay));
+			dataCollection.setDataCollector(target.getDataCollector());
+			dataCollection.setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(type));
+			return dataCollection;
+		}	
 	}
 }

@@ -15,8 +15,8 @@ import no.atferdssenteret.panda.controller.table.DataCollectionTableController;
 import no.atferdssenteret.panda.controller.table.ParticipantTableController;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.controller.table.UserTableController;
-import no.atferdssenteret.panda.fft.config.DataCollectionRulesSetup;
-import no.atferdssenteret.panda.fft.config.QuestionnairesForDataCollectionSetup;
+import no.atferdssenteret.panda.fft.config.DataCollectionGeneratorsSetup;
+import no.atferdssenteret.panda.fft.config.QuestionnairesAndDataCollectionsSetup;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.table.TableObserver;
@@ -118,8 +118,8 @@ public class MainController extends AbstractTabsAndTablesController implements A
 	}
 
 	public static void main(String[] args) {
-		QuestionnairesForDataCollectionSetup.setup();
-		DataCollectionRulesSetup.setup();
+		QuestionnairesAndDataCollectionsSetup.setup();
+		new DataCollectionGeneratorsSetup();
 		Session.createTestSession();
 		new MainController();
 	}

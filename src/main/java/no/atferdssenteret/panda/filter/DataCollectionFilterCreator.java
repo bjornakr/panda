@@ -1,13 +1,12 @@
 package no.atferdssenteret.panda.filter;
 
-import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.fft.config.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.util.DateUtil;
@@ -35,7 +34,7 @@ public class DataCollectionFilterCreator implements FilterCreator {
 	public Filter[] createFilters() {
 		Filter[] filters = new Filter[3];
 		filters[0] = new Filter("Status", DataCollectionFilterCreator.Statuses.values());
-		filters[1] = new Filter("Type", DataCollectionTypes.values());
+		filters[1] = new Filter("Type", DataCollectionTypes.getInstance().toArray());
 		filters[2] = new Filter("Framdrift", DataCollection.ProgressStatuses.values());
 		return filters;
 	}
@@ -44,7 +43,7 @@ public class DataCollectionFilterCreator implements FilterCreator {
 		if (value instanceof DataCollectionFilterCreator.Statuses) {
 			return createStatusPredicate((DataCollectionFilterCreator.Statuses)value, root);
 		}
-		else if (Arrays.asList(DataCollectionTypes.values()).contains(value)) {
+		else if (DataCollectionTypes.getInstance().contains(value)) {
 			return criteriaBuilder.equal(root.get(DataCollection_.type), value);
 		}
 		else if (value instanceof DataCollection.ProgressStatuses) {

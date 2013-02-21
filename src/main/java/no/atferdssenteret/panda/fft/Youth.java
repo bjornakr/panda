@@ -1,5 +1,7 @@
 package no.atferdssenteret.panda.fft;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -52,6 +54,7 @@ public class Youth extends Target {
 	private Genders gender;
 	@Column(nullable = false)
 	private TreatmentGroups treatmentGroup;
+	private Date treatmentStart;
 	@Column(nullable = false)
 	private String region;
 
@@ -69,6 +72,14 @@ public class Youth extends Target {
 
 	public void setTreatmentGroup(TreatmentGroups treatmentGroup) {
 		this.treatmentGroup = treatmentGroup;
+	}
+
+	public Date getTreatmentStart() {
+		return treatmentStart;
+	}
+
+	public void setTreatmentStart(Date treatmentStart) {
+		this.treatmentStart = treatmentStart;
 	}
 
 	public Genders getGender() {

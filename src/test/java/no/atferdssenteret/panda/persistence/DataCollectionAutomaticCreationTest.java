@@ -3,7 +3,6 @@ package no.atferdssenteret.panda.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
@@ -15,14 +14,11 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 
 import no.atferdssenteret.panda.DataCollectionManager;
-import no.atferdssenteret.panda.DataCollectionRule;
-import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
-import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.TestUtil;
 
@@ -30,44 +26,42 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DataCollectionAutomaticCreationTest {
-
+	public final static String DC_T1 = "T1";
+	
 	@Before
 	public void setup() throws Exception {
 		JPATransactor.getInstance().entityManager().close();
 		Session.createTestSession();
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
-		DataCollectionManager.getInstance().removeAllRules();
+		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
 	}
 
 	@Test
-	public void dataCollectionIsCreatedAfterTargetIsCreatedAccordingToRule() {
-		final int noOfMonths = 3;
-		DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(noOfMonths));
+	public void dataCollectionShouldBeCreatedAfterTargetIsCreated() {
+		DataCollectionManager.getInstance().addDataCollectionGenerator(TestUtil.createDataCollectionGenerator(DC_T1, 0));
 		Target target = TestUtil.createParticipatingTarget();
 		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
-		assertTrue("Data collection created", existsDataCollectionCreatedFor(target));
-		DataCollection dc = getDataCollection(target, "T1");
-		assertEquals("Data collection type: ", "T1", dc.getType());
-		assertEquals("Target date: ", calculateExpectedTargetDate(target.getCreated(), noOfMonths), dc.getTargetDate());
+		assertTrue("Target has data collection", target.hasDataCollection(DC_T1));
+		assertTrue("Data collection created in database", dataCollectionExistsInDatabase(target, DC_T1));
+	}
+	
+	@Test
+	public void dataCollectionHasCorrectTargetDate() {
+		final int noOfMonthsDelay = 3;
+		DataCollectionManager.getInstance().addDataCollectionGenerator(TestUtil.createDataCollectionGenerator(DC_T1, noOfMonthsDelay));
+		Target target = TestUtil.createParticipatingTarget();
+		DataCollectionManager.getInstance().generateDataCollections(target);
+		DataCollection dataCollection = target.getDataCollection(DC_T1);
+		assertNotNull(dataCollection);
+		assertEquals("Target date: ", calculateExpectedTargetDate(target.getCreated(), noOfMonthsDelay), dataCollection.getTargetDate());
 	}
 
-	private boolean existsDataCollectionCreatedFor(Target target) {
-		TypedQuery<DataCollection> query = JPATransactor.getInstance().entityManager().createQuery("SELECT dc FROM DataCollection dc WHERE dc.target.id = " + target.getId(), DataCollection.class);
-		System.err.println(query.toString());
+	private boolean dataCollectionExistsInDatabase(Target target, String type) {
+		TypedQuery<DataCollection> query = JPATransactor.getInstance().entityManager().
+				createQuery("SELECT dc FROM DataCollection dc WHERE dc.target.id = " + target.getId() +
+						" AND dc.type = '" + type + "'", DataCollection.class);
 		return query.getResultList().size() > 0;
-	}
-
-	private DataCollection getDataCollection(Target target, String type) {
-		TypedQuery<DataCollection> query = JPATransactor.getInstance().entityManager().createQuery(
-				"SELECT dc FROM DataCollection dc WHERE dc.target.id = " + target.getId() + " AND dc.type = '" + type + "'", DataCollection.class);
-		System.err.println(query.toString());
-		if (query.getResultList().size() > 0) {
-			return query.getResultList().get(0);
-		}
-		else {
-			return null;
-		}
 	}
 
 	private List<DataCollection> getDataCollections(Target target) {
@@ -77,76 +71,14 @@ public class DataCollectionAutomaticCreationTest {
 	}
 
 	@Test
-	public void dataCollectionsAreCreatedAfterTargetIsUpdatedAccordingToRules() throws ParseException {
-		final int noOfMonthsForT2 = 6;
-		final int noOfMonthsForT3 = 18;
-		DataCollectionManager dcManager = DataCollectionManager.getInstance();
-		dcManager.addRule(TestUtil.createDataCollectionRuleT2WhenTargetUpdated(noOfMonthsForT2));
-		dcManager.addRule(TestUtil.createDataCollectionRuleT3WhenTargetUpdated(noOfMonthsForT3));
+	public void noDuplcateDataCollectionsShouldBeCreated() throws ParseException {
+		DataCollectionManager.getInstance().addDataCollectionGenerator(TestUtil.createDataCollectionGenerator(DC_T1, 0));
 		Target target = TestUtil.createParticipatingTarget();
 		DataCollectionManager.getInstance().generateDataCollections(target);
-		persist(target);
-		JPATransactor.getInstance().entityManager().getTransaction().begin();
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-03-19"));
 		DataCollectionManager.getInstance().generateDataCollections(target);
-		JPATransactor.getInstance().entityManager().getTransaction().commit();
-
-		DataCollection dataCollection = getDataCollection(target, "T2");
-		assertNotNull("Data collection T2 exists in database: ", dataCollection);
-		assertEquals("Target date: ", calculateExpectedTargetDate(target.getTreatmentStart(), noOfMonthsForT2),
-				dataCollection.getTargetDate());
-		dataCollection = getDataCollection(target, "T3");
-		assertNotNull("Data collection T3 exists in database: ", dataCollection);
-		assertEquals("Target date: ", calculateExpectedTargetDate(target.getTreatmentStart(), noOfMonthsForT3),
-				dataCollection.getTargetDate());
-	}
-
-	@Test
-	public void targetDateOfAutogeneratedDataCollectionIsCorrect() {
-		final int delayT1 = 8;
-		DataCollectionManager dcManager = DataCollectionManager.getInstance();
-		dcManager.addRule(new DataCollectionRule(DataCollectionTypes.T1,
-				Calendar.MONTH, delayT1, DataCollectionRule.TargetDates.AFTER_TREATMENT_START));
-		Target target = TestUtil.createParticipatingTarget();
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-08-25"));
 		DataCollectionManager.getInstance().generateDataCollections(target);
 		persist(target);
-		DataCollection dataCollection = getDataCollection(target, DataCollectionTypes.T1.toString());
-		assertEquals("Target date: ", DateUtil.parseDateFromInternationalDateFormat("2013-04-25"), dataCollection.getTargetDate());	
-	}
-
-	@Test
-	public void updatesExistingInsteadOfCreatingNewDataCollection() throws ParseException {
-		DataCollectionManager dcManager = DataCollectionManager.getInstance();
-		dcManager.addRule(TestUtil.createDataCollectionRuleT2WhenTargetUpdated(6));
-		Target target = TestUtil.createParticipatingTarget();
-		DataCollectionManager.getInstance().generateDataCollections(target);
-		persist(target);
-		
-		JPATransactor.getInstance().transaction().begin();
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-01"));
-		DataCollectionManager.getInstance().generateDataCollections(target);
-		JPATransactor.getInstance().transaction().commit();
-
-		JPATransactor.getInstance().transaction().begin();
-		target.setTreatmentStart(DateUtil.parseDateFromInternationalDateFormat("2012-01-02"));
-		DataCollectionManager.getInstance().generateDataCollections(target);
-		JPATransactor.getInstance().transaction().commit();
 		assertFalse("Duplicate data collections", hasDuplicateDataCollections(target));	
-		DataCollection dataCollection = getDataCollection(target, "T2");
-		assertEquals(DateUtil.parseDateFromInternationalDateFormat("2012-07-02"), dataCollection.getTargetDate());	
-	}
-
-	@Test
-	public void ruleIsIgnoredWhenPrerequisiteFieldsAreNotSet() {
-		DataCollectionManager dcManager = DataCollectionManager.getInstance();
-		dcManager.addRule(TestUtil.createDataCollectionRuleT2WhenTargetUpdated(6));
-		Target target = TestUtil.createParticipatingTarget();
-		persist(target);
-		JPATransactor.getInstance().transaction().begin();
-		target.setTreatmentStart(null);
-		JPATransactor.getInstance().transaction().commit();
-		assertNull(target.getDataCollection("T2"));
 	}
 
 	@Test
@@ -156,15 +88,12 @@ public class DataCollectionAutomaticCreationTest {
 		dataCollector.setFirstName("Robby");
 		dataCollector.setLastName("Rocksleigh");
 		dataCollector.setAccessLevel(User.AccessLevel.DATA_COLLECTOR);
-		persist(dataCollector);	
-		DataCollectionManager.getInstance().addRule(TestUtil.createDataCollectionRuleT1WhenTargetCreated(1));
+		DataCollectionManager.getInstance().addDataCollectionGenerator(TestUtil.createDataCollectionGenerator(DC_T1, 0));
 		Target target = TestUtil.createParticipatingTarget();
 		target.setDataCollector(dataCollector);
 		DataCollectionManager.getInstance().generateDataCollections(target);
-		persist(target);
-		assertTrue("Target has data collections: ", getDataCollections(target).size() > 0);
-		for (DataCollection dataCollection : getDataCollections(target)) {
-			assertEquals("Target's data collector = Data collection's data collector: ",
+		for (DataCollection dataCollection : target.getDataCollections()) {
+			assertEquals("Target's data collector == Data collection's data collector: ",
 					target.getDataCollector(), dataCollection.getDataCollector());
 		}
 	}

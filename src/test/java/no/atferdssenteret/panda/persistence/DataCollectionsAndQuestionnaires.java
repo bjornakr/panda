@@ -7,7 +7,6 @@ import javax.persistence.Query;
 
 import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
-import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.util.DatabaseCleaner;
 import no.atferdssenteret.panda.util.DateUtil;
@@ -18,17 +17,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DataCollectionsAndQuestionnaires {
+	private final String DC_T1 = "T1";
 	private final String questionnaireCBCL = "CBCL";
 	private final String questionnaireTRF = "TRF";
 
 	@Before
 	public void cleanDatabase() throws Exception {
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
-		DataCollectionManager.getInstance().removeAllRules();
+		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
 		QuestionnairesForDataCollectionType dcqMap = QuestionnairesForDataCollectionType.getInstance();
 		dcqMap.clear();
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T1, questionnaireCBCL);
-		dcqMap.addQuestionnaireNameForDataCollection(DataCollectionTypes.T1, questionnaireTRF);
+		dcqMap.addQuestionnaireNameForDataCollection(DC_T1, questionnaireCBCL);
+		dcqMap.addQuestionnaireNameForDataCollection(DC_T1, questionnaireTRF);
 	}
 
 	@Test

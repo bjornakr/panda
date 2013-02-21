@@ -20,7 +20,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
@@ -40,7 +39,6 @@ public class Target implements Model, TargetBelonging {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
-	private Date treatmentStart;
 	private String comment;
 	private Date created;
 	private Date updated;
@@ -133,17 +131,6 @@ public class Target implements Model, TargetBelonging {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public Date getTreatmentStart() {
-		return treatmentStart;
-	}
-
-	public void setTreatmentStart(Date treatmentStart) {
-//		if (this.treatmentStart != null && !this.treatmentStart.equals(treatmentStart)) {
-//			DataCollectionManager.getInstance().notifyTargetUpdated(this);
-//		}
-		this.treatmentStart = treatmentStart;
 	}
 
 	public void addDataCollection(final DataCollection dataCollection) {
@@ -253,9 +240,9 @@ public class Target implements Model, TargetBelonging {
 		return id;
 	}
 	
-	public boolean hasDataCollection(DataCollectionTypes dataCollectionType) {
+	public boolean hasDataCollection(String dataCollectionType) {
 		for (DataCollection dataCollection : dataCollections) {
-			if (dataCollection.getType().equals(dataCollectionType.toString())) {
+			if (dataCollection.getType().equals(dataCollectionType)) {
 				return true;
 			}
 		}

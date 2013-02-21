@@ -4,7 +4,6 @@ import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.User;
-import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.TargetDialog;
@@ -22,7 +21,6 @@ public abstract class TargetController extends ApplicationController {
 		view.setLastName(model.getLastName());
 		view.setStatus(model.getStatus());
 		view.setDataCollector(model.getDataCollector());
-		view.setTreatmentStart(DateUtil.formatDate(model.getTreatmentStart()));
 		view.setComment(model.getComment());
 	}
 
@@ -34,7 +32,6 @@ public abstract class TargetController extends ApplicationController {
 		model.setLastName(StringUtil.groomString(view.getLastName()));
 		model.setStatus((ParticipationStatuses)view.getStatus());
 		model.setDataCollector((User)view.getDataCollector());
-		model.setTreatmentStart(StringUtil.parseDate(view.getTreatmentStart()));
 		model.setComment(StringUtil.groomString(view.getComment()));
 	}
 	

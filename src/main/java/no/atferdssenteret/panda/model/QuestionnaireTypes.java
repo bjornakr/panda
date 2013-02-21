@@ -1,13 +1,18 @@
 package no.atferdssenteret.panda.model;
 
-public class QuestionnaireTypes {
-	public final static String PARENT = "Foreldreskjema";
-	public final static String YOUTH = "Ungdomsskjema";
-	public final static String TEACHER = "Lærerskjema";
-	public final static String INTERVENTIONIST = "Konsulentskjema";
+import java.util.LinkedList;
+
+public class QuestionnaireTypes extends LinkedList<String> {
+	private static final long serialVersionUID = 1L;
+	private static QuestionnaireTypes self;
 	
-	public static String[] values() {
-		String[] values = {PARENT, YOUTH, TEACHER, INTERVENTIONIST};
-		return values;
+	private QuestionnaireTypes() {
+	}
+	
+	public static QuestionnaireTypes getInstance() {
+		if (self == null) {
+			self = new QuestionnaireTypes();
+		}
+		return self;
 	}
 }

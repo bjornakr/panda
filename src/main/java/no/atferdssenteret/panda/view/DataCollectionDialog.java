@@ -13,7 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.fft.config.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -27,7 +27,7 @@ public class DataCollectionDialog extends JDialog {
 	public final static String CBOX_PROGRESS_DATE = "CBOX_PROGRESS_DATE";	
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
-	private JComboBox cboxTypes = new JComboBox(DataCollectionTypes.values());
+	private JComboBox cboxTypes = new JComboBox(DataCollectionTypes.getInstance().toArray());
 	private DefaultTextField txtTargetDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
 	private JComboBox cboxProgressStatuses = new JComboBox(DataCollection.ProgressStatuses.values());
 	private DefaultTextField txtProgressDate = new DefaultTextField(DefaultTextField.DATE_WIDTH);
@@ -111,7 +111,7 @@ public class DataCollectionDialog extends JDialog {
 		return cboxDataCollector.getSelectedItem();
 	}
 	
-	public void setType(DataCollectionTypes type) {
+	public void setType(String type) {
 		cboxTypes.setSelectedItem(type);
 	}
 	

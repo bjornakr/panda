@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import no.atferdssenteret.panda.fft.Youth;
-import no.atferdssenteret.panda.fft.config.DataCollectionRulesSetup;
-import no.atferdssenteret.panda.fft.config.QuestionnairesForDataCollectionSetup;
+import no.atferdssenteret.panda.fft.config.DataCollectionGeneratorsSetup;
+import no.atferdssenteret.panda.fft.config.QuestionnairesAndDataCollectionsSetup;
 import no.atferdssenteret.panda.model.ParticipantRoles;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.entity.Participant;
@@ -99,8 +99,8 @@ public class DataGenerator {
 
 	
 	public static void main(String[] args) throws SQLException {
-		QuestionnairesForDataCollectionSetup.setup();
-		DataCollectionRulesSetup.setup();
+		QuestionnairesAndDataCollectionsSetup.setup();
+		new DataCollectionGeneratorsSetup();
 		new DataGenerator();
 	}
 }
