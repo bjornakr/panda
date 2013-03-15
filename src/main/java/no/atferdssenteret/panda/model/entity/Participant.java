@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
@@ -19,8 +20,6 @@ import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
 public class Participant implements Model, TargetBelonging {
-//	public enum Statuses {PARTICIPATING, CONSENT_WITHDRAWN, SOMETHING}    
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -47,14 +46,14 @@ public class Participant implements Model, TargetBelonging {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
 		onUpdate();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 	
 	public long getId() {
@@ -147,19 +146,19 @@ public class Participant implements Model, TargetBelonging {
 	
 	public void validate() {
 		if (target == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Target"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Target"));
 		}
 		else if (role == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Deltakerrolle"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Deltakerrolle"));
 		}
 		else if (status == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Status"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Status"));
 		}
 		else if (firstName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Fornavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));
 		}
 		else if (lastName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Etternavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));
 		}
 	}
 

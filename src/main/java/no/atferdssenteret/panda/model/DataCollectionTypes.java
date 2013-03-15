@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.fft.config;
+package no.atferdssenteret.panda.model;
 
 import java.util.LinkedList;
 

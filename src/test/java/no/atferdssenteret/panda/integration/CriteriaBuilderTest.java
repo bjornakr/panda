@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -30,7 +31,7 @@ public class CriteriaBuilderTest {
 
 	@Before
 	public void setup() throws SQLException {
-		JPATransactor.getInstance().entityManager().close();
+		new JPATransactor(Persistence.createEntityManagerFactory("targets"));
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
 		Session.createTestSession();
@@ -55,7 +56,7 @@ public class CriteriaBuilderTest {
 	}
 	
 	@Test
-	public void testQueringForDataCollectionStatus() {
+	public void testQueryingForDataCollectionStatus() {
 		Target t = TestUtil.createNotParticipatingTarget();
 		DataCollection dc = new DataCollection();
 		dc.setType("T1");

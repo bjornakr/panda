@@ -28,6 +28,8 @@ public class UserDialog extends JDialog {
 	private JComboBox cboxAccessLevel = new JComboBox(User.AccessLevel.values());
 	private DefaultTextField txtFirstName = new DefaultTextField();
 	private DefaultTextField txtLastName = new DefaultTextField();
+	private JPasswordField txtPasswordDummy = new JPasswordField(10);
+	
 	
 	public UserDialog(Window parentWindow, ActionListener actionListener) {
 		this.actionListener = actionListener;
@@ -53,10 +55,10 @@ public class UserDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(labLastName, txtLastName));
 		JButton butPassword = new JButton("Passord");
 		butPassword.setActionCommand(CMD_SET_PASSWORD);
-		JPasswordField txtPassword = new JPasswordField(10);
-		txtPassword.setText("abcde");
-		txtPassword.setEditable(false);
-		labelsAndFields.add(new LabelFieldPair(butPassword, txtPassword));
+		butPassword.addActionListener(actionListener);
+		txtPasswordDummy = new JPasswordField(10);
+		txtPasswordDummy.setEditable(false);
+		labelsAndFields.add(new LabelFieldPair(butPassword, txtPasswordDummy));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(1));
 	}
@@ -66,7 +68,7 @@ public class UserDialog extends JDialog {
 		cboxAccessLevel.removeItem(AccessLevel.ADMINISTRATOR);
 	}
 
-	public String getUserName() {
+	public String getUsername() {
 		return txtUsername.getText();
 	}
 
@@ -96,6 +98,10 @@ public class UserDialog extends JDialog {
 
 	public void setTxtLastName(String lastName) {
 		txtLastName.setText(lastName);
+	}
+	
+	public void showPasswordIsSet(boolean passwordIsSet) {
+		txtPasswordDummy.setText(passwordIsSet ? "aaaaaa" : "");
 	}
 
 	

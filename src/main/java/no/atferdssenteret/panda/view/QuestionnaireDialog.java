@@ -12,7 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
+import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
 import no.atferdssenteret.panda.view.util.GuiUtil;
@@ -22,7 +22,7 @@ public class QuestionnaireDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
 	private DefaultTablePanel questionnaireEventView;
-	private JComboBox cboxName = new JComboBox(QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
+	private JComboBox cboxName = new JComboBox(QuestionnaireTypes.getInstance().toArray());
 
 	public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireEventPanel) {
 		this.actionListener = actionListener;

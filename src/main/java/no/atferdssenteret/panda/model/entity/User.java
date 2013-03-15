@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -44,7 +45,9 @@ public class User implements Model {
 	}
 
 	@Id
-	private String userName;
+	private String username;
+	@Column(nullable = false)
+	private String encryptedPassword;
 	@Column(nullable = false)
 	private AccessLevel accessLevel;
 	@Column(nullable = false)
@@ -59,14 +62,14 @@ public class User implements Model {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUserName();
-		updatedBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	public AccessLevel getAccessLevel() {
@@ -77,12 +80,20 @@ public class User implements Model {
 		this.accessLevel = accessLevel;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
+	
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
 	}
 
 	public String getFirstName() {
@@ -152,14 +163,17 @@ public class User implements Model {
 	
 	@Override
 	public void validate() {
-		if (userName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Brukernavn"));
+		if (username == null) {
+			throw new InvalidUserInputException(StandardMessages.missingField("Brukernavn"));
 		}
 		else if (firstName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Fornavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));
 		}
 		else if (lastName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Etternavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));
+		}
+		else if (encryptedPassword == null) {
+			throw new InvalidUserInputException(StandardMessages.missingField("Passord"));
 		}
 	}
 
@@ -169,6 +183,6 @@ public class User implements Model {
 	
 	@Override
 	public String referenceName() {
-		return "Bruker: " + firstName + " " + lastName + " (" + userName + ", " + accessLevel + ")";
+		return "Bruker: " + firstName + " " + lastName + " (" + username + ", " + accessLevel + ")";
 	}
 }

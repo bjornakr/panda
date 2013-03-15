@@ -8,7 +8,6 @@ import no.atferdssenteret.panda.model.entity.Target;
 
 public class DataCollectionManager {
 	private static DataCollectionManager dataCollectionManager;
-//	private final List<DataCollectionRuleNo2> dataCollectionRules = new LinkedList<DataCollectionRuleNo2>();
 	private final List<DataCollectionGenerator> dataCollectionGenerators = new LinkedList<DataCollectionGenerator>();
 
 	private DataCollectionManager() {
@@ -22,40 +21,18 @@ public class DataCollectionManager {
 	}
 
 	public void generateDataCollections(Target target) {
-		deleteUntouchedDataCollections(target);
+		deleteUntouchedSystemGeneratedDataCollections(target);
 		for (DataCollectionGenerator dataCollectionGenerator : dataCollectionGenerators) {
-			if (dataCollectionGenerator.isApplicable(target)) {
+			if (dataCollectionGenerator.isApplicable(target) && !target.hasDataCollection(dataCollectionGenerator.dataCollectionType())) {
 				target.addDataCollection(dataCollectionGenerator.createDataCollection(target));
 			}
 		}
 	}
 
-//	private void processDataCollectionRuleForTarget(Target target, DataCollectionRuleNo2 dataCollectionRule) {
-//		if (!target.hasDataCollection(dataCollectionRule.dataCollectionType())) {
-//			if (dataCollectionRule.targetDate() == DataCollectionRuleNo2.TargetDates.AFTER_TARGET_CREATION_DATE) {
-//				createDataCollectionForTarget(dataCollectionRule, target);
-//			}
-//			else if (dataCollectionRule.targetDate() == DataCollectionRuleNo2.TargetDates.AFTER_TREATMENT_START
-//					&& target.getTreatmentStart() != null) {
-//				createDataCollectionForTarget(dataCollectionRule, target);
-//			}
-//		}
-//	}
-//
-//	private void createDataCollectionForTarget(DataCollectionRuleNo2 dataCollectionRule, Target target) {
-//		DataCollection dataCollection = new DataCollection();
-//		dataCollection.setType(dataCollectionRule.dataCollectionType().toString());
-//		dataCollection.setTargetDate(calculateTargetDate(target, dataCollectionRule));
-//		dataCollection.setDataCollector(target.getDataCollector());
-//		dataCollection.setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(dataCollectionRule.dataCollectionType()));
-//		target.addDataCollection(dataCollection);
-//	}
-
-
-	private void deleteUntouchedDataCollections(Target target) {
+	private void deleteUntouchedSystemGeneratedDataCollections(Target target) {
 		List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 		for (DataCollection dataCollection : target.getDataCollections()) {
-			if (dataCollection.isUntouched()) {
+			if (dataCollection.isUntouched() && dataCollection.getSystemGenerated()) {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}

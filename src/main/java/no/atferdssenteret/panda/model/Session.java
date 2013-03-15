@@ -17,7 +17,7 @@ public class Session {
 	
 	public static Session createTestSession() {
 		User user = new User();
-		user.setUserName("erkebisk");
+		user.setUsername("erkebisk");
 		user.setFirstName("Erkebiskop");
 		user.setLastName("Jacobsen");
 		user.setAccessLevel(User.AccessLevel.SUPER_USER);

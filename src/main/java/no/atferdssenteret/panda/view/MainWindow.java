@@ -38,15 +38,21 @@ public class MainWindow extends JFrame {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		add(createTargetLinkPanel(), BorderLayout.PAGE_START);
-		add(tabsAndTablesPanel);
+//		add(tabsAndTablesPanel, BorderLayout.CENTER);
 		
-		pack();
+//		pack();
+		setSize(1024, 768);
 		setLocationRelativeTo(null);
 		addWindowListener(new MainWindowListener());
 		setTitle(controller.title());
 		setVisible(true);
 	}
 
+	public void addTabsAndTablesPanel(TabsAndTablesPanel tabsAndTablesPanel) {
+		add(tabsAndTablesPanel, BorderLayout.CENTER);
+		this.tabsAndTablesPanel = tabsAndTablesPanel;
+	}
+	
 	private JPanel createTargetLinkPanel() {
 		txtTargetLink = new JTextField(4);
 		txtTargetLink.addActionListener(controller);

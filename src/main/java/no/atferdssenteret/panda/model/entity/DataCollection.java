@@ -18,6 +18,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
@@ -74,7 +75,6 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	@Column(nullable = false)
 	private String type;
 	@Column(nullable = false)
-	@OrderBy("targetDate")
 	private Date targetDate;
 	@Column(nullable = false)
 	private ProgressStatuses progressStatus;
@@ -83,8 +83,11 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	private Date updated;
 	private String createdBy;
 	private String updatedBy;
+	@Column(nullable = false)
+	private boolean systemGenerated = true;
 
 	@OneToMany(mappedBy="dataCollection", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OrderBy("name ASC")
 	private List<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 	@ManyToOne(cascade = {CascadeType.DETACH})
 	private User dataCollector;
@@ -92,13 +95,13 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 
@@ -230,24 +233,24 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 
 	public void validate() {
 		if (target == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Target"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Target"));
 		}
 		else if (type == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Type"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Type"));
 		}
 		else if (targetDate == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Måldato"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Måldato"));
 		}
 		else if (progressStatus == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Framdrift"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Framdrift"));
 		}
 		else if (progressStatus == ProgressStatuses.COMPLETED && !allQuesitonnairesHaveEvents()) {
-			throw new IllegalStateException("Kan ikke sette datainnsamlingen til \"" + 
+			throw new InvalidUserInputException("Kan ikke sette datainnsamlingen til \"" + 
 					ProgressStatuses.COMPLETED + "\" før hvert spørreskjema har minst én hendelse.");
 		}
 		else if ((progressStatus == ProgressStatuses.APPOINTED || progressStatus == ProgressStatuses.COMPLETED)
 				&& progressDate == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Dato"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Dato"));
 		}
 	}
 
@@ -276,6 +279,14 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		this.createdBy = createdBy;
 	}
 
+	public boolean getSystemGenerated() {
+		return systemGenerated;
+	}
+
+	public void setSystemGenerated(boolean systemGenerated) {
+		this.systemGenerated = systemGenerated;
+	}
+	
 	@Override
 	public long getTargetId() {
 		return target.getId();

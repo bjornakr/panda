@@ -105,18 +105,28 @@ public class QuestionnaireTableController extends AbstractTableController {
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
 			new QuestionnaireController(view.getWindow(), model);
-			if (dataCollection == null) {
-				updateTableModel();
-			}
-			else {
+//			if (dataCollection == null) {
+//				updateTableModel();
+//			}
+//			else {
 				tableModel.update(model);
-			}
+//			}
 		}
 		else if (event.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
 			registerRecievedQuestionnaire();
 		}
 	}
 
+	@Override
+	protected void processDeleteCommand() {
+		if (!JPATransactor.getInstance().entityManager().contains(dataCollection)) {  // ...meaning it hasn't been created yet.
+			tableModel.deleteRow(modelForSelectedTableRow());
+		}
+		else {
+			super.processDeleteCommand();
+		}
+	}
+	
 	private void registerRecievedQuestionnaire() {
 		Questionnaire questionnaire = (Questionnaire)modelForSelectedTableRow();
 		JPATransactor.getInstance().transaction().begin();

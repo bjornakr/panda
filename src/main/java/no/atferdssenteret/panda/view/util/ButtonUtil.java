@@ -16,6 +16,7 @@ public class ButtonUtil {
 	public final static String COMMAND_EDIT = "EDIT";
 	public final static String COMMAND_DELETE = "DELETE";
 	public final static String COMMAND_SAVE = "SAVE";
+	public final static String COMMAND_OK = "OK";
 	public final static String COMMAND_CANCEL = "CANCEL";
 	public final static String COMMAND_DOUBLE_CLICK = "DOUBLE_CLICK";
 
@@ -44,11 +45,33 @@ public class ButtonUtil {
 
 		return buttons;
 	}
+	
+	public static List<JButton> createOkCancelButtons(ActionListener actionListener, RootPaneContainer window) {
+		JButton okButton = new JButton("Ok");
+		okButton.setActionCommand(COMMAND_OK);
+		okButton.addActionListener(actionListener);
+
+		JButton cancelButton = new JButton("Avbryt");
+		cancelButton.setActionCommand(COMMAND_CANCEL);
+		cancelButton.addActionListener(actionListener);
+
+		window.getRootPane().setDefaultButton(okButton);
+
+		List<JButton> buttons = new LinkedList<JButton>();
+		buttons.add(okButton);
+		buttons.add(cancelButton);
+
+		return buttons;
+	}
 
 	public static JPanel createSaveCancelButtonPanel(ActionListener actionListener, RootPaneContainer window) {	
 		return createButtonPanel(createSaveCancelButtons(actionListener, window));
 	}
 
+	public static JPanel createOkCancelButtonPanel(ActionListener actionListener, RootPaneContainer window) {	
+		return createButtonPanel(createOkCancelButtons(actionListener, window));
+	}
+	
 	public static JPanel createCRUDButtonPanel(ActionListener actionListener) {
 		return createButtonPanel(createCRUDButtons(actionListener));
 	}

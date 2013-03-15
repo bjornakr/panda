@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 
+import no.atferdssenteret.panda.DataCollectionManager;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.model.Model;
@@ -13,6 +14,7 @@ import no.atferdssenteret.panda.model.entity.Questionnaire;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.DateUtil;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.DataCollectionDialog;
 
@@ -33,7 +35,7 @@ public class DataCollectionController extends ApplicationController {
 		this.target = target;
 		questionnaireTableController = new QuestionnaireTableController(this.model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
-		view.initializeTypeComboBox();
+		view.initializeTypeComboBox();  // Must do this before its actionListener is added.
 		if (getMode() == Mode.EDIT) {
 			transferModelToView();
 		}
@@ -76,7 +78,7 @@ public class DataCollectionController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model.setTarget(target);
-//			target.addDataCollection(model);
+			model.setSystemGenerated(false);
 		}
 		model.setType((String)view.getType());	
 		model.setTargetDate(StringUtil.parseDate(view.getTargetDate()));
@@ -117,5 +119,18 @@ public class DataCollectionController extends ApplicationController {
 	@Override
 	protected void setModel(Model model) {
 		this.model = (DataCollection)model;
+	}
+
+	@Override
+	protected void performTransaction() {
+		JPATransactor.getInstance().transaction().begin();
+		transferUserInputToModel();
+		model().validate();
+		if (getMode() == Mode.CREATE) {
+			target.addDataCollection(model);
+		}
+		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());
+		
+		JPATransactor.getInstance().transaction().commit();
 	}
 }

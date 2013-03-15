@@ -20,6 +20,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
@@ -68,14 +69,14 @@ public class Target implements Model, TargetBelonging {
 	
 	@PrePersist
 	protected void onCreate() {
-		createdBy = Session.currentSession.user().getUserName();
-		updatedBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 	
 	public long getId() {
@@ -111,9 +112,6 @@ public class Target implements Model, TargetBelonging {
 	}
 
 	public void setStatus(ParticipationStatuses status) {
-//		if (this.status != null && !this.status.equals(status)) {
-//			DataCollectionManager.getInstance().notifyTargetUpdated(this);
-//		}
 		this.status = status;	
 	}
 
@@ -177,7 +175,6 @@ public class Target implements Model, TargetBelonging {
 
 	public void setDataCollector(User dataCollector) {
 		this.dataCollector = dataCollector;
-//		DataCollectionManager.getInstance().notifyTargetUpdated(this);
 	}
 
 	public List<Participant> getParticipants() {
@@ -210,13 +207,13 @@ public class Target implements Model, TargetBelonging {
 
 	public void validate() {
 		if (status == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Status"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Status"));
 		}
 		else if (firstName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Fornavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));
 		}
 		else if (lastName == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Etternavn"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.view.ErrorMessageDialog;
@@ -49,14 +50,24 @@ public abstract class ApplicationController implements ActionListener {
 
 	private void save() {
 		try {
-			mergeModelIfDetached();
+			if (mode == Mode.EDIT) {
+				setModel(JPATransactor.getInstance().mergeIfDetached(model()));
+			}
+//			JPATransactor.getInstance().mergeIfDetached(model());
 			performTransaction();
 			view().dispose();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			JPATransactor.getInstance().transaction().rollback();
+		catch (InvalidUserInputException e) {
+			if (JPATransactor.getInstance().transaction().isActive()) {
+				JPATransactor.getInstance().transaction().rollback();
+			}
 			new ErrorMessageDialog(e.getMessage(), null, view());
+		}
+		catch (Exception e) {
+			if (JPATransactor.getInstance().transaction().isActive()) {
+				JPATransactor.getInstance().transaction().rollback();
+			}
+			e.printStackTrace();
 		}
 	}
 
@@ -64,18 +75,11 @@ public abstract class ApplicationController implements ActionListener {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
 		model().validate();
+		System.out.println(model());
 		if (mode == Mode.CREATE) {
 			JPATransactor.getInstance().entityManager().persist(model());
 		}
 		JPATransactor.getInstance().transaction().commit();
-	}
-
-	private void mergeModelIfDetached() {
-		if (model() != null) {
-			if (!JPATransactor.getInstance().entityManager().contains(model())) {
-				setModel(JPATransactor.getInstance().entityManager().merge(model()));
-			}
-		}
 	}
 
 	protected abstract void setModel(Model model);

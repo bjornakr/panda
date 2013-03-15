@@ -41,7 +41,6 @@ public class Questionnaire implements Model, TargetBelonging {
 		}
 	}
 
-//	@OrderBy("dataCollection, name")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -63,14 +62,14 @@ public class Questionnaire implements Model, TargetBelonging {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUserName();
-		updatedBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 	
 	public long getId() {
@@ -151,8 +150,6 @@ public class Questionnaire implements Model, TargetBelonging {
 
 	public QuestionnaireEvent lastEvent() {
 		if (questionnaireEvents != null && questionnaireEvents.size() > 0) {
-//			Collections.sort(questionnaireEvents);
-//			return questionnaireEvents.get(0);
 			return questionnaireEvents.get(questionnaireEvents.size()-1);
 		}
 		else {
@@ -204,7 +201,7 @@ public class Questionnaire implements Model, TargetBelonging {
 
 	@Override
 	public long getTargetId() {
-		return getDataCollection().getTarget().getId();
+		return getDataCollection().getTarget() != null ? getDataCollection().getTarget().getId() : -1;
 	}
 	
 	@Override

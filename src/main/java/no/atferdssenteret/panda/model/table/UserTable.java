@@ -26,7 +26,7 @@ public class UserTable extends DefaultAbstractTableModel {
 	protected Object[] dataColumns(Model model) {
 		User user = (User)model;
 		Object[] columns = new Object[headerColumns().length];
-		columns[USERNAME] = user.getUserName();
+		columns[USERNAME] = user.getUsername();
 		columns[ACCESS_LEVEL] = user.getAccessLevel();
 		columns[FIRST_NAME] = user.getFirstName();
 		columns[LAST_NAME] = user.getLastName();

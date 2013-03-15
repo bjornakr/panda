@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import no.atferdssenteret.panda.DataCollectionManager;
@@ -30,7 +31,8 @@ public class DataCollectionAutomaticCreationTest {
 	
 	@Before
 	public void setup() throws Exception {
-		JPATransactor.getInstance().entityManager().close();
+		new JPATransactor(Persistence.createEntityManagerFactory("targets"));
+//		JPATransactor.getInstance().entityManager().close();
 		Session.createTestSession();
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
@@ -84,7 +86,7 @@ public class DataCollectionAutomaticCreationTest {
 	@Test
 	public void GeneratedDataCollectionsAreAssignedToSameDataCollectorAsTarget() {
 		User dataCollector = new User();
-		dataCollector.setUserName("robrock");
+		dataCollector.setUsername("robrock");
 		dataCollector.setFirstName("Robby");
 		dataCollector.setLastName("Rocksleigh");
 		dataCollector.setAccessLevel(User.AccessLevel.DATA_COLLECTOR);

@@ -56,7 +56,7 @@ public class UserTableController extends AbstractTableController {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
 		Root<User> root = criteriaQuery.from(User.class);
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(User_.userName)));
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(User_.username)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 }

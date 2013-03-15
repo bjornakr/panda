@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.util.StandardMessages;
@@ -36,14 +37,14 @@ public class TargetNote implements Model {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
 		onUpdate();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 	
 	public long getId() {
@@ -105,7 +106,7 @@ public class TargetNote implements Model {
 	@Override
 	public void validate() {
 		if (note == null) {
-			throw new IllegalStateException(StandardMessages.missingField("Notat"));
+			throw new InvalidUserInputException(StandardMessages.missingField("Notat"));
 		}
 	}
 

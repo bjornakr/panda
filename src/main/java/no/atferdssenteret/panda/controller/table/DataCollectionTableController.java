@@ -29,12 +29,14 @@ public class DataCollectionTableController extends AbstractTableController {
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
 	private Target target;
+	private List<JButton> buttons = new LinkedList<JButton>();
 
 	public DataCollectionTableController(Target target) {
 		super("Datainnsamlinger");
 		this.target = target;
 		if (target == null) {
 			tableModel = new DataCollectionTable();
+			buttons.add(ButtonUtil.editButton(this));
 		}
 		else {
 			tableModel = new DataCollectionTableForTargetFocus();			
@@ -55,8 +57,6 @@ public class DataCollectionTableController extends AbstractTableController {
 	@Override
 	public List<JButton> buttons() {
 		if (target == null) {
-			List<JButton> buttons = new LinkedList<JButton>();
-			buttons.add(ButtonUtil.editButton(this));
 			return buttons;
 		}
 		else {

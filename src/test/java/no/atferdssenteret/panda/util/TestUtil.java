@@ -56,6 +56,11 @@ public class TestUtil {
 			dataCollection.setDataCollector(target.getDataCollector());
 			dataCollection.setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(type));
 			return dataCollection;
+		}
+
+		@Override
+		public String dataCollectionType() {
+			return type;
 		}	
 	}
 }

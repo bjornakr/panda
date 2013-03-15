@@ -78,7 +78,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	protected void restrictAccessToButton(String actionCommand) {
-		for (JButton button : buttons) {
+		for (JButton button : buttons()) {
 			if (button.getActionCommand().equals(actionCommand)) {
 				button.setEnabled(false);
 				restrictedButtons.add(button);
@@ -122,7 +122,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		}
 	}
 
-	private void processDeleteCommand() {
+	protected void processDeleteCommand() {
 		final String delete = "Slett";
 		final String cancel = "Avbryt";
 		String[] options = {delete, cancel};
@@ -147,6 +147,7 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	private void deleteModelForSelectedTableRow() {
+		JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
 		JPATransactor.getInstance().transaction().begin();
 		JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
 		JPATransactor.getInstance().transaction().commit();

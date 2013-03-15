@@ -13,7 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import no.atferdssenteret.panda.fft.config.DataCollectionTypes;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
@@ -88,7 +88,9 @@ public class DataCollectionDialog extends JDialog {
 	}
 
 	public void initializeTypeComboBox() {
-		cboxTypes.setSelectedIndex(0);	
+		if (cboxTypes.getModel().getSize() > 0) {
+			cboxTypes.setSelectedIndex(0);
+		}
 	}
 
 //	public Object getDataCollectionType() {

@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.controller.QuestionnaireEventController;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent_;
 import no.atferdssenteret.panda.model.table.QuestionnaireEventTable;
@@ -38,19 +37,6 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		return tableModel;
 	}
 
-	//	public List<QuestionnaireEvent> allModels() {
-	//		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
-	//		for (Model model : tableModel.allModels()) {
-	//			models.add((QuestionnaireEvent)model);
-	//		}
-	//		return models;
-	//	}
-	//
-	//	@Override
-	//	protected List<? extends Model> retrieve(Predicate[] predicates) {
-	//		return allModels();
-	//	}
-
 	public List<QuestionnaireEvent> currentModels() {
 		List<QuestionnaireEvent> models = new LinkedList<QuestionnaireEvent>();
 		for (Model model : tableModel.allModels()) {
@@ -71,19 +57,13 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			QuestionnaireEvent model = (QuestionnaireEvent)modelForSelectedTableRow();
 			new QuestionnaireEventController(view.getWindow(), model);
-//			tableModel.update(model);
 			updateTableModel();
 		}
 	}
 
-	//	@Override
-	//	protected Class<? extends Model> getModelClass() {
-	//		return QuestionnaireEvent.class;
-	//	}
-
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
-		CriteriaQuery<Participant> criteriaQuery = criteriaBuilder.createQuery(Participant.class);
+		CriteriaQuery<QuestionnaireEvent> criteriaQuery = criteriaBuilder.createQuery(QuestionnaireEvent.class);
 		Root<QuestionnaireEvent> root = criteriaQuery.from(QuestionnaireEvent.class);
 		criteriaQuery.orderBy(criteriaBuilder.asc(root.get(QuestionnaireEvent_.date)),
 				criteriaBuilder.asc(root.get(QuestionnaireEvent_.id)));

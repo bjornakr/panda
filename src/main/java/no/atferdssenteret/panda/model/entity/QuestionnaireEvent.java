@@ -66,14 +66,14 @@ public class QuestionnaireEvent implements Model {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUserName();
-		updatedBy = Session.currentSession.user().getUserName();
+		createdBy = Session.currentSession.user().getUsername();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUserName();
+		updatedBy = Session.currentSession.user().getUsername();
 	}
 
 	public long getId() {

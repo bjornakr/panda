@@ -6,7 +6,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
-import no.atferdssenteret.panda.fft.config.DataCollectionTypes;
+import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
