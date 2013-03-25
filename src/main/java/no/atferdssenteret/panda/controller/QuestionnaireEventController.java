@@ -66,7 +66,7 @@ public class QuestionnaireEventController extends ApplicationController {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			try {
 				transferUserInputToModel();
-				model.validate();
+				model.validateUserInput();
 				view.dispose();
 			}
 			catch (IllegalStateException e) {

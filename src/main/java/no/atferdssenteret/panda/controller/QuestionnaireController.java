@@ -64,7 +64,7 @@ public class QuestionnaireController extends ApplicationController {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			try {
 				transferUserInputToModel();
-				model.validate();
+				model.validateUserInput();
 				if (getMode() == Mode.EDIT) {
 					JPATransactor.getInstance().transaction().begin();
 					JPATransactor.getInstance().transaction().commit();

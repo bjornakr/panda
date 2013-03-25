@@ -17,7 +17,7 @@ public class TargetNoteTableController extends AbstractTableController {
 	private Target target;
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
-	
+
 	public TargetNoteTableController(Target target) {
 		super("Notater");
 		this.target = target;
@@ -37,6 +37,10 @@ public class TargetNoteTableController extends AbstractTableController {
 
 	@Override
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
+		if (!JPATransactor.getInstance().entityManager().contains(target)) {
+			target = JPATransactor.getInstance().entityManager().merge(target);
+		}
+		JPATransactor.getInstance().entityManager().refresh(target);
 		return target.getTargetNotes();
 	}
 
@@ -44,7 +48,6 @@ public class TargetNoteTableController extends AbstractTableController {
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			new TargetNoteController(view.getWindow(), null, target);
-			JPATransactor.getInstance().entityManager().refresh(target); // To reactivate ordering (@OrderBy)
 			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
@@ -53,7 +56,6 @@ public class TargetNoteTableController extends AbstractTableController {
 			updateTableModel();
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-			JPATransactor.getInstance().entityManager().refresh(target);
 			updateTableModel();
 		}
 	}

@@ -33,13 +33,15 @@ public class QuestionnaireTableController extends AbstractTableController {
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
 	private DataCollection dataCollection;
+	private List<JButton> buttons = new LinkedList<JButton>();
 
 	public QuestionnaireTableController(DataCollection dataCollection) {
 		super("Spørreskjemaer");
 		this.dataCollection = dataCollection;
-		
+
 		if (dataCollection == null) {
 			tableModel = new QuestionnaireTable();
+			buttons = createButtons();
 			view = new DefaultTablePanel(this, new QuestionnaireFilterCreator());
 		}
 		else {
@@ -66,22 +68,26 @@ public class QuestionnaireTableController extends AbstractTableController {
 		return models;		
 	}
 
+	private List<JButton> createButtons() {
+		List<JButton> buttons = new LinkedList<JButton>();
+		buttons.add(ButtonUtil.editButton(this));
+		JButton butRegisterRecievedQuestionnaire = new JButton("Registrer mottatt skjema");
+		butRegisterRecievedQuestionnaire.setActionCommand(COMMAND_REGISTER_QUESTIONNAIRE);
+		butRegisterRecievedQuestionnaire.addActionListener(this);
+		buttons.add(butRegisterRecievedQuestionnaire);
+		return buttons;
+	}
+
 	@Override
 	public List<JButton> buttons() {
 		if (dataCollection == null) {
-			List<JButton> buttons = new LinkedList<JButton>();
-			buttons.add(ButtonUtil.editButton(this));
-			JButton butRegisterRecievedQuestionnaire = new JButton("Registrer mottatt skjema");
-			butRegisterRecievedQuestionnaire.setActionCommand(COMMAND_REGISTER_QUESTIONNAIRE);
-			butRegisterRecievedQuestionnaire.addActionListener(this);
-			buttons.add(butRegisterRecievedQuestionnaire);
 			return buttons;
 		}
 		else {
 			return super.buttons();
 		}
 	}
-	
+
 	@Override
 	protected void setButtonEnabledStates() {
 		super.setButtonEnabledStates();
@@ -92,7 +98,7 @@ public class QuestionnaireTableController extends AbstractTableController {
 			}
 		}
 	}
-	
+
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
@@ -105,28 +111,13 @@ public class QuestionnaireTableController extends AbstractTableController {
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
 			new QuestionnaireController(view.getWindow(), model);
-//			if (dataCollection == null) {
-//				updateTableModel();
-//			}
-//			else {
-				tableModel.update(model);
-//			}
+			tableModel.update(model);
 		}
 		else if (event.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
 			registerRecievedQuestionnaire();
 		}
 	}
 
-	@Override
-	protected void processDeleteCommand() {
-		if (!JPATransactor.getInstance().entityManager().contains(dataCollection)) {  // ...meaning it hasn't been created yet.
-			tableModel.deleteRow(modelForSelectedTableRow());
-		}
-		else {
-			super.processDeleteCommand();
-		}
-	}
-	
 	private void registerRecievedQuestionnaire() {
 		Questionnaire questionnaire = (Questionnaire)modelForSelectedTableRow();
 		JPATransactor.getInstance().transaction().begin();
@@ -148,7 +139,7 @@ public class QuestionnaireTableController extends AbstractTableController {
 				criteriaBuilder.asc(root.get(Questionnaire_.name)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
-	
+
 	private Predicate[] extractPredicatesFromFilterValues(List<Object> filterValues,
 			Root<Questionnaire> root, Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton) {
 		Predicate[] predicates = new Predicate[filterValues.size()+1];
@@ -159,11 +150,11 @@ public class QuestionnaireTableController extends AbstractTableController {
 		predicates[predicates.length-1] = completedDataCollections(joinQuestionnaireDataColleciton);
 		return predicates;
 	}
-	
+
 	private Predicate completedDataCollections(Join<Questionnaire, DataCollection> joinQuestionnaireDataColleciton) {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 		Predicate completedDataCollecitons = criteriaBuilder.
-		equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.COMPLETED);
+				equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.COMPLETED);
 		Predicate initiatedDataCollections = criteriaBuilder.
 				equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.INITIATED);
 		return criteriaBuilder.or(completedDataCollecitons, initiatedDataCollections);

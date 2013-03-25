@@ -55,6 +55,11 @@ public class ParticipantTableController extends AbstractTableController {
 	@Override
 	protected List<? extends Model> retrieve(List<Object> filterValues) {
 		if (target != null) {
+			if (!JPATransactor.getInstance().entityManager().contains(target)) {
+				target = JPATransactor.getInstance().entityManager().merge(target);
+			}
+			JPATransactor.getInstance().entityManager().refresh(target);
+//			System.err.println("TABLE: Target is managed: " + JPATransactor.getInstance().entityManager().contains(target));
 			return target.getParticipants();
 		}
 		else {
@@ -77,19 +82,21 @@ public class ParticipantTableController extends AbstractTableController {
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-			new ParticipantController(view.getWindow(), null, target);
-			JPATransactor.getInstance().entityManager().refresh(target);
-			updateTableModel();
+			ParticipantController participantController = new ParticipantController(view.getWindow(), null, target);
+//			JPATransactor.getInstance().entityManager().refresh(target);
+			if (participantController.model() != null) {
+				updateTableModel();
+			}
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			new ParticipantController(view.getWindow(), (Participant)modelForSelectedTableRow(), target);
 			updateTableModel();
 		}
-		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
-			JPATransactor.getInstance().entityManager().refresh(target);
-			updateTableModel();
-		}
+//		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+////			JPATransactor.getInstance().entityManager().refresh(target);
+//			updateTableModel();
+//		}
 	}
 
 	protected List<? extends Model> retrieveForAllTargets(List<Object> filterValues) {

@@ -56,7 +56,8 @@ public class DataCollectionAutomaticCreationTest {
 		DataCollectionManager.getInstance().generateDataCollections(target);
 		DataCollection dataCollection = target.getDataCollection(DC_T1);
 		assertNotNull(dataCollection);
-		assertEquals("Target date: ", calculateExpectedTargetDate(target.getCreated(), noOfMonthsDelay), dataCollection.getTargetDate());
+		assertEquals("Target date: ", calculateExpectedTargetDate(new Date(target.getCreated().getTime()), noOfMonthsDelay),
+				dataCollection.getTargetDate());
 	}
 
 	private boolean dataCollectionExistsInDatabase(Target target, String type) {

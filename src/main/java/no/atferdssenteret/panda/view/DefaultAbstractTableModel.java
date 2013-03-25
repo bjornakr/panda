@@ -101,8 +101,9 @@ public abstract class DefaultAbstractTableModel extends AbstractTableModel {
 	}
 
 	public void update(Model model) {
+		int indexOfModel = rows.indexOf(new TableRow(dataColumns(model), model));
 		rows.remove(new TableRow(dataColumns(model), model));
-		rows.add(new TableRow(dataColumns(model), model));
+		rows.add(indexOfModel, new TableRow(dataColumns(model), model));
 		fireTableDataChanged();
 	}
 	

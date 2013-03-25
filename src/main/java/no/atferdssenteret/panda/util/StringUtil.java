@@ -3,6 +3,8 @@ package no.atferdssenteret.panda.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
+
 public class StringUtil {
 
 	/**
@@ -19,7 +21,7 @@ public class StringUtil {
 		}
 
 		if (dateString.length() != 8) {
-			throw new IllegalArgumentException("Ugyldig dato: \"" + dateString + "\". Bruk formen \"dd.mm.åå\".");
+			throw new InvalidUserInputException("Ugyldig dato: \"" + dateString + "\". Bruk formen \"dd.mm.åå\".");
 		}
 
 		int day = new Integer(dateString.substring(0, 2));
@@ -27,7 +29,7 @@ public class StringUtil {
 		int year = new Integer(dateString.substring(6, 7));
 
 		if ((day < 1) || (day > 31) || (month < 1) || (month > 12) || (year < 0) || (year > 99)) {
-			throw new IllegalArgumentException("Ugyldig dato: \"" + dateString + "\".");
+			throw new InvalidUserInputException("Ugyldig dato: \"" + dateString + "\".");
 		}
 
 
@@ -44,11 +46,6 @@ public class StringUtil {
 	public static String groomString(String s) {
 		if (s != null) {
 			s = s.trim();
-
-//			if (s.contains("\\") || s.contains("'")) {
-//				throw new IllegalArgumentException("Teksten \"" + s + "\" er ulovlig. Av sikkerhetsmessige grunner kan en tekststreng ikke inneholde tegnene " +
-//						"backslash (\\) eller fnutt (').");					
-//			}
 
 			if (s.equals("")) {
 				s = null;
@@ -67,7 +64,7 @@ public class StringUtil {
 			return i; 
 		}
 		catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Feil i feltet \"" + field + "\": Ugyldig verdi: \"" + s + "\".");  
+			throw new InvalidUserInputException("Feil i feltet \"" + field + "\": Ugyldig verdi: \"" + s + "\".");  
 		}
 	}
 

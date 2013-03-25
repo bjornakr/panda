@@ -28,7 +28,7 @@ import no.atferdssenteret.panda.view.util.ButtonUtil;
  * Extend it to provide functionality for a specific model. 
  *
  */
-public abstract class AbstractTableController implements ListSelectionListener, MouseListener, ActionListener {
+public abstract class AbstractTableController implements StandardController, ListSelectionListener, MouseListener, ActionListener {
 	private String title;
 	private List<TableObserver> tableObservers;
 	private List<JButton> buttons;
@@ -40,13 +40,14 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 		buttons = ButtonUtil.createCRUDButtons(this);
 	}
 
+	public String title() {
+		return title;
+	}
+
 	public abstract DefaultTablePanel view();
 
 	public abstract DefaultAbstractTableModel tableModel();
 
-	public String title() {
-		return title;
-	}
 
 	public boolean isModelInitialized() {
 		if (tableModel() == null) {
@@ -147,15 +148,18 @@ public abstract class AbstractTableController implements ListSelectionListener, 
 	}
 
 	private void deleteModelForSelectedTableRow() {
-		JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
+		Model model = JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
 		JPATransactor.getInstance().transaction().begin();
-		JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
+		JPATransactor.getInstance().entityManager().remove(model);
 		JPATransactor.getInstance().transaction().commit();
-		tableModel().deleteRow(modelForSelectedTableRow());
+		tableModel().deleteRow(model);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
+		if (modelForSelectedTableRow() != null) {
+			System.err.println("ATC: " + JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow()));
+		}
 		setButtonEnabledStates();
 		view().updateTableCounters();
 		if (modelForSelectedTableRow() instanceof TargetBelonging) {

@@ -39,7 +39,7 @@ public abstract class TargetController extends ApplicationController {
 	protected void performTransaction() {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
-		model().validate();
+		model().validateUserInput();
 		DataCollectionManager.getInstance().generateDataCollections((Target)model());
 		if (getMode() == Mode.CREATE) {
 			JPATransactor.getInstance().entityManager().persist(model());

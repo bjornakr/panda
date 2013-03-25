@@ -1,6 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,8 +17,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent.Types;
 import no.atferdssenteret.panda.util.DateUtil;
 
@@ -54,22 +54,19 @@ public class Questionnaire implements Model, TargetBelonging {
 	@OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@OrderBy("date ASC, id ASC")
 	private List<QuestionnaireEvent> questionnaireEvents = new LinkedList<QuestionnaireEvent>();
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String createdBy;
 	private String updatedBy;
 	
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUsername();
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 	
 	public long getId() {
@@ -163,38 +160,46 @@ public class Questionnaire implements Model, TargetBelonging {
 	
 	
 	@Override
-	public void validate() {
+	public void validateUserInput() {
 		
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	@Override
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	@Override
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}

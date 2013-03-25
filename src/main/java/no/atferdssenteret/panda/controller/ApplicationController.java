@@ -21,6 +21,7 @@ public abstract class ApplicationController implements ActionListener {
 		}
 		else {
 			mode = Mode.EDIT;
+			setModel(JPATransactor.getInstance().mergeIfDetached(model));
 		}
 	}
 
@@ -53,7 +54,6 @@ public abstract class ApplicationController implements ActionListener {
 			if (mode == Mode.EDIT) {
 				setModel(JPATransactor.getInstance().mergeIfDetached(model()));
 			}
-//			JPATransactor.getInstance().mergeIfDetached(model());
 			performTransaction();
 			view().dispose();
 		}
@@ -74,7 +74,7 @@ public abstract class ApplicationController implements ActionListener {
 	protected void performTransaction() {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
-		model().validate();
+		model().validateUserInput();
 		System.out.println(model());
 		if (mode == Mode.CREATE) {
 			JPATransactor.getInstance().entityManager().persist(model());

@@ -33,6 +33,7 @@ package no.atferdssenteret.panda.view;
 
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -51,33 +52,43 @@ import no.atferdssenteret.panda.view.util.TabButton;
 @SuppressWarnings("serial")
 public class ButtonTabComponent extends JPanel {
 
-    public ButtonTabComponent(final JTabbedPane pane, final ActionListener actionListener) {
-        //unset default FlowLayout' gaps
-        super(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        if (pane == null) {
-            throw new NullPointerException("TabbedPane is null");
-        }
-        setOpaque(false);        
-        
-        //make JLabel read titles from JTabbedPane
-        JLabel label = new JLabel() {
-            public String getText() {
-                int i = pane.indexOfTabComponent(ButtonTabComponent.this);
-                if (i != -1) {
-                    return pane.getTitleAt(i);
-                }
-                return null;
-            }
-        };
-        
-        add(label);
-        //add more space between the label and the button
-        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        //tab button
-        JButton button = new TabButton(this, actionListener);
-        add(button);
-        //add more space to the top of the component
-        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
-    }
+	public ButtonTabComponent(final JTabbedPane pane, final int tabIndex) {
+		
+		//unset default FlowLayout' gaps
+		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		if (pane == null) {
+			throw new NullPointerException("TabbedPane is null");
+		}
+		setOpaque(false);        
+
+		//make JLabel read titles from JTabbedPane
+		JLabel label = new JLabel() {
+			public String getText() {
+				int i = pane.indexOfTabComponent(ButtonTabComponent.this);
+				if (i != -1) {
+					return pane.getTitleAt(i);
+				}
+				else {
+					return "";
+				}
+			}
+		};
+
+		add(label);
+		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+		JButton button = new TabButton(this, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int i = pane.indexOfTabComponent(ButtonTabComponent.this);
+				boolean tabIsSelected = pane.getSelectedIndex() == i;
+				pane.remove(i);
+				if (tabIsSelected) {
+					pane.setSelectedIndex(0);
+				}
+			}
+		});
+		add(button);
+		setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+	}
 }
 

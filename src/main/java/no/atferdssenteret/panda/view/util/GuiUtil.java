@@ -50,7 +50,7 @@ public class GuiUtil {
 	}
 
 	public static void setNotNullFlag(JLabel label) {
-		label.setIcon(new ImageIcon("resources/gfx/bullet_red.png"));
+		label.setIcon(new ImageIcon(new GuiUtil().getClass().getResource("/gfx/bullet_red.png")));
 	}
 }
 

@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.util;
 
+import java.sql.Date;
 import java.util.Calendar;
 
 import no.atferdssenteret.panda.DataCollectionGenerator;
@@ -52,7 +53,7 @@ public class TestUtil {
 		public DataCollection createDataCollection(Target target) {
 			DataCollection dataCollection = new DataCollection();
 			dataCollection.setType(type);
-			dataCollection.setTargetDate(DateUtil.addTime(target.getCreated(), Calendar.MONTH, noOfMonthsDelay));
+			dataCollection.setTargetDate(DateUtil.addTime(new Date(target.getCreated().getTime()), Calendar.MONTH, noOfMonthsDelay));
 			dataCollection.setDataCollector(target.getDataCollector());
 			dataCollection.setQuestionnaires(QuestionnairesForDataCollectionType.getInstance().getQuestionnairesFor(type));
 			return dataCollection;

@@ -1,6 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +14,8 @@ import javax.persistence.PreUpdate;
 import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
-import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
@@ -38,22 +38,19 @@ public class Participant implements Model, TargetBelonging {
 	private String address;
 	private String contactInfo;
 	private String comment;
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String createdBy;
 	private String updatedBy;
 
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUsername();
-		onUpdate();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 	
 	public long getId() {
@@ -144,17 +141,8 @@ public class Participant implements Model, TargetBelonging {
 		this.status = status;
 	}
 	
-	public void validate() {
-		if (target == null) {
-			throw new InvalidUserInputException(StandardMessages.missingField("Target"));
-		}
-		else if (role == null) {
-			throw new InvalidUserInputException(StandardMessages.missingField("Deltakerrolle"));
-		}
-		else if (status == null) {
-			throw new InvalidUserInputException(StandardMessages.missingField("Status"));
-		}
-		else if (firstName == null) {
+	public void validateUserInput() {
+		if (firstName == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));
 		}
 		else if (lastName == null) {
@@ -162,34 +150,42 @@ public class Participant implements Model, TargetBelonging {
 		}
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	@Override
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	@Override
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}

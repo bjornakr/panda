@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda;
+ package no.atferdssenteret.panda;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +32,8 @@ public class DataCollectionManager {
 	private void deleteUntouchedSystemGeneratedDataCollections(Target target) {
 		List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 		for (DataCollection dataCollection : target.getDataCollections()) {
-			if (dataCollection.isUntouched() && dataCollection.getSystemGenerated()) {
+			System.err.println("isUntouched(): " + dataCollection + ", " + dataCollection.isUntouched());
+			if (dataCollection.isUntouched()) {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}
@@ -42,18 +43,6 @@ public class DataCollectionManager {
 	public void addDataCollectionGenerator(DataCollectionGenerator dataCollectionGenerator) {
 		dataCollectionGenerators.add(dataCollectionGenerator);
 	}
-
-//	public java.sql.Date calculateTargetDate(Target target, DataCollectionRuleNo2 dataCollectionRule) {
-//		Calendar targetDateCalendar = Calendar.getInstance();
-//		if (dataCollectionRule.targetDate() == DataCollectionRuleNo2.TargetDates.AFTER_TARGET_CREATION_DATE) {
-//			targetDateCalendar.setTime(target.getCreated());
-//		}
-//		else if (dataCollectionRule.targetDate() == DataCollectionRuleNo2.TargetDates.AFTER_TREATMENT_START) {
-//			targetDateCalendar.setTime(target.getTreatmentStart());
-//		}
-//		targetDateCalendar.add(dataCollectionRule.timeUnit(), dataCollectionRule.timeSpan());
-//		return new java.sql.Date(targetDateCalendar.getTimeInMillis());
-//	}
 
 	public void removeAllDataCollectionGenerators() {
 		dataCollectionGenerators.clear();

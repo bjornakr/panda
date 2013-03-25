@@ -19,17 +19,17 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import no.atferdssenteret.panda.controller.table.AbstractTabsAndTablesController;
+import no.atferdssenteret.panda.controller.table.StandardController;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GuiUtil;
 
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTargetLink;
-	private AbstractTabsAndTablesController controller;
+	private StandardController controller;
 	private TabsAndTablesPanel tabsAndTablesPanel;
 
-	public MainWindow(AbstractTabsAndTablesController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
+	public MainWindow(StandardController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
 		this.controller = controller;
 		this.tabsAndTablesPanel = tabsAndTablesPanel;
 	}
@@ -57,7 +57,7 @@ public class MainWindow extends JFrame {
 		txtTargetLink = new JTextField(4);
 		txtTargetLink.addActionListener(controller);
 		txtTargetLink.setActionCommand(ButtonUtil.COMMAND_GOTO);
-		JButton butChildLink = new JButton(new ImageIcon("resources/gfx/arrow_right.png"));
+		JButton butChildLink = new JButton(new ImageIcon(getClass().getResource("/gfx/arrow_right.png")));
 		butChildLink.setActionCommand(ButtonUtil.COMMAND_GOTO);
 		butChildLink.addActionListener(controller);
 
@@ -87,13 +87,13 @@ public class MainWindow extends JFrame {
 		c = new GridBagConstraints();
 		c.gridx = 3;
 		c.anchor = GridBagConstraints.LINE_START;
-		targetLinkPanel.add(new JLabel(new ImageIcon("resources/gfx/Panda-icon.png")), c);
+		targetLinkPanel.add(new JLabel(new ImageIcon(getClass().getResource("/gfx/Panda-icon.png"))), c);
 
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.anchor = GridBagConstraints.LINE_START;
-		targetLinkPanel.add(new JLabel(new ImageIcon("resources/gfx/logo-beta.png")), c);
-
+		targetLinkPanel.add(new JLabel(new ImageIcon(getClass().getResource("/gfx/logo-beta.png"))), c);
+		
 		targetLinkPanel.setBackground(getRootPane().getBackground());
 
 		JPanel wrapperPanel = new JPanel();
@@ -110,6 +110,7 @@ public class MainWindow extends JFrame {
 	public void setSelectedChildID(Integer childID) {
 		txtTargetLink.setText(childID.toString());
 	}
+	
 	public String getTypedChildID() {
 		return txtTargetLink.getText();
 	}
@@ -118,7 +119,7 @@ public class MainWindow extends JFrame {
 		JTabbedPane tabbedPane = tabsAndTablesPanel.tabbedPane();
 		tabbedPane.addTab(title, contentPanel);
 		int newTabIndex = tabbedPane.getTabCount()-1;
-		tabbedPane.setTabComponentAt(newTabIndex, new ButtonTabComponent(tabbedPane, controller));
+		tabbedPane.setTabComponentAt(newTabIndex, new ButtonTabComponent(tabbedPane, newTabIndex)); // TODO: WTD here?
 		tabbedPane.setBackgroundAt(newTabIndex, new Color(0x74FF00));
 		tabbedPane.setSelectedIndex(newTabIndex);
 	}
@@ -160,6 +161,5 @@ public class MainWindow extends JFrame {
 		@Override
 		public void windowOpened(WindowEvent e) {
 		}
-		
 	}
 }

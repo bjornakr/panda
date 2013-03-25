@@ -23,7 +23,6 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class DataCollectionDialog extends JDialog {
-	public final static String CBOX_TYPE = "CBOX_TYPE";
 	public final static String CBOX_PROGRESS_DATE = "CBOX_PROGRESS_DATE";	
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
@@ -38,12 +37,11 @@ public class DataCollectionDialog extends JDialog {
 		this.actionListener = actionListener;
 		this.questionnaireView = questionnaireView;
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		cboxTypes.setActionCommand(CBOX_TYPE);
-		cboxTypes.addActionListener(this.actionListener);
 		cboxProgressStatuses.setActionCommand(CBOX_PROGRESS_DATE);
 		cboxProgressStatuses.addActionListener(actionListener);
 		layoutContent();
 		pack();
+		setSize(getWidth(), 500);
 		setLocationRelativeTo(parentWindow);
 	}
 
@@ -51,6 +49,7 @@ public class DataCollectionDialog extends JDialog {
 		setLayout(new GridBagLayout());
 
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
+		cboxTypes.setEnabled(false);
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Datainnsamling"), cboxTypes));
 		JLabel labTargetDate = new JLabel("Måldato");
 		GuiUtil.setNotNullFlag(labTargetDate);
@@ -92,10 +91,6 @@ public class DataCollectionDialog extends JDialog {
 			cboxTypes.setSelectedIndex(0);
 		}
 	}
-
-//	public Object getDataCollectionType() {
-//		return cboxTypes.getSelectedItem();
-//	}
 
 	public String getTargetDate() {
 		return txtTargetDate.getText();

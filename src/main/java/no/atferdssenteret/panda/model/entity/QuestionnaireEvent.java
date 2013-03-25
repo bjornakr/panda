@@ -1,6 +1,7 @@
 package no.atferdssenteret.panda.model.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Session;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
@@ -50,8 +51,8 @@ public class QuestionnaireEvent implements Model {
 	@Column(nullable = false)
 	private Types type;
 	private String comment;
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String createdBy;
 	private String updatedBy;
 	
@@ -65,15 +66,12 @@ public class QuestionnaireEvent implements Model {
 	
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUsername();
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 
 	public long getId() {
@@ -120,40 +118,48 @@ public class QuestionnaireEvent implements Model {
 		this.comment = comment;
 	}
 	
-	public void validate() {
+	public void validateUserInput() {
 		if (date == null) {
 			throw new IllegalStateException(StandardMessages.missingField("Dato"));
 		}
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	@Override
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	@Override
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}

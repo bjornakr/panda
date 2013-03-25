@@ -1,6 +1,7 @@
 package no.atferdssenteret.panda.util;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,5 +65,9 @@ public class DateUtil {
 		calendar.setTime(date);
 		calendar.add(field, amount);
 		return sqlDate(calendar.getTime());
+	}
+	
+	public static Date addTime(Timestamp timestamp, int field, int amount) {
+		return addTime(new Date(timestamp.getTime()), field, amount);
 	}
 }

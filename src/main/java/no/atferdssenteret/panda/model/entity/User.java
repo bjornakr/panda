@@ -1,6 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -14,7 +14,7 @@ import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Session;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StandardMessages;
 
@@ -54,22 +54,19 @@ public class User implements Model {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String createdBy;
 	private String updatedBy;
 
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUsername();
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 
 	public AccessLevel getAccessLevel() {
@@ -124,35 +121,42 @@ public class User implements Model {
 		return firstName + " " + lastName;
 	}
 
-
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	@Override
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	@Override
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
@@ -162,7 +166,7 @@ public class User implements Model {
 	}
 	
 	@Override
-	public void validate() {
+	public void validateUserInput() {
 		if (username == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Brukernavn"));
 		}

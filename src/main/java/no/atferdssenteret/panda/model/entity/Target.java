@@ -1,6 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -25,6 +25,7 @@ import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StandardMessages;
 
@@ -41,8 +42,8 @@ public class Target implements Model, TargetBelonging {
 	@Column(nullable = false)
 	private String lastName;
 	private String comment;
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String createdBy;
 	private String updatedBy;
 
@@ -64,19 +65,19 @@ public class Target implements Model, TargetBelonging {
 		// Cannot wait to set the "created" field until persisting,
 		// because it is required by the DataCollectionManager before
 		// it is persisted.
-		created = new Date(System.currentTimeMillis());
+		created = new Timestamp(System.currentTimeMillis());
 	}
 	
 	@PrePersist
 	protected void onCreate() {
 		createdBy = Session.currentSession.user().getUsername();
-		updatedBy = Session.currentSession.user().getUsername();
+		updated = created;
+		updatedBy = createdBy;
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 	
 	public long getId() {
@@ -149,19 +150,23 @@ public class Target implements Model, TargetBelonging {
 		return null;
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
@@ -205,22 +210,21 @@ public class Target implements Model, TargetBelonging {
 		return (JPATransactor.getInstance().entityManager().find(Target.class, id) != null);
 	}
 
-	public void validate() {
-		if (status == null) {
-			throw new InvalidUserInputException(StandardMessages.missingField("Status"));
-		}
-		else if (firstName == null) {
+	public void validateUserInput() {
+		if (firstName == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));
 		}
 		else if (lastName == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));
 		}
 	}
-
+	
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}

@@ -1,13 +1,17 @@
 package no.atferdssenteret.panda.controller;
 
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 
+import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
+import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
 public class ParticipantController extends ApplicationController {
@@ -61,7 +65,8 @@ public class ParticipantController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model = new Participant();
-			target.addParticipant(model);
+			model.setTarget(target);
+//			target.addParticipant(model);
 		}
 		model.setFirstName(StringUtil.groomString(view.getFirstName()));
 		model.setLastName(StringUtil.groomString(view.getLastName()));
@@ -78,4 +83,48 @@ public class ParticipantController extends ApplicationController {
 	protected void setModel(Model model) {
 		this.model = (Participant)model;
 	}
+	
+//	@Override
+//	public void actionPerformed(ActionEvent event) {
+//		if (event.getActionCommand().equals(COMMAND_SAVE)) {
+//			save();
+//		}
+//		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
+//			view().dispose();
+//		}
+//	}
+//
+//	private void save() {
+//		try {
+//			if (getMode() == Mode.EDIT) {
+//				setModel(JPATransactor.getInstance().mergeIfDetached(model()));
+//			}
+//			performTransaction();
+//			view().dispose();
+//		}
+//		catch (InvalidUserInputException e) {
+//			if (JPATransactor.getInstance().transaction().isActive()) {
+//				JPATransactor.getInstance().transaction().rollback();
+//			}
+//			new ErrorMessageDialog(e.getMessage(), null, view());
+//		}
+//		catch (Exception e) {
+//			if (JPATransactor.getInstance().transaction().isActive()) {
+//				JPATransactor.getInstance().transaction().rollback();
+//			}
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	protected void performTransaction() {
+//		JPATransactor.getInstance().transaction().begin();
+//		transferUserInputToModel();
+//		model().validateUserInput();
+//		System.out.println(model());
+//		if (getMode() == Mode.CREATE) {
+////			target.addParticipant(model);
+//			JPATransactor.getInstance().entityManager().persist(model());
+//		}
+//		JPATransactor.getInstance().transaction().commit();
+//	}
 }

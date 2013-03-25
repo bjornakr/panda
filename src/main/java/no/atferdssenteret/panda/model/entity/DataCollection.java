@@ -1,6 +1,7 @@
 package no.atferdssenteret.panda.model.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +22,8 @@ import javax.persistence.PreUpdate;
 import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.TargetBelonging;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.StandardMessages;
 
@@ -63,9 +64,6 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 			return name;
 		}	
 	};
-	//	public enum QuestionnaireStatuses {NOT_INITIATED, IN_PROGRESS, COMPLETED, COMPLETED_WITH_MISSING};
-	//    public enum Types {T1, T2, T3};
-	//    public static final Collection<String> types = new HashSet<String>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)    
@@ -79,12 +77,14 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	@Column(nullable = false)
 	private ProgressStatuses progressStatus;
 	private Date progressDate;
-	private Date created;
-	private Date updated;
-	private String createdBy;
-	private String updatedBy;
 	@Column(nullable = false)
-	private boolean systemGenerated = true;
+	private Timestamp created;
+	@Column(nullable = false)
+	private Timestamp updated;
+	@Column(nullable = false)
+	private String createdBy;
+	@Column(nullable = false)
+	private String updatedBy;
 
 	@OneToMany(mappedBy="dataCollection", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@OrderBy("name ASC")
@@ -94,14 +94,12 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 
 
@@ -190,19 +188,23 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		this.progressDate = progressDate;
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
@@ -231,7 +233,7 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		return Statuses.PLANNED;
 	}
 
-	public void validate() {
+	public void validateUserInput() {
 		if (target == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Target"));
 		}
@@ -271,22 +273,16 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		this.updatedBy = updatedBy;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public boolean getSystemGenerated() {
-		return systemGenerated;
-	}
-
-	public void setSystemGenerated(boolean systemGenerated) {
-		this.systemGenerated = systemGenerated;
-	}
-	
 	@Override
 	public long getTargetId() {
 		return target.getId();
@@ -309,16 +305,18 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	}
 
 	public boolean isUntouched() {
-		return (progressStatus == ProgressStatuses.NOT_INITIATED
-				&& !hasQuestionnairesWithQuestionnaireEvents());
+//		return (progressStatus == ProgressStatuses.NOT_INITIATED
+//				&& !hasQuestionnairesWithQuestionnaireEvents()
+//				&& dataCollector == target.getDataCollector());
+		return created == updated;
 	}
 
-	private boolean hasQuestionnairesWithQuestionnaireEvents() {
-		for (Questionnaire questionnaire : questionnaires) {
-			if (questionnaire.getQuestionnaireEvents().size() > 0) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean hasQuestionnairesWithQuestionnaireEvents() {
+//		for (Questionnaire questionnaire : questionnaires) {
+//			if (questionnaire.getQuestionnaireEvents().size() > 0) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }

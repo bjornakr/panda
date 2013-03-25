@@ -34,9 +34,9 @@ public class DataCollectionTableController extends AbstractTableController {
 	public DataCollectionTableController(Target target) {
 		super("Datainnsamlinger");
 		this.target = target;
+		buttons = createButtons();
 		if (target == null) {
 			tableModel = new DataCollectionTable();
-			buttons.add(ButtonUtil.editButton(this));
 		}
 		else {
 			tableModel = new DataCollectionTableForTargetFocus();			
@@ -54,25 +54,22 @@ public class DataCollectionTableController extends AbstractTableController {
 		return tableModel;
 	}
 
+	private List<JButton> createButtons() {
+		List<JButton> buttons = new LinkedList<JButton>();
+		buttons.add(ButtonUtil.editButton(this));
+		return buttons;
+	}
+	
 	@Override
 	public List<JButton> buttons() {
-		if (target == null) {
-			return buttons;
-		}
-		else {
-			return super.buttons();
-		}
+		return buttons;
 	}
 
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
-		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-			new DataCollectionController(view.getWindow(), null, target);
-			updateTableModel();
-		}
-		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
+		if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
-			new DataCollectionController(view.getWindow(), (DataCollection)modelForSelectedTableRow(), target);
+			new DataCollectionController(view.getWindow(), (DataCollection)modelForSelectedTableRow());
 			updateTableModel();
 		}
 	}

@@ -1,6 +1,6 @@
 package no.atferdssenteret.panda.model.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import javax.persistence.PreUpdate;
 
 import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
-import no.atferdssenteret.panda.model.Session;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.util.StandardMessages;
 
 @Entity
@@ -26,9 +26,9 @@ public class TargetNote implements Model {
 	@JoinColumn(nullable = false)
 	private Target target;	
 	@Column(nullable = false)
-	private Date created;
+	private Timestamp created;
 	@Column(nullable = false)
-	private Date updated;
+	private Timestamp updated;
 	@Column(nullable = false)
 	private String createdBy;
 	@Column(nullable = false)
@@ -36,15 +36,12 @@ public class TargetNote implements Model {
 	
 	@PrePersist
 	protected void onCreate() {
-		created = new Date(System.currentTimeMillis());
-		createdBy = Session.currentSession.user().getUsername();
-		onUpdate();
+		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		updated = new Date(System.currentTimeMillis());
-		updatedBy = Session.currentSession.user().getUsername();
+		TimeStamper.onUpdate(this);
 	}
 	
 	public long getId() {
@@ -71,40 +68,48 @@ public class TargetNote implements Model {
 		this.target = target;
 	}
 
-	public Date getCreated() {
+	@Override
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	@Override
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	@Override
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	@Override
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	@Override
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	@Override
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
 	@Override
-	public void validate() {
+	public void validateUserInput() {
 		if (note == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Notat"));
 		}
