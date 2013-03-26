@@ -23,7 +23,7 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 import no.atferdssenteret.panda.view.util.LabelFieldPair;
 
 public class DataCollectionDialog extends JDialog {
-	public final static String CBOX_PROGRESS_DATE = "CBOX_PROGRESS_DATE";	
+	public final static String CBOX_PROGRESS_STATUS = "CBOX_PROGRESS_STATUS";	
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
 	private JComboBox cboxTypes = new JComboBox(DataCollectionTypes.getInstance().toArray());
@@ -36,8 +36,9 @@ public class DataCollectionDialog extends JDialog {
 	public DataCollectionDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireView) {
 		this.actionListener = actionListener;
 		this.questionnaireView = questionnaireView;
+		setTitle("Rediger datainnsamling");
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		cboxProgressStatuses.setActionCommand(CBOX_PROGRESS_DATE);
+		cboxProgressStatuses.setActionCommand(CBOX_PROGRESS_STATUS);
 		cboxProgressStatuses.addActionListener(actionListener);
 		layoutContent();
 		pack();

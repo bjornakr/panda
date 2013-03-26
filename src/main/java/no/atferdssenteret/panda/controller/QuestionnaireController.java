@@ -17,7 +17,7 @@ public class QuestionnaireController extends ApplicationController {
 
 	public QuestionnaireController(Window parentWindow, Questionnaire model) {
 		super(model);
-		this.model = model;
+//		this.model = model;
 		view = new QuestionnaireDialog(parentWindow, this, questionnaireEventTableController.view());
 
 		if (getMode() == Mode.EDIT) {
@@ -44,6 +44,7 @@ public class QuestionnaireController extends ApplicationController {
 
 	@Override
 	public void transferModelToView() {
+		JPATransactor.getInstance().entityManager().refresh(model);
 		view.setQuestionnaireName(model.getName());
 		questionnaireEventTableController.tableModel().setModels(model.getQuestionnaireEvents());
 	}

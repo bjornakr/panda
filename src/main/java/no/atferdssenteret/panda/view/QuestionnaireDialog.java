@@ -28,6 +28,7 @@ public class QuestionnaireDialog extends JDialog {
 		this.actionListener = actionListener;
 		this.questionnaireEventView = questionnaireEventPanel;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setTitle("Rediger spørreskjema");
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

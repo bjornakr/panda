@@ -34,6 +34,7 @@ public class UserDialog extends JDialog {
 	public UserDialog(Window parentWindow, ActionListener actionListener) {
 		this.actionListener = actionListener;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setTitle("Rediger bruker");
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

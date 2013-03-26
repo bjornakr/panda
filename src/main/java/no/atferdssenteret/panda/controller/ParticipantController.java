@@ -1,17 +1,13 @@
 package no.atferdssenteret.panda.controller;
 
 import java.awt.Window;
-import java.awt.event.ActionEvent;
 
-import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.Target;
-import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
-import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
 public class ParticipantController extends ApplicationController {

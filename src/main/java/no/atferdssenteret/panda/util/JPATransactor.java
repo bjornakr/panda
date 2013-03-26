@@ -51,7 +51,7 @@ public class JPATransactor {
 	public Model mergeIfDetached(Model model) {
 		if (model != null) {
 			if (!JPATransactor.getInstance().entityManager().contains(model)) {
-				System.out.println("MERGE!");
+				System.out.println("Merging: " + model);
 				return JPATransactor.getInstance().entityManager().merge(model);
 			}
 		}

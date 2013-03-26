@@ -135,24 +135,21 @@ public abstract class AbstractTableController implements StandardController, Lis
 				null, options, options[1]);
 
 		if (answer >= 0 && options[answer].equals(delete)) {
-			try {
-				deleteModelForSelectedTableRow();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(view(), "Sletting mislyktes.\n\nAlle referanser til\n" +
-						modelForSelectedTableRow().referenceName() + "\n" +
-						"i andre deler av systemet må fjernes først.");
-			}
+			deleteModelForSelectedTableRow();
 		}
 	}
 
 	private void deleteModelForSelectedTableRow() {
 		Model model = JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
-		JPATransactor.getInstance().transaction().begin();
-		JPATransactor.getInstance().entityManager().remove(model);
-		JPATransactor.getInstance().transaction().commit();
-		tableModel().deleteRow(model);
+		try {
+			JPATransactor.getInstance().transaction().begin();
+			JPATransactor.getInstance().entityManager().remove(model);
+			JPATransactor.getInstance().transaction().commit();
+			tableModel().deleteRow(modelForSelectedTableRow());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

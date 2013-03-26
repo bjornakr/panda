@@ -29,6 +29,7 @@ public class QuestionnaireEventDialog extends JDialog {
 	public QuestionnaireEventDialog(Window parentWindow, ActionListener actionListener) {
 		this.actionListener = actionListener;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setTitle("Rediger hendelse");
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

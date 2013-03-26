@@ -9,6 +9,7 @@ public interface TargetDialog {
 	public Object getDataCollector();
 	public String getTreatmentStart();
 	public String getComment();
+	public void setId(String id);
 	public void setFirstName(String firstName);
 	public void setLastName(String lastName);
 	public void setStatus(Object status);

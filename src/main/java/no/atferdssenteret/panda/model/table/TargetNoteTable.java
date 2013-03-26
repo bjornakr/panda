@@ -34,7 +34,7 @@ public class TargetNoteTable extends DefaultAbstractTableModel {
 	@Override
 	protected int[] columnSizes() {
 		int[] columnSizes = new int[NO_OF_FIELDS];
-		columnSizes[DATE] = COLUMN_SIZE_SMALL;
+		columnSizes[DATE] = COLUMN_SIZE_NORMAL;
 		columnSizes[NOTE] = 500;
 		columnSizes[SIGNATURE] = COLUMN_SIZE_SMALL;
 		return columnSizes;

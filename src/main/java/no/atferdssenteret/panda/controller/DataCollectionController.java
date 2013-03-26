@@ -22,7 +22,7 @@ public class DataCollectionController extends ApplicationController {
 
 	public DataCollectionController(Window parentWindow, DataCollection model) {
 		super(model);
-		this.model = model;
+//		this.model = model;
 		questionnaireTableController = new QuestionnaireTableController(this.model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
 		transferModelToView();
@@ -49,6 +49,7 @@ public class DataCollectionController extends ApplicationController {
 
 	@Override
 	public void transferModelToView() {
+		JPATransactor.getInstance().entityManager().refresh(model);
 		view.setType(model.getType());
 		view.setTargetDate(model.getTargetDate());
 		view.setProgressStatus(model.getProgressStatus());
@@ -70,7 +71,7 @@ public class DataCollectionController extends ApplicationController {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		super.actionPerformed(event);
-		if (event.getActionCommand().equals(DataCollectionDialog.CBOX_PROGRESS_DATE) && shouldAutoInsertDate()) {
+		if (event.getActionCommand().equals(DataCollectionDialog.CBOX_PROGRESS_STATUS) && shouldAutoInsertDate()) {
 			view.setProgressDate(DateUtil.today());
 		}
 	}
@@ -91,8 +92,7 @@ public class DataCollectionController extends ApplicationController {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
 		model().validateUserInput();
-		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());
-		
+		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
 		JPATransactor.getInstance().transaction().commit();
 	}
 }

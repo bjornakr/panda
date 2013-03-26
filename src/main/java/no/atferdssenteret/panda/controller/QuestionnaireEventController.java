@@ -16,7 +16,7 @@ public class QuestionnaireEventController extends ApplicationController {
 
 	public QuestionnaireEventController(Window mainWindow, QuestionnaireEvent model) {
 		super(model);
-		this.model = model;
+//		this.model = model;
 		view = new QuestionnaireEventDialog(mainWindow, this);
 
 		if (getMode() == Mode.EDIT) {

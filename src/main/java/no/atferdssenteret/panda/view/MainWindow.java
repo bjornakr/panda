@@ -26,21 +26,19 @@ import no.atferdssenteret.panda.view.util.GuiUtil;
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTargetLink;
-	private StandardController controller;
+	private final StandardController controller;
 	private TabsAndTablesPanel tabsAndTablesPanel;
+	private final ImageIcon logoImage;
 
-	public MainWindow(StandardController controller, TabsAndTablesPanel tabsAndTablesPanel) { 
+	public MainWindow(StandardController controller, ImageIcon logoImage) { 
 		this.controller = controller;
-		this.tabsAndTablesPanel = tabsAndTablesPanel;
+		this.logoImage = logoImage;
 	}
 
 	public void display() {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		add(createTargetLinkPanel(), BorderLayout.PAGE_START);
-//		add(tabsAndTablesPanel, BorderLayout.CENTER);
-		
-//		pack();
 		setSize(1024, 768);
 		setLocationRelativeTo(null);
 		addWindowListener(new MainWindowListener());
@@ -84,15 +82,15 @@ public class MainWindow extends JFrame {
 		c.insets = new Insets(0, 0, 0, 300);
 		targetLinkPanel.add(butChildLink, c);
 
+//		c = new GridBagConstraints();
+//		c.gridx = 3;
+//		c.anchor = GridBagConstraints.LINE_START;
+//		targetLinkPanel.add(new JLabel(new ImageIcon(getClass().getResource("/gfx/Panda-icon.png"))), c);
+
 		c = new GridBagConstraints();
 		c.gridx = 3;
 		c.anchor = GridBagConstraints.LINE_START;
-		targetLinkPanel.add(new JLabel(new ImageIcon(getClass().getResource("/gfx/Panda-icon.png"))), c);
-
-		c = new GridBagConstraints();
-		c.gridx = 4;
-		c.anchor = GridBagConstraints.LINE_START;
-		targetLinkPanel.add(new JLabel(new ImageIcon(getClass().getResource("/gfx/logo-beta.png"))), c);
+		targetLinkPanel.add(new JLabel(logoImage), c);
 		
 		targetLinkPanel.setBackground(getRootPane().getBackground());
 
@@ -119,7 +117,7 @@ public class MainWindow extends JFrame {
 		JTabbedPane tabbedPane = tabsAndTablesPanel.tabbedPane();
 		tabbedPane.addTab(title, contentPanel);
 		int newTabIndex = tabbedPane.getTabCount()-1;
-		tabbedPane.setTabComponentAt(newTabIndex, new ButtonTabComponent(tabbedPane, newTabIndex)); // TODO: WTD here?
+		tabbedPane.setTabComponentAt(newTabIndex, new ButtonTabComponent(tabbedPane, newTabIndex));
 		tabbedPane.setBackgroundAt(newTabIndex, new Color(0x74FF00));
 		tabbedPane.setSelectedIndex(newTabIndex);
 	}

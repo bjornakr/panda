@@ -48,7 +48,7 @@ public class TargetNoteController extends ApplicationController {
 	protected void transferUserInputToModel() {
 		if (getMode() == Mode.CREATE) {
 			model = new TargetNote();
-			target.addTargetNote(model);
+			model.setTarget(target);
 		}
 		model.setNote(StringUtil.groomString(view.getNote()));
 	}

@@ -41,6 +41,7 @@ public abstract class ApplicationController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		System.out.println("We are here: " + title() + ", " + event.getActionCommand());
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			save();
 		}
@@ -68,6 +69,10 @@ public abstract class ApplicationController implements ActionListener {
 				JPATransactor.getInstance().transaction().rollback();
 			}
 			e.printStackTrace();
+		}
+		finally {
+			System.out.println("Closing entity manager.");
+			JPATransactor.getInstance().entityManager().close();
 		}
 	}
 
