@@ -1,8 +1,11 @@
 package no.atferdssenteret.panda.controller;
 
 import no.atferdssenteret.panda.DataCollectionManager;
+import no.atferdssenteret.panda.controller.ApplicationController.Mode;
 import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.TargetNoteFactory;
 import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.entity.TargetNote;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
@@ -31,6 +34,11 @@ public abstract class TargetController extends ApplicationController {
 		final Target model = (Target)model();
 		model.setFirstName(StringUtil.groomString(view.getFirstName()));
 		model.setLastName(StringUtil.groomString(view.getLastName()));
+		if (getMode() == Mode.EDIT && model.getStatus() != view.getStatus()) {
+			TargetNote systemNote = TargetNoteFactory.createChangeNote("Status",
+					model.getStatus().toString(), view.getStatus().toString());
+			model.addTargetNote(systemNote);
+		}
 		model.setStatus((ParticipationStatuses)view.getStatus());
 		model.setDataCollector((User)view.getDataCollector());
 		model.setComment(StringUtil.groomString(view.getComment()));

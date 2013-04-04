@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public class DateUtil {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy", new Locale("Norwegian"));
-	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", new Locale("Norwegian"));
+	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("dd.MM.yy, HH:mm", new Locale("Norwegian"));
 
 	public static Date parseDateFromInternationalDateFormat(String dateString) {
 		try {
