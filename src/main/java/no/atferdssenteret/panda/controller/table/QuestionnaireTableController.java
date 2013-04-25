@@ -48,6 +48,7 @@ public class QuestionnaireTableController extends AbstractTableController {
 			tableModel = new QuestionnaireTableForDataCollectionView();
 			view = new DefaultTablePanel(this, null);
 		}
+		setButtonEnabledStates();
 	}
 
 	@Override
@@ -104,18 +105,25 @@ public class QuestionnaireTableController extends AbstractTableController {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
 			QuestionnaireController questionnaireController = new QuestionnaireController(view.getWindow(), null);
 			if (questionnaireController.model() != null) {
+//				dataCollection.addQuestionnaire((Questionnaire)questionnaireController.model());
+//				((Questionnaire)questionnaireController.model()).setDataCollection(dataCollection);
 				tableModel.addRow(questionnaireController.model());
+//				tableModel.setModels(dataCollection.getQuestionnaires());
 			}
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
 			new QuestionnaireController(view.getWindow(), model);
+//			tableModel.setModels(dataCollection.getQuestionnaires());
 			tableModel.update(model);
+//			tableModel.addRow(controller.model());
+//			updateTableModel(); // funker ikke
 		}
 		else if (event.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
 			registerRecievedQuestionnaire();
 		}
+		setButtonEnabledStates();
 	}
 
 	private void registerRecievedQuestionnaire() {

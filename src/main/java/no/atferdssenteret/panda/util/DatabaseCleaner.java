@@ -12,10 +12,11 @@ import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.TargetNote;
 import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.model.entity.Version;
 
 public class DatabaseCleaner {
 	private static final Class<?>[] ENTITY_TYPES = {
-		TargetNote.class, QuestionnaireEvent.class, Questionnaire.class, DataCollection.class, Participant.class, Target.class, User.class
+		Version.class, TargetNote.class, QuestionnaireEvent.class, Questionnaire.class, DataCollection.class, Participant.class, Target.class, User.class
 	};
 	private final EntityManager entityManager;
 

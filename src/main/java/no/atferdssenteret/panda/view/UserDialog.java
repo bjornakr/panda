@@ -1,4 +1,4 @@
-package no.atferdssenteret.panda.controller;
+package no.atferdssenteret.panda.view;
 
 import java.awt.GridBagLayout;
 import java.awt.Window;

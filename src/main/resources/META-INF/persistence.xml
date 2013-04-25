@@ -16,7 +16,7 @@
     <class>no.atferdssenteret.panda.model.entity.User</class>
     <class>no.atferdssenteret.panda.model.entity.Participant</class>
     <class>no.atferdssenteret.panda.model.entity.TargetNote</class>
-    <class>no.atferdssenteret.panda.fft.Youth</class>
+    <class>no.atferdssenteret.panda.model.entity.Version</class>
      
     <properties>
       <property name="javax.persistence.jdbc.password" value="panda" />

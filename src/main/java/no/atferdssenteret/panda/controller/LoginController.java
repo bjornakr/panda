@@ -66,13 +66,14 @@ public class LoginController implements ActionListener, WindowListener {
 			throw new InvalidUserInputException(INVALID_LOGIN);			
 		}
 
-		checkVersion();
+		//checkVersion();
 
 		new Session(user);
 	}
 
 	private void checkVersion() {
-		String queryString = "SELEVT v FROM Version v";
+//		return; // TODO: FIX
+		String queryString = "SELECT v FROM Version v";
 		TypedQuery<Version> query = JPATransactor.getInstance().entityManager().createQuery(queryString, Version.class);
 		Version version = query.getSingleResult();
 

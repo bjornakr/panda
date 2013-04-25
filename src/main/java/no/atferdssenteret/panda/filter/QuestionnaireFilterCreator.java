@@ -7,6 +7,7 @@ import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.QuestionnairesForDataCollectionType;
 import no.atferdssenteret.panda.model.DataCollectionTypes;
+import no.atferdssenteret.panda.model.QuestionnaireTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
@@ -17,7 +18,8 @@ public class QuestionnaireFilterCreator implements FilterCreator {
 	public Filter[] createFilters() {
 		Filter[] filters = new Filter[3];
 		filters[0] = new Filter("Datainnsamling", DataCollectionTypes.getInstance().toArray());
-		filters[1] = new Filter("Spørreskjema", QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
+		//filters[1] = new Filter("Spørreskjema", QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
+		filters[1] = new Filter("Spørreskjema", QuestionnaireTypes.getInstance().toArray());
 		filters[2] = new Filter("Status", Questionnaire.Statuses.values());
 		return filters;
 	}

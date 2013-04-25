@@ -14,10 +14,12 @@ import javax.swing.JButton;
 import no.atferdssenteret.panda.controller.DataCollectionController;
 import no.atferdssenteret.panda.filter.DataCollectionFilterCreator;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.Target_;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.table.DataCollectionTable;
 import no.atferdssenteret.panda.model.table.DataCollectionTableForTargetFocus;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -41,6 +43,9 @@ public class DataCollectionTableController extends AbstractTableController {
 		else {
 			tableModel = new DataCollectionTableForTargetFocus();			
 		}
+		if (Session.currentSession.user().getAccessLevel() != User.AccessLevel.SUPER_USER) {
+			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
+		}
 		view = new DefaultTablePanel(this, new DataCollectionFilterCreator());
 	}
 
@@ -56,6 +61,7 @@ public class DataCollectionTableController extends AbstractTableController {
 
 	private List<JButton> createButtons() {
 		List<JButton> buttons = new LinkedList<JButton>();
+		buttons.add(ButtonUtil.deleteButton(this));
 		buttons.add(ButtonUtil.editButton(this));
 		return buttons;
 	}

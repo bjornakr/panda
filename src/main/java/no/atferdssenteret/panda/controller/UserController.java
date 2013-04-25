@@ -3,15 +3,19 @@ package no.atferdssenteret.panda.controller;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 
-import org.jasypt.util.password.BasicPasswordEncryptor;
-
 import no.atferdssenteret.panda.InvalidUserInputException;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.model.validator.UserInputValidator;
+import no.atferdssenteret.panda.model.validator.UserValidator;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.PasswordDialog;
+import no.atferdssenteret.panda.view.UserDialog;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
+
+import org.jasypt.util.password.BasicPasswordEncryptor;
 
 public class UserController extends ApplicationController {
 	private User model;
@@ -20,11 +24,10 @@ public class UserController extends ApplicationController {
 
 	public UserController(Window parentWindow, User model) {
 		super(model);
-
-
 		this.model = model;
 		view = new UserDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
+			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			if (Session.currentSession.user().getAccessLevel().value() <= model.getAccessLevel().value()) {
 				throw new RuntimeException("Du har ikke adgang til å endre brukere med likt eller høyere adgangsnivå.");
 			}
@@ -109,5 +112,10 @@ public class UserController extends ApplicationController {
 	@Override
 	protected void setModel(Model model) {
 		this.model = (User)model;
+	}
+
+	@Override
+	protected UserInputValidator getValidator() {
+		return new UserValidator(view, passwordDialog);
 	}
 }

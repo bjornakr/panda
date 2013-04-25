@@ -7,7 +7,7 @@ import no.atferdssenteret.panda.view.DefaultAbstractTableModel;
 public class DataCollectionTable extends DefaultAbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private final static int NO_OF_FIELDS = 7;
+	private final static int NO_OF_FIELDS = 8;
 	private final static int TARGET_ID = 0;
 	private final static int STATUS = 1;
 	private final static int TARGET_DATE = 2;
@@ -15,6 +15,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 	private final static int PROGRESS_STATUS = 4;
 	private final static int PROGRESS_DATE = 5;
 	private final static int DATA_COLLECTOR = 6;
+	private final static int CREATED = 7;
 
 	@Override
 	protected String[] headerColumns() {
@@ -26,6 +27,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 		headerColumns[PROGRESS_STATUS] = "Framdrift";
 		headerColumns[PROGRESS_DATE] = "Dato";
 		headerColumns[DATA_COLLECTOR] = "Datainnsamler";
+		headerColumns[CREATED] = "Opprettet";
 		return headerColumns;
 	}
 
@@ -40,6 +42,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 		dataColumns[PROGRESS_STATUS] = dataCollection.getProgressStatus();
 		dataColumns[PROGRESS_DATE] = dataCollection.getProgressDate();
 		dataColumns[DATA_COLLECTOR] = dataCollection.getDataCollector();
+		dataColumns[CREATED] = dataCollection.getCreated();
 		return dataColumns;
 	}
 
@@ -53,6 +56,7 @@ public class DataCollectionTable extends DefaultAbstractTableModel {
 		columnSizes[PROGRESS_STATUS] = COLUMN_SIZE_NORMAL;
 		columnSizes[PROGRESS_DATE] = COLUMN_SIZE_SMALL;
 		columnSizes[DATA_COLLECTOR] = COLUMN_SIZE_WIDE;
+		columnSizes[CREATED] = COLUMN_SIZE_NORMAL;
 		return columnSizes;
 	}
 }

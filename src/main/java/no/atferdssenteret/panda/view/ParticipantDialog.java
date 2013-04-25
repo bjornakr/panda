@@ -36,6 +36,7 @@ public class ParticipantDialog extends JDialog {
 	public ParticipantDialog(Window parentWindow, ActionListener actionListener) {
 		this.actionListener = actionListener;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setTitle("Rediger deltaker");
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

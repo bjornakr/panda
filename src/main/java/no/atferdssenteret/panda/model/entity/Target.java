@@ -47,11 +47,11 @@ public class Target implements Model, TargetBelonging {
 	private String createdBy;
 	private String updatedBy;
 
-	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy = "target", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@OrderBy("targetDate")
 	private final List<DataCollection> dataCollections = new LinkedList<DataCollection>();
 	
-	@OneToMany(mappedBy = "target", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy = "target", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Participant> participants = new LinkedList<Participant>();
 	
 	@OneToMany(mappedBy = "target", cascade = {CascadeType.ALL}, orphanRemoval = true)

@@ -57,7 +57,7 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			QuestionnaireEvent model = (QuestionnaireEvent)modelForSelectedTableRow();
 			new QuestionnaireEventController(view.getWindow(), model);
-			updateTableModel();
+			tableModel().update(model);
 		}
 	}
 

@@ -233,6 +233,7 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		return Statuses.PLANNED;
 	}
 
+	@Override
 	public void validateUserInput() {
 		if (target == null) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Target"));
@@ -306,9 +307,9 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 
 	public boolean isUntouched() {
 //		return (progressStatus == ProgressStatuses.NOT_INITIATED
-//				&& !hasQuestionnairesWithQuestionnaireEvents()
+//				&& !hasQuestionnairesWithQuestionnaireEvents());
 //				&& dataCollector == target.getDataCollector());
-		return created == updated;
+		return (created == null || created.equals(updated));
 	}
 
 //	private boolean hasQuestionnairesWithQuestionnaireEvents() {

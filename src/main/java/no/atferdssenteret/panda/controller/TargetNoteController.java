@@ -5,6 +5,9 @@ import java.awt.Window;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.TargetNote;
+import no.atferdssenteret.panda.model.validator.TargetNoteValidator;
+import no.atferdssenteret.panda.model.validator.UserInputValidator;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.TargetNoteDialog;
 
@@ -19,6 +22,7 @@ public class TargetNoteController extends ApplicationController {
 		this.target = target;
 		view = new TargetNoteDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
+			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			transferModelToView();
 		}
 		view.setVisible(true);
@@ -56,6 +60,11 @@ public class TargetNoteController extends ApplicationController {
 	@Override
 	protected void setModel(Model model) {
 		this.model = (TargetNote)model;
+	}
+
+	@Override
+	protected UserInputValidator getValidator() {
+		return new TargetNoteValidator(view);
 	}
 
 }

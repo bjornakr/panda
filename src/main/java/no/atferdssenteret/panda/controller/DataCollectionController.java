@@ -9,7 +9,11 @@ import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
+import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.entity.User;
+import no.atferdssenteret.panda.model.validator.DataCollectionValidator;
+import no.atferdssenteret.panda.model.validator.UserInputValidator;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
@@ -22,6 +26,7 @@ public class DataCollectionController extends ApplicationController {
 
 	public DataCollectionController(Window parentWindow, DataCollection model) {
 		super(model);
+		this.model = JPATransactor.getInstance().mergeIfDetached(model);
 //		this.model = model;
 		questionnaireTableController = new QuestionnaireTableController(this.model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
@@ -89,10 +94,31 @@ public class DataCollectionController extends ApplicationController {
 
 	@Override
 	protected void performTransaction() {
+//		JPATransactor.getInstance().transaction().begin();
+//		model.setQuestionnaires(new LinkedList<Questionnaire>());
+//		JPATransactor.getInstance().transaction().commit();
+		
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
-		model().validateUserInput();
+		model.validateUserInput();
+		zip(model);
 		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
 		JPATransactor.getInstance().transaction().commit();
+	}
+	
+	private void zip(DataCollection model) {
+		System.out.println("=== DATA COLLECTION REPORT ===");
+		System.out.println("DC: " + model);
+		for (Questionnaire q : model.getQuestionnaires()) {
+			System.out.println("--Q: " + q + ", " + q.getDataCollection());
+			for (QuestionnaireEvent qe : q.getQuestionnaireEvents()) {
+				System.out.println("----QE: " + qe);
+			}
+		}
+	}
+
+	@Override
+	protected UserInputValidator getValidator() {
+		return new DataCollectionValidator(view, questionnaireTableController.currentModels());
 	}
 }

@@ -7,6 +7,9 @@ import no.atferdssenteret.panda.model.ParticipationStatuses;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.Participant;
 import no.atferdssenteret.panda.model.entity.Target;
+import no.atferdssenteret.panda.model.validator.ParticipantValidator;
+import no.atferdssenteret.panda.model.validator.UserInputValidator;
+import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
@@ -21,6 +24,7 @@ public class ParticipantController extends ApplicationController {
 		this.target = target;
 		this.view = new ParticipantDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
+			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			transferModelToView();
 		}
 		if (!Session.currentSession.user().hasAccessToRestrictedFields()) {
@@ -78,6 +82,11 @@ public class ParticipantController extends ApplicationController {
 	@Override
 	protected void setModel(Model model) {
 		this.model = (Participant)model;
+	}
+
+	@Override
+	protected UserInputValidator getValidator() {
+		return new ParticipantValidator(view);
 	}
 	
 //	@Override

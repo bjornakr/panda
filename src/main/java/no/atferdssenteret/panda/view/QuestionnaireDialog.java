@@ -63,4 +63,8 @@ public class QuestionnaireDialog extends JDialog {
 	public void setQuestionnaireName(String name) {
 		cboxName.setSelectedItem(name);
 	}
+	
+	public void enableQuestionnaireComboBox(boolean enable) {
+		cboxName.setEnabled(enable);
+	}
 }

@@ -37,6 +37,7 @@ public class DataCollectionManager {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}
+		System.out.println("untouchedDataCollections.size(): " + untouchedDataCollections.size());
 		target.getDataCollections().removeAll(untouchedDataCollections);
 	}
 

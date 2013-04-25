@@ -6,6 +6,8 @@ import java.sql.Date;
 
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
+import no.atferdssenteret.panda.model.validator.QuestionnaireEventValidator;
+import no.atferdssenteret.panda.model.validator.UserInputValidator;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.ErrorMessageDialog;
 import no.atferdssenteret.panda.view.QuestionnaireEventDialog;
@@ -16,13 +18,13 @@ public class QuestionnaireEventController extends ApplicationController {
 
 	public QuestionnaireEventController(Window mainWindow, QuestionnaireEvent model) {
 		super(model);
-//		this.model = model;
+		this.model = model;
 		view = new QuestionnaireEventDialog(mainWindow, this);
 
 		if (getMode() == Mode.EDIT) {
 			transferModelToView();
-		}
-		else if (getMode() == Mode.CREATE) {
+		} else
+		if (getMode() == Mode.CREATE) {
 			view.setDate(new Date(System.currentTimeMillis()));
 		}
 
@@ -65,11 +67,12 @@ public class QuestionnaireEventController extends ApplicationController {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			try {
+				getValidator().validateUserInput();
 				transferUserInputToModel();
 				model.validateUserInput();
 				view.dispose();
 			}
-			catch (IllegalStateException e) {
+			catch (Exception e) {
 				new ErrorMessageDialog(e.getMessage(), null, view());
 			}
 		}
@@ -81,5 +84,10 @@ public class QuestionnaireEventController extends ApplicationController {
 	@Override
 	protected void setModel(Model model) {
 		this.model = (QuestionnaireEvent)model;
+	}
+
+	@Override
+	protected UserInputValidator getValidator() {
+		return new QuestionnaireEventValidator(view);
 	}
 }
