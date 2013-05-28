@@ -27,7 +27,8 @@ public class UserController extends ApplicationController {
 		this.model = model;
 		view = new UserDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
-			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
+			JPATransactor.getInstance().entityManager().refresh(model);
+//			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			if (Session.currentSession.user().getAccessLevel().value() <= model.getAccessLevel().value()) {
 				throw new RuntimeException("Du har ikke adgang til å endre brukere med likt eller høyere adgangsnivå.");
 			}

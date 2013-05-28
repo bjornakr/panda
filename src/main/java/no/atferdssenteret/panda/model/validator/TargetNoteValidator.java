@@ -16,5 +16,8 @@ public class TargetNoteValidator implements UserInputValidator {
 		if (ValidationUtil.notFilledIn(view.getNote())) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Notat"));
 		}
+		if (ValidationUtil.exceedsMaximumLength(view.getNote(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Notat"));
+		}
 	}
 }

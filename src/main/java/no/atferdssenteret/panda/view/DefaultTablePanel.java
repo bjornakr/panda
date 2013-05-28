@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
@@ -44,6 +45,7 @@ public class DefaultTablePanel extends JPanel implements Observer {
 	private AbstractTableController controller;
 	private Filter[] filters;
 	private List<JComboBox> filterComboBoxes;
+	private HashMap<String, JComboBox> filterComboBoxLookupByName = new HashMap<String, JComboBox>();
 	private JTable table;
 	private TableRowSorter<AbstractTableModel> sorter;
 	private JScrollPane tableScroller;
@@ -111,6 +113,8 @@ public class DefaultTablePanel extends JPanel implements Observer {
 			filterBox.addActionListener(controller);
 			filterPanel.add(filterBox, gbc);
 			gbc.gridx++;
+			
+			filterComboBoxLookupByName.put(filter.name(), filterBox);
 		}
 
 		return filterPanel;
@@ -204,5 +208,15 @@ public class DefaultTablePanel extends JPanel implements Observer {
 
 	public Window getWindow() {
 		return (Window)SwingUtilities.getRoot(this);
+	}
+	
+	public void setSelectedFilter(String name, Object value) {
+		JComboBox filterBox = filterComboBoxLookupByName.get(name);
+		if (filterBox == null) {
+			return;
+		}
+		else {
+			filterBox.setSelectedItem(value);
+		}
 	}
 }

@@ -22,6 +22,7 @@ public class TargetNoteDialog extends JDialog {
 	public TargetNoteDialog(Window parentWindow, ActionListener actionListener) {
 		this.actionListener = actionListener;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setTitle("Rediger notat");
 		layoutContent();
 		pack();
 		setLocationRelativeTo(parentWindow);

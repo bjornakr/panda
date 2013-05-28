@@ -12,7 +12,7 @@ public class ParticipantRoles {
 	public final static String PARTNER_MALE = "Mannlig partner";
 	public final static String MOTHERS_PARTNER_MALE = "Partner til mor, mann";
 	public final static String FATHERS_PARTNER_MALE = "Partner til far, mann";	
-	public final static String INTERVENTIONIST = "Intervensjonist";
+	public final static String INTERVENTIONIST = "Behandler/veileder";
 	public final static String TEACHER = "Lærer";
 
 	public static String[] values() {
@@ -25,7 +25,7 @@ public class ParticipantRoles {
 				FATHER,
 				STEP_FATHER,
 				FOSTER_FATHER,
-				MOTHERS_PARTNER_MALE,
+				MOTHERS_PARTNER_FEMALE,
 				FATHERS_PARTNER_MALE,
 				INTERVENTIONIST,
 				TEACHER

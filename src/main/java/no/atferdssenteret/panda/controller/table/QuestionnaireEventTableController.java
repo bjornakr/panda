@@ -25,6 +25,7 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 	public QuestionnaireEventTableController() {
 		super("Hendelser");
 		view = new DefaultTablePanel(this, null);
+		setButtonEnabledStates();
 	}
 
 	@Override
@@ -59,6 +60,7 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 			new QuestionnaireEventController(view.getWindow(), model);
 			tableModel().update(model);
 		}
+		setButtonEnabledStates();
 	}
 
 	protected List<? extends Model> retrieve(List<Object> filterValues) {

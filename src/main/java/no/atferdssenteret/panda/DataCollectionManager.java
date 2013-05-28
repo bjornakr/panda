@@ -23,8 +23,14 @@ public class DataCollectionManager {
 	public void generateDataCollections(Target target) {
 		deleteUntouchedSystemGeneratedDataCollections(target);
 		for (DataCollectionGenerator dataCollectionGenerator : dataCollectionGenerators) {
+			System.out.println("Trying to add: " + dataCollectionGenerator.dataCollectionType());
 			if (dataCollectionGenerator.isApplicable(target) && !target.hasDataCollection(dataCollectionGenerator.dataCollectionType())) {
 				target.addDataCollection(dataCollectionGenerator.createDataCollection(target));
+			}
+			else {
+				System.out.println("Nope!");
+				System.out.println("dataCollectionGenerator.isApplicable(target): " + dataCollectionGenerator.isApplicable(target));
+				System.out.println("!target.hasDataCollection(dataCollectionGenerator.dataCollectionType()): " + !target.hasDataCollection(dataCollectionGenerator.dataCollectionType()));
 			}
 		}
 	}

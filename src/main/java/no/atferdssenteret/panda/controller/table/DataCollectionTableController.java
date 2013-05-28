@@ -47,6 +47,10 @@ public class DataCollectionTableController extends AbstractTableController {
 			super.restrictAccessToButton(ButtonUtil.COMMAND_DELETE);
 		}
 		view = new DefaultTablePanel(this, new DataCollectionFilterCreator());
+		if (Session.currentSession.user().getAccessLevel() == User.AccessLevel.DATA_COLLECTOR) {
+			view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_DATA_COLLECTOR, Session.currentSession.user());
+		}
+		view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_STATUS, DataCollectionFilterCreator.Statuses.FORTHCOMING_AND_DELAYED);
 	}
 
 	@Override

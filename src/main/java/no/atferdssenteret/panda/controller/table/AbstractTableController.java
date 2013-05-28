@@ -112,6 +112,17 @@ public abstract class AbstractTableController implements StandardController, Lis
 				// A filter has been activated
 				updateTableModel();
 			}
+			if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT) 
+					|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)
+					|| event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
+				if (modelForSelectedTableRow().getCreated() != null
+						&& !JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow())) {
+					throw new IllegalStateException(modelForSelectedTableRow() + " er ikke lenger tilgjengelig. Tabellen vil nå bli oppdatert.");
+				}
+				System.out.println("!JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow(): " + !JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow()));
+				System.out.println("!!!modelForSelectedTableRow().getCreated() NOT null: " + (modelForSelectedTableRow().getCreated() != null));
+
+			}
 			if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
 				processDeleteCommand();
 			}
@@ -120,6 +131,7 @@ public abstract class AbstractTableController implements StandardController, Lis
 		catch (Exception e) {
 			e.printStackTrace();
 			new ErrorMessageDialog(StringUtil.splitString(e.getMessage(), 80, 0), null, view().getWindow());
+			updateTableModel();
 		}
 	}
 
@@ -139,11 +151,11 @@ public abstract class AbstractTableController implements StandardController, Lis
 		}
 	}
 
-	private void deleteModelForSelectedTableRow() {
-		Model model = JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
+	protected void deleteModelForSelectedTableRow() {
+		//		Model model = JPATransactor.getInstance().mergeIfDetached(modelForSelectedTableRow());
 		try {
 			JPATransactor.getInstance().transaction().begin();
-			JPATransactor.getInstance().entityManager().remove(model);
+			JPATransactor.getInstance().entityManager().remove(modelForSelectedTableRow());
 			JPATransactor.getInstance().transaction().commit();
 			tableModel().deleteRow(modelForSelectedTableRow());
 		}

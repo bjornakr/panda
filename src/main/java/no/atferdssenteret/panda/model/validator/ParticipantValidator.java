@@ -17,6 +17,27 @@ public class ParticipantValidator implements UserInputValidator {
 		}
 		if (ValidationUtil.notFilledIn(view.getLastName())) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));			
-		}			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getFirstName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Fornavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getLastName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Etternavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getPhoneNo(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Tlf. nr"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getEMail(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("E-post"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getAddress(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Adresse"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getContactInfo(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Kontaktinformasjon"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getComment(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Kommentar"));			
+		}
 	}
 }

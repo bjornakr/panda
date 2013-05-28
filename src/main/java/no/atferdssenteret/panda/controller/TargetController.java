@@ -6,8 +6,6 @@ import no.atferdssenteret.panda.model.TargetNoteFactory;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.TargetNote;
 import no.atferdssenteret.panda.model.entity.User;
-import no.atferdssenteret.panda.model.validator.TargetValidator;
-import no.atferdssenteret.panda.model.validator.UserInputValidator;
 import no.atferdssenteret.panda.util.JPATransactor;
 import no.atferdssenteret.panda.util.StringUtil;
 import no.atferdssenteret.panda.view.TargetDialog;

@@ -50,6 +50,7 @@ public class QuestionnaireEvent implements Model {
 	private Date date;
 	@Column(nullable = false)
 	private Types type;
+	@Column(length = 1024)
 	private String comment;
 	private Timestamp created;
 	private Timestamp updated;

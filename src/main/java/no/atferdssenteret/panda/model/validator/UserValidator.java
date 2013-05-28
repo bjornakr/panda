@@ -11,6 +11,7 @@ public class UserValidator implements UserInputValidator {
 
 	public UserValidator(UserDialog view, PasswordDialog passwordView) {
 		this.view = view;
+		this.passwordView = passwordView;
 	}
 
 	@Override
@@ -31,6 +32,18 @@ public class UserValidator implements UserInputValidator {
 			if (passwordView.getPassword().length < 6) {
 				throw new InvalidUserInputException(StandardMessages.missingField("Passordet må være minst seks tegn."));							
 			}
+			if (ValidationUtil.exceedsMaximumLength(passwordView.getPassword().toString(), 255)) {
+				throw new InvalidUserInputException(StandardMessages.missingField("Passordet må være minst seks tegn."));							
+			}
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getUsername(), 256)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Brukernavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getFirstName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Fornavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getLastName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Etternavn"));			
 		}
 	}
 }

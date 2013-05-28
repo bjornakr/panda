@@ -65,7 +65,7 @@ public class ParticipantDialog extends JDialog {
 	}
 
 	public void restrictAccess() {
-		cboxStatuses.setEnabled(false);
+		//cboxStatuses.setEnabled(false);
 	}
 	
 	public String getFirstName() {

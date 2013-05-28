@@ -38,7 +38,7 @@ public class QuestionnaireTable extends DefaultAbstractTableModel {
 		}
 		dataColumns[DATA_COLLECTION] = questionnaire.getDataCollection().getType();
 		dataColumns[NAME] = questionnaire.getName();
-		dataColumns[STATUS] = questionnaire.calculateStatus();
+		dataColumns[STATUS] = questionnaire.getStatus();
 		if (questionnaire.lastEvent() != null) {
 			dataColumns[LAST_EVENT] = questionnaire.lastEvent().getType();
 			dataColumns[LAST_EVENT_DATE] = questionnaire.lastEvent().getDate();

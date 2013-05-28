@@ -1,7 +1,7 @@
 package no.atferdssenteret.panda.model.entity;
 
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -114,11 +114,12 @@ public class User implements Model {
 		this.lastName = lastName;
 	}
 
-	public static Collection<User> dataCollectors() {
+	public static List<User> dataCollectors() {
 		CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().entityManager().getCriteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
 		Root<User> userRoot = criteriaQuery.from(User.class);
 		criteriaQuery.where(criteriaBuilder.equal(userRoot.get(User_.accessLevel), User.AccessLevel.DATA_COLLECTOR));
+		criteriaQuery.orderBy(criteriaBuilder.asc(userRoot.get(User_.firstName)), criteriaBuilder.asc(userRoot.get(User_.username)));
 		return JPATransactor.getInstance().entityManager().createQuery(criteriaQuery).getResultList();
 	}
 

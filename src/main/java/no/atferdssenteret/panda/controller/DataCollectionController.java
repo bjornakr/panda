@@ -26,8 +26,14 @@ public class DataCollectionController extends ApplicationController {
 
 	public DataCollectionController(Window parentWindow, DataCollection model) {
 		super(model);
-		this.model = JPATransactor.getInstance().mergeIfDetached(model);
-//		this.model = model;
+		if (getMode() == Mode.EDIT) {
+			JPATransactor.getInstance().entityManager().refresh(model);
+			// Must refresh target here, because it knows about the other data collections,
+			// which is relevant for the data collection manager when this data collection is modified.
+			JPATransactor.getInstance().entityManager().refresh(model.getTarget());
+		}
+//		this.model = JPATransactor.getInstance().mergeIfDetached(model);
+		this.model = model;
 		questionnaireTableController = new QuestionnaireTableController(this.model);
 		view = new DataCollectionDialog(parentWindow, this, questionnaireTableController.view());
 		transferModelToView();
@@ -54,7 +60,7 @@ public class DataCollectionController extends ApplicationController {
 
 	@Override
 	public void transferModelToView() {
-		JPATransactor.getInstance().entityManager().refresh(model);
+//		JPATransactor.getInstance().entityManager().refresh(model); Hva var poenget med denne? Kommenter hvis den settes tilbake...
 		view.setType(model.getType());
 		view.setTargetDate(model.getTargetDate());
 		view.setProgressStatus(model.getProgressStatus());
@@ -83,8 +89,7 @@ public class DataCollectionController extends ApplicationController {
 
 	private boolean shouldAutoInsertDate() {
 		return StringUtil.groomString(view.getProgressDate()) == null
-				&& (view.getProgressStatus() == DataCollection.ProgressStatuses.APPOINTED
-				|| view.getProgressStatus() == DataCollection.ProgressStatuses.COMPLETED);
+				&& view.getProgressStatus() == DataCollection.ProgressStatuses.COMPLETED;
 	}
 
 	@Override
@@ -102,6 +107,9 @@ public class DataCollectionController extends ApplicationController {
 		transferUserInputToModel();
 		model.validateUserInput();
 		zip(model);
+//		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
+		JPATransactor.getInstance().transaction().commit();
+		JPATransactor.getInstance().transaction().begin();
 		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
 		JPATransactor.getInstance().transaction().commit();
 	}

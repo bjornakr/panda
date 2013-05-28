@@ -21,7 +21,7 @@ public class TargetNote implements Model {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 1024)
 	private String note;
 	@JoinColumn(nullable = false)
 	private Target target;	

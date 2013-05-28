@@ -20,6 +20,9 @@ public class QuestionnaireEventValidator implements UserInputValidator {
 		else {
 			StringUtil.parseDate(view.getDate());
 		}
+		if (ValidationUtil.exceedsMaximumLength(view.getComment(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Kommentar"));
+		}
 	}
 
 }

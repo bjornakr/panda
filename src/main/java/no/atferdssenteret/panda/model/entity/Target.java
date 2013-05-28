@@ -41,6 +41,7 @@ public class Target implements Model, TargetBelonging {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
+	@Column(length = 1024)
 	private String comment;
 	private Timestamp created;
 	private Timestamp updated;

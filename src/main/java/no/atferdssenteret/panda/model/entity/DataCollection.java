@@ -309,6 +309,10 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 //		return (progressStatus == ProgressStatuses.NOT_INITIATED
 //				&& !hasQuestionnairesWithQuestionnaireEvents());
 //				&& dataCollector == target.getDataCollector());
+		System.out.println("created == null: " + (created == null));
+		if (created != null) {
+			System.out.println("created.equals(updated): " + (created.equals(updated)));
+		}
 		return (created == null || created.equals(updated));
 	}
 

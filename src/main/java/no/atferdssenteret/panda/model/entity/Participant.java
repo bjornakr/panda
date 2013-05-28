@@ -35,8 +35,11 @@ public class Participant implements Model, TargetBelonging {
 	private String lastName;
 	private String phoneNo;
 	private String eMail;
+	@Column(length = 1024)
 	private String address;
+	@Column(length = 1024)
 	private String contactInfo;
+	@Column(length = 1024)
 	private String comment;
 	private Timestamp created;
 	private Timestamp updated;

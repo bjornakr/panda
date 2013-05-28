@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -66,23 +67,24 @@ public class LoginController implements ActionListener, WindowListener {
 			throw new InvalidUserInputException(INVALID_LOGIN);			
 		}
 
-		//checkVersion();
+		checkVersion();
 
 		new Session(user);
 	}
 
 	private void checkVersion() {
-//		return; // TODO: FIX
 		String queryString = "SELECT v FROM Version v";
 		TypedQuery<Version> query = JPATransactor.getInstance().entityManager().createQuery(queryString, Version.class);
-		Version version = query.getSingleResult();
+		List<Version> versions = query.getResultList();
+		Version version = null;
+		if (versions.size() > 0) {
+			version = versions.get(0);
+		}
 
-		if (version != null) {
-			if (appVersion < version.getRequiredVersion()) {
-				new ErrorMessageDialog("Denne versjonen av systemet er foreldet. Du kjører versjon " + appVersion + ". " +
-						"Siste versjon er " + version.getRequiredVersion() + ".", null, view);
-				System.exit(0);
-			}
+		if (version != null && appVersion < version.getRequiredVersion()) {
+			new ErrorMessageDialog("Denne versjonen av systemet er foreldet. Du kjører versjon " + appVersion + ". " +
+					"Siste versjon er " + version.getRequiredVersion() + ".", null, view);
+			System.exit(0);
 		}
 	}
 

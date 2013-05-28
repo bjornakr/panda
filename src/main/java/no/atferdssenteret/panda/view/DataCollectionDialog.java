@@ -59,7 +59,7 @@ public class DataCollectionDialog extends JDialog {
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Dato"), txtProgressDate));
 		cboxDataCollector.insertItemAt(null, 0);
 		cboxDataCollector.setSelectedIndex(0);
-		labelsAndFields.add(new LabelFieldPair(new JLabel("DataCollector"), cboxDataCollector));
+		labelsAndFields.add(new LabelFieldPair(new JLabel("Datainnsamler"), cboxDataCollector));
 		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
 		add(createQuestionnairePanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
 		add(ButtonUtil.createSaveCancelButtonPanel(actionListener, this), GridBagLayoutAutomat.constraintsForButtonPanel(2));	

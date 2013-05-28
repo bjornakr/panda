@@ -31,7 +31,7 @@ public class CriteriaBuilderTest {
 
 	@Before
 	public void setup() throws SQLException {
-		new JPATransactor(Persistence.createEntityManagerFactory("targets"));
+		new JPATransactor(Persistence.createEntityManagerFactory("panda"));
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();
 		DataCollectionManager.getInstance().removeAllDataCollectionGenerators();
 		Session.createTestSession();

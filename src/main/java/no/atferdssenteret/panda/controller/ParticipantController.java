@@ -24,7 +24,8 @@ public class ParticipantController extends ApplicationController {
 		this.target = target;
 		this.view = new ParticipantDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
-			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
+			JPATransactor.getInstance().entityManager().refresh(model);
+//			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			transferModelToView();
 		}
 		if (!Session.currentSession.user().hasAccessToRestrictedFields()) {

@@ -8,12 +8,16 @@ import javax.persistence.criteria.Root;
 
 import no.atferdssenteret.panda.model.DataCollectionTypes;
 import no.atferdssenteret.panda.model.entity.DataCollection;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.util.DateUtil;
 import no.atferdssenteret.panda.util.JPATransactor;
 
 
 public class DataCollectionFilterCreator implements FilterCreator {
+	public static final String FILTER_NAME_DATA_COLLECTOR = "Datainnsamler";
+	public static final String FILTER_NAME_STATUS = "Status";
+	
 	public enum Statuses {
 		FORTHCOMING_AND_DELAYED("Aktuelle og forsinkede"),
 		CONCLUDED("Avklart");
@@ -32,10 +36,11 @@ public class DataCollectionFilterCreator implements FilterCreator {
 	private static CriteriaBuilder criteriaBuilder = JPATransactor.getInstance().criteriaBuilder();
 	
 	public Filter[] createFilters() {
-		Filter[] filters = new Filter[3];
-		filters[0] = new Filter("Status", DataCollectionFilterCreator.Statuses.values());
+		Filter[] filters = new Filter[4];
+		filters[0] = new Filter(FILTER_NAME_STATUS, DataCollectionFilterCreator.Statuses.values());
 		filters[1] = new Filter("Type", DataCollectionTypes.getInstance().toArray());
 		filters[2] = new Filter("Framdrift", DataCollection.ProgressStatuses.values());
+		filters[3] = new Filter(FILTER_NAME_DATA_COLLECTOR, User.dataCollectors().toArray());
 		return filters;
 	}
 
@@ -48,6 +53,9 @@ public class DataCollectionFilterCreator implements FilterCreator {
 		}
 		else if (value instanceof DataCollection.ProgressStatuses) {
 			return criteriaBuilder.equal(root.get(DataCollection_.progressStatus), value);
+		}
+		else if (value instanceof User) {
+			return criteriaBuilder.equal(root.get(DataCollection_.dataCollector), value);
 		}
 		else {
 			return criteriaBuilder.conjunction();

@@ -31,7 +31,7 @@ public class DataCollectionAutomaticCreationTest {
 	
 	@Before
 	public void setup() throws Exception {
-		new JPATransactor(Persistence.createEntityManagerFactory("targets"));
+		new JPATransactor(Persistence.createEntityManagerFactory("panda"));
 //		JPATransactor.getInstance().entityManager().close();
 		Session.createTestSession();
 		new DatabaseCleaner(JPATransactor.getInstance().entityManager()).clean();

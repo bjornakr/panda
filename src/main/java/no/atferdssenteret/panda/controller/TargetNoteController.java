@@ -22,7 +22,8 @@ public class TargetNoteController extends ApplicationController {
 		this.target = target;
 		view = new TargetNoteDialog(parentWindow, this);
 		if (getMode() == Mode.EDIT) {
-			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
+			JPATransactor.getInstance().entityManager().refresh(model);
+//			this.model = JPATransactor.getInstance().mergeIfDetached(this.model);
 			transferModelToView();
 		}
 		view.setVisible(true);

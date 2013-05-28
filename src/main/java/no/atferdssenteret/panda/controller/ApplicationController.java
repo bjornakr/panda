@@ -22,6 +22,10 @@ public abstract class ApplicationController implements ActionListener {
 		}
 		else {
 			mode = Mode.EDIT;
+//			if (model.getCreated() != null) {
+//				System.out.println("AHH! REFRESH!");
+//				JPATransactor.getInstance().entityManager().refresh(model);
+//			}
 		}
 	}
 

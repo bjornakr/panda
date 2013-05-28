@@ -51,7 +51,7 @@ public class ParticipantTable extends DefaultAbstractTableModel {
 		int[] columnSizes = new int[NO_OF_FIELDS];
 		columnSizes[TARGET_ID] = COLUMN_SIZE_SMALL;
 		columnSizes[ROLE] = COLUMN_SIZE_WIDE;
-		columnSizes[STATUS] = COLUMN_SIZE_NORMAL;
+		columnSizes[STATUS] = COLUMN_SIZE_WIDE;
 		columnSizes[FIRST_NAME] = COLUMN_SIZE_NORMAL;
 		columnSizes[LAST_NAME] = COLUMN_SIZE_NORMAL;
 		columnSizes[TLF_NO] = COLUMN_SIZE_NORMAL;

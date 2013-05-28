@@ -15,7 +15,7 @@ public class TargetNoteTable extends DefaultAbstractTableModel {
 	@Override
 	protected String[] headerColumns() {
 		String[] headerColumns = new String[NO_OF_FIELDS];
-		headerColumns[DATE] = "Dato";
+		headerColumns[DATE] = "Tidspunkt";
 		headerColumns[NOTE] = "Notat";
 		headerColumns[SIGNATURE] = "Signatur";
 		return headerColumns;

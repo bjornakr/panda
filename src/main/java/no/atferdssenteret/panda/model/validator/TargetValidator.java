@@ -17,6 +17,15 @@ public class TargetValidator implements UserInputValidator {
 		}
 		if (ValidationUtil.notFilledIn(view.getLastName())) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));			
-		}			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getFirstName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getLastName(), 255)) {
+			throw new InvalidUserInputException(StandardMessages.missingField("Etternavn"));			
+		}
+		if (ValidationUtil.exceedsMaximumLength(view.getComment(), 1024)) {
+			throw new InvalidUserInputException(StandardMessages.textTooLong("Kommentar"));			
+		}
 	}
 }
