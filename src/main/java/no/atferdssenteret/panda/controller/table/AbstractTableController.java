@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import no.atferdssenteret.panda.controller.AdditionalAction;
+import no.atferdssenteret.panda.controller.AdditionalActionsForContext;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.TargetBelonging;
 import no.atferdssenteret.panda.model.table.TableObserver;
@@ -37,7 +39,7 @@ public abstract class AbstractTableController implements StandardController, Lis
 	public AbstractTableController(String title) {
 		this.title = title;
 		tableObservers  = new LinkedList<TableObserver>();
-		buttons = ButtonUtil.createCRUDButtons(this);
+		createDeafulButtons();
 	}
 
 	public String title() {
@@ -91,9 +93,9 @@ public abstract class AbstractTableController implements StandardController, Lis
 		boolean hasSelection = view().selectedTableRow() >= 0;
 		for (JButton button : buttons()) {
 			if (restrictedButtons.contains(button)) {
-				continue;
+				continue;  // Restricted buttons are removed from display, so no need to enable/disable them.
 			}
-			if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
+			else if (button.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)) {
 				button.setEnabled(hasSelection);
 			}
 			else if (button.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
@@ -134,6 +136,22 @@ public abstract class AbstractTableController implements StandardController, Lis
 			updateTableModel();
 		}
 	}
+
+	private void createDeafulButtons() {
+		buttons = new LinkedList<JButton>();
+		if (AdditionalActionsForContext.getInstance().get(getContext()) != null) {
+			for (AdditionalAction additionalAction : AdditionalActionsForContext.getInstance().get(getContext())) {
+				additionalAction.setController(this);
+				JButton additionalActionButton = new JButton(additionalAction.getName());
+				additionalActionButton.setActionCommand(additionalAction.getActionCommand());
+				additionalActionButton.addActionListener(additionalAction);
+				buttons.add(additionalActionButton);
+			}
+		}
+		buttons.addAll(ButtonUtil.createCRUDButtons(this));
+	}
+
+	protected abstract String getContext();
 
 	protected void processDeleteCommand() {
 		final String delete = "Slett";

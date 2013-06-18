@@ -19,6 +19,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class QuestionnaireEventTableController extends AbstractTableController {
+	public final static String CONTEXT = "QUESTIONNAIRE_EVENT";
 	private QuestionnaireEventTable tableModel = new QuestionnaireEventTable();
 	private DefaultTablePanel view;
 
@@ -27,7 +28,11 @@ public class QuestionnaireEventTableController extends AbstractTableController {
 		view = new DefaultTablePanel(this, null);
 		setButtonEnabledStates();
 	}
-
+	
+	@Override protected String getContext() {
+		return CONTEXT;
+	}
+	
 	@Override
 	public DefaultTablePanel view() {
 		return view;

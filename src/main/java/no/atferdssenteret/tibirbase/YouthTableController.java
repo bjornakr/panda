@@ -34,6 +34,7 @@ public class YouthTableController extends AbstractTableController {
 		view = new DefaultTablePanel(this, new YouthFilterCreator());
 	}
 
+	
 	@Override
 	public DefaultTablePanel view() {
 		return view;
@@ -76,6 +77,12 @@ public class YouthTableController extends AbstractTableController {
 			predicates[i] = YouthFilterCreator.createPredicate(filterValues.get(i), root);
 		}
 		return predicates;
+	}
+
+
+	@Override
+	protected String getContext() {
+		return null;
 	}
 	
 	

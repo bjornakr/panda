@@ -72,7 +72,7 @@ public class YouthFocusPanel extends JPanel {
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new GridBagLayout());
 
-		JLabel labID = new JLabel(model.formattedIdWithLetterAppendix());
+		JLabel labID = new JLabel(model.formattedIdWithLetterAppendix(true));
 		labID.setFont(GuiUtil.HEADER_FONT_PRIMARY);	
 
 		GridBagConstraints c = new GridBagConstraints();

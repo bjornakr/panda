@@ -89,8 +89,13 @@ public class Target implements Model, TargetBelonging {
 		this.id = id;
 	}
 
-	public String formattedIdWithLetterAppendix() {
-		return formattedNumericId() + " " + letterId();
+	public String formattedIdWithLetterAppendix(boolean includeSpace) {
+		if (includeSpace) {
+			return formattedNumericId() + " " + letterId();
+		}
+		else {
+			return formattedNumericId() + letterId();			
+		}
 	}
 
 	public Object formattedNumericId() {

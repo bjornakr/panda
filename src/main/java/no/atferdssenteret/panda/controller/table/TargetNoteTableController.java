@@ -14,6 +14,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class TargetNoteTableController extends AbstractTableController {
+	public static final String CONTEXT = "TARGET_NOTE";
 	private Target target;
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
@@ -23,6 +24,10 @@ public class TargetNoteTableController extends AbstractTableController {
 		this.target = target;
 		tableModel = new TargetNoteTable();
 		view = new DefaultTablePanel(this, null);
+	}
+	
+	@Override protected String getContext() {
+		return CONTEXT;
 	}
 
 	@Override

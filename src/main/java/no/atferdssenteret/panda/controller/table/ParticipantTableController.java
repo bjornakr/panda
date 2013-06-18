@@ -26,6 +26,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class ParticipantTableController extends AbstractTableController {
+	public final static String CONTEXT = "PARTICIPANT";
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
 	private Target target;
@@ -40,6 +41,10 @@ public class ParticipantTableController extends AbstractTableController {
 			tableModel = new ParticipantTableForTargetFocus();
 		}
 		view = new DefaultTablePanel(this, new ParticipantFilterCreator());
+	}
+	
+	@Override protected String getContext() {
+		return CONTEXT;
 	}
 
 	@Override

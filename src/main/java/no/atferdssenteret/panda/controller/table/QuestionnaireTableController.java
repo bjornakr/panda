@@ -11,6 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 
+import no.atferdssenteret.panda.controller.AdditionalAction;
+import no.atferdssenteret.panda.controller.AdditionalActionsForContext;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.filter.QuestionnaireFilterCreator;
 import no.atferdssenteret.panda.model.Model;
@@ -29,6 +31,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class QuestionnaireTableController extends AbstractTableController {
+	public final static String CONTEXT = "QUESITONNAIRE";
 	private final static String COMMAND_REGISTER_QUESTIONNAIRE = "REGISTER_QUESTIONNAIRE";
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
@@ -51,6 +54,10 @@ public class QuestionnaireTableController extends AbstractTableController {
 		setButtonEnabledStates();
 	}
 
+	@Override protected String getContext() {
+		return CONTEXT;
+	}
+
 	@Override
 	public DefaultTablePanel view() {
 		return view;
@@ -71,6 +78,13 @@ public class QuestionnaireTableController extends AbstractTableController {
 
 	private List<JButton> createButtons() {
 		List<JButton> buttons = new LinkedList<JButton>();
+		for (AdditionalAction additionalAction : AdditionalActionsForContext.getInstance().get(CONTEXT)) {
+			additionalAction.setController(this);
+			JButton additionalActionButton = new JButton(additionalAction.getName());
+			additionalActionButton.setActionCommand(additionalAction.getActionCommand());
+			additionalActionButton.addActionListener(additionalAction);
+			buttons.add(additionalActionButton);
+		}
 		buttons.add(ButtonUtil.editButton(this));
 		JButton butRegisterRecievedQuestionnaire = new JButton("Registrer mottatt skjema");
 		butRegisterRecievedQuestionnaire.setActionCommand(COMMAND_REGISTER_QUESTIONNAIRE);
@@ -95,6 +109,9 @@ public class QuestionnaireTableController extends AbstractTableController {
 		boolean hasSelection = view().selectedTableRow() >= 0;
 		for (JButton button : buttons()) {
 			if (button.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
+				button.setEnabled(hasSelection);
+			}
+			else if (AdditionalActionsForContext.getInstance().hasActionCommand(CONTEXT, button.getActionCommand())) {
 				button.setEnabled(hasSelection);
 			}
 		}

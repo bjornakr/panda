@@ -43,7 +43,7 @@ public class YouthFocusController implements StandardController {
 
 	@Override
 	public String title() {
-		return model.formattedIdWithLetterAppendix();
+		return model.formattedIdWithLetterAppendix(true);
 	}
 
 	@Override

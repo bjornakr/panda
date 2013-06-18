@@ -119,6 +119,6 @@ public class Youth extends Target {
 	
 	@Override
 	public String toString() {
-		return formattedIdWithLetterAppendix() + " - " + getFirstName() + " " + getLastName();
+		return formattedIdWithLetterAppendix(true) + " - " + getFirstName() + " " + getLastName();
 	}
 }

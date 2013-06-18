@@ -33,7 +33,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 public class MainController implements StandardController, ActionListener, TableObserver {
 	public static final String APP_NAME = "FFTbase";
-	public static final double APP_VERSION = 0.314;
+	public static final double APP_VERSION = 1.0;
 	private List<AbstractTableController> tableControllers;
 	private MainWindow view;
 	private TabsAndTablesPanel tabsAndTablesPanel;
@@ -82,9 +82,9 @@ public class MainController implements StandardController, ActionListener, Table
 //		dbProps.put("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/panda");
 //		dbProps.put("javax.persistence.jdbc.user", "pandaboy");
 //		dbProps.put("javax.persistence.jdbc.password", "panda");
-		dbProps.put("javax.persistence.jdbc.url", "jdbc:mysql://atferd56.uio.no/panda");
-		dbProps.put("javax.persistence.jdbc.user", "pandabear");
-		dbProps.put("javax.persistence.jdbc.password", encryptor.decrypt("pzg5gtGA/XTVBs7dYvV45w=="));
+		dbProps.put("javax.persistence.jdbc.url", "jdbc:mysql://atferd56.uio.no/panda_tibir_prod");
+		dbProps.put("javax.persistence.jdbc.user", "tibir");
+		dbProps.put("javax.persistence.jdbc.password", encryptor.decrypt("ggFA9/d6uhEbQr7QznimidyJXA/uZyGSiCxABOYbUlxPCHN3Zv3cvQ=="));
 //		dbProps.put("javax.persistence.jdbc.password", "bamboo");
 		return dbProps;
 	}

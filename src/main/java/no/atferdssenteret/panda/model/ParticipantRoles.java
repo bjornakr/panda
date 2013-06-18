@@ -32,4 +32,17 @@ public class ParticipantRoles {
 		};
 		return allRoles;
 	}
+	
+	public static boolean isParent(String role) {
+		return (role.equals(MOTHER)
+				|| role.equals(STEP_MOTHER)
+				|| role.equals(FOSTER_MOTHER)
+				|| role.equals(FATHERS_PARTNER_FEMALE)
+				|| role.equals(MOTHERS_PARTNER_MALE)
+				|| role.equals(FATHER)
+				|| role.equals(STEP_FATHER)
+				|| role.equals(FOSTER_FATHER)
+				|| role.equals(MOTHERS_PARTNER_FEMALE)
+				|| role.equals(FATHERS_PARTNER_MALE));
+	}
 }

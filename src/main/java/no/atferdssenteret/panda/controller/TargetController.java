@@ -19,7 +19,7 @@ public abstract class TargetController extends ApplicationController {
 	public void transferModelToView() {
 		final TargetDialog view = (TargetDialog)view();
 		final Target model = (Target)model();
-		view.setId(model.formattedIdWithLetterAppendix());
+		view.setId(model.formattedIdWithLetterAppendix(true));
 		view.setFirstName(model.getFirstName());
 		view.setLastName(model.getLastName());
 		view.setStatus(model.getStatus());

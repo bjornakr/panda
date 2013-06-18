@@ -28,6 +28,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class DataCollectionTableController extends AbstractTableController {
+	public static final String CONTEXT = "DATA_COLLECTION";
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
 	private Target target;
@@ -53,6 +54,10 @@ public class DataCollectionTableController extends AbstractTableController {
 		view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_STATUS, DataCollectionFilterCreator.Statuses.FORTHCOMING_AND_DELAYED);
 	}
 
+	@Override protected String getContext() {
+		return CONTEXT;
+	}
+	
 	@Override
 	public DefaultTablePanel view() {
 		return view;

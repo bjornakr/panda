@@ -22,6 +22,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class UserTableController extends AbstractTableController {
+	public final static String CONTEXT = "USER";
 	private DefaultTablePanel view = new DefaultTablePanel(this, null);
 	private UserTable tableModel = new UserTable();
 	
@@ -30,6 +31,10 @@ public class UserTableController extends AbstractTableController {
 		view = new DefaultTablePanel(this, null);
 	}
 
+	@Override protected String getContext() {
+		return CONTEXT;
+	}
+	
 	@Override
 	public DefaultTablePanel view() {
 		return view;
