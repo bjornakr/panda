@@ -89,48 +89,4 @@ public class ParticipantController extends ApplicationController {
 	protected UserInputValidator getValidator() {
 		return new ParticipantValidator(view);
 	}
-	
-//	@Override
-//	public void actionPerformed(ActionEvent event) {
-//		if (event.getActionCommand().equals(COMMAND_SAVE)) {
-//			save();
-//		}
-//		else if (event.getActionCommand().equals(COMMAND_CANCEL)) {
-//			view().dispose();
-//		}
-//	}
-//
-//	private void save() {
-//		try {
-//			if (getMode() == Mode.EDIT) {
-//				setModel(JPATransactor.getInstance().mergeIfDetached(model()));
-//			}
-//			performTransaction();
-//			view().dispose();
-//		}
-//		catch (InvalidUserInputException e) {
-//			if (JPATransactor.getInstance().transaction().isActive()) {
-//				JPATransactor.getInstance().transaction().rollback();
-//			}
-//			new ErrorMessageDialog(e.getMessage(), null, view());
-//		}
-//		catch (Exception e) {
-//			if (JPATransactor.getInstance().transaction().isActive()) {
-//				JPATransactor.getInstance().transaction().rollback();
-//			}
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	protected void performTransaction() {
-//		JPATransactor.getInstance().transaction().begin();
-//		transferUserInputToModel();
-//		model().validateUserInput();
-//		System.out.println(model());
-//		if (getMode() == Mode.CREATE) {
-////			target.addParticipant(model);
-//			JPATransactor.getInstance().entityManager().persist(model());
-//		}
-//		JPATransactor.getInstance().transaction().commit();
-//	}
 }

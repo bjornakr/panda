@@ -9,8 +9,6 @@ import no.atferdssenteret.panda.controller.table.QuestionnaireTableController;
 import no.atferdssenteret.panda.model.Model;
 import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
-import no.atferdssenteret.panda.model.entity.Questionnaire;
-import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.validator.DataCollectionValidator;
 import no.atferdssenteret.panda.model.validator.UserInputValidator;
@@ -99,31 +97,15 @@ public class DataCollectionController extends ApplicationController {
 
 	@Override
 	protected void performTransaction() {
-//		JPATransactor.getInstance().transaction().begin();
-//		model.setQuestionnaires(new LinkedList<Questionnaire>());
-//		JPATransactor.getInstance().transaction().commit();
-		
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
 		model.validateUserInput();
-		zip(model);
-//		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
 		JPATransactor.getInstance().transaction().commit();
 		JPATransactor.getInstance().transaction().begin();
 		DataCollectionManager.getInstance().generateDataCollections(model.getTarget());	
 		JPATransactor.getInstance().transaction().commit();
 	}
 	
-	private void zip(DataCollection model) {
-		System.out.println("=== DATA COLLECTION REPORT ===");
-		System.out.println("DC: " + model);
-		for (Questionnaire q : model.getQuestionnaires()) {
-			System.out.println("--Q: " + q + ", " + q.getDataCollection());
-			for (QuestionnaireEvent qe : q.getQuestionnaireEvents()) {
-				System.out.println("----QE: " + qe);
-			}
-		}
-	}
 
 	@Override
 	protected UserInputValidator getValidator() {

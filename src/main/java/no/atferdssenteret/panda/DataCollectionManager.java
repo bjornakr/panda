@@ -23,14 +23,8 @@ public class DataCollectionManager {
 	public void generateDataCollections(Target target) {
 		deleteUntouchedSystemGeneratedDataCollections(target);
 		for (DataCollectionGenerator dataCollectionGenerator : dataCollectionGenerators) {
-			System.out.println("Trying to add: " + dataCollectionGenerator.dataCollectionType());
 			if (dataCollectionGenerator.isApplicable(target) && !target.hasDataCollection(dataCollectionGenerator.dataCollectionType())) {
 				target.addDataCollection(dataCollectionGenerator.createDataCollection(target));
-			}
-			else {
-				System.out.println("Nope!");
-				System.out.println("dataCollectionGenerator.isApplicable(target): " + dataCollectionGenerator.isApplicable(target));
-				System.out.println("!target.hasDataCollection(dataCollectionGenerator.dataCollectionType()): " + !target.hasDataCollection(dataCollectionGenerator.dataCollectionType()));
 			}
 		}
 	}
@@ -38,12 +32,10 @@ public class DataCollectionManager {
 	private void deleteUntouchedSystemGeneratedDataCollections(Target target) {
 		List<DataCollection> untouchedDataCollections = new LinkedList<DataCollection>();
 		for (DataCollection dataCollection : target.getDataCollections()) {
-			System.err.println("isUntouched(): " + dataCollection + ", " + dataCollection.isUntouched());
 			if (dataCollection.isUntouched()) {
 				untouchedDataCollections.add(dataCollection);
 			}
 		}
-		System.out.println("untouchedDataCollections.size(): " + untouchedDataCollections.size());
 		target.getDataCollections().removeAll(untouchedDataCollections);
 	}
 

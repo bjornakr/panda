@@ -83,15 +83,15 @@ public class DataCollectionDialog extends JDialog {
 		
 	}
 	
-	public Object getType() {
-		return cboxTypes.getSelectedItem();
-	}
+//	public Object getDataCollectionType() {
+//		return cboxTypes.getSelectedItem();
+//	}
 
-	public void initializeTypeComboBox() {
-		if (cboxTypes.getModel().getSize() > 0) {
-			cboxTypes.setSelectedIndex(0);
-		}
-	}
+//	public void initializeTypeComboBox() {
+//		if (cboxTypes.getModel().getSize() > 0) {
+//			cboxTypes.setSelectedIndex(0);
+//		}
+//	}
 
 	public String getTargetDate() {
 		return txtTargetDate.getText();

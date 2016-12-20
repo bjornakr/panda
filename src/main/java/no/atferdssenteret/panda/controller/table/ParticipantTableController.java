@@ -64,7 +64,6 @@ public class ParticipantTableController extends AbstractTableController {
 				target = JPATransactor.getInstance().entityManager().merge(target);
 			}
 			JPATransactor.getInstance().entityManager().refresh(target);
-//			System.err.println("TABLE: Target is managed: " + JPATransactor.getInstance().entityManager().contains(target));
 			return target.getParticipants();
 		}
 		else {

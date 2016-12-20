@@ -104,7 +104,6 @@ public class DataCollectionAutomaticCreationTest {
 	private boolean hasDuplicateDataCollections(Target target) {
 		List<String> existingDataCollectionTypes = new ArrayList<String>(); 
 		for (DataCollection dataCollection : getDataCollections(target)) {
-			System.err.println(dataCollection.getType());
 			if (existingDataCollectionTypes.contains(dataCollection.getType())) {
 				return true;
 			}

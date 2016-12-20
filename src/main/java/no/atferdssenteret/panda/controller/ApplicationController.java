@@ -22,10 +22,6 @@ public abstract class ApplicationController implements ActionListener {
 		}
 		else {
 			mode = Mode.EDIT;
-//			if (model.getCreated() != null) {
-//				System.out.println("AHH! REFRESH!");
-//				JPATransactor.getInstance().entityManager().refresh(model);
-//			}
 		}
 	}
 
@@ -47,7 +43,6 @@ public abstract class ApplicationController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		System.out.println("We are here: " + title() + ", " + event.getActionCommand());
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			try {
 				getValidator().validateUserInput();
@@ -64,7 +59,6 @@ public abstract class ApplicationController implements ActionListener {
 	}
 
 	private void save() {
-		System.out.println("Saving...");
 		try {
 			if (mode == Mode.EDIT) {
 				setModel(JPATransactor.getInstance().mergeIfDetached(model()));
@@ -85,17 +79,12 @@ public abstract class ApplicationController implements ActionListener {
 			new ErrorMessageDialog(e.getMessage(), null, view());
 			e.printStackTrace();
 		}
-		finally {
-//			System.out.println("Closing entity manager.");
-//			JPATransactor.getInstance().entityManager().close();
-		}
 	}
 
 	protected void performTransaction() {
 		JPATransactor.getInstance().transaction().begin();
 		transferUserInputToModel();
 		model().validateUserInput();
-		System.out.println(model());
 		if (mode == Mode.CREATE) {
 			JPATransactor.getInstance().entityManager().persist(model());
 		}

@@ -21,13 +21,14 @@ public class QuestionnaireEvent implements Model {
 	public enum Types {
 		FILLED_OUT_WITH_DATACOLLECTOR_PRESENT("Fylt ut med datainnsamler tilstede"),
 		TELEPHONE_INTERVIEW("Telefonintervju"),
-		E_MAILED_TO_RESPONDENT("Sendt per e-post til deltaker"),
-		MAILED_TO_RESPONDENT("Sendt per post til deltaker"),
+		E_MAILED_TO_RESPONDENT("Sendt per e-post til respondent"),
+		MAILED_TO_RESPONDENT("Sendt per post til respondent"),
 		SENT_FOR_PROCESSING("Sendt per post til databehandler"),
 		SENT_REMINDER("Purret"),
 		RECIEVED("Mottatt"),
 		GIVEN_UP("Gitt opp"),
 		LOST("Mistet"),
+		NOT_APPLICABLE("Ikke aktuell"),
 		OTHER("Annet");
 		
 		private String name;

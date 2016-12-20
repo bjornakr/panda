@@ -1,16 +1,18 @@
 package no.atferdssenteret.panda.model.validator;
 
 import no.atferdssenteret.panda.InvalidUserInputException;
+import no.atferdssenteret.panda.model.ParticipationStatuses;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.util.StandardMessages;
 import no.atferdssenteret.panda.view.ParticipantDialog;
 
 public class ParticipantValidator implements UserInputValidator {
 	private ParticipantDialog view;
-	
+
 	public ParticipantValidator(ParticipantDialog view) {
 		this.view = view;
 	}
-	
+
 	public void validateUserInput() {
 		if (ValidationUtil.notFilledIn(view.getFirstName())) {
 			throw new InvalidUserInputException(StandardMessages.missingField("Fornavn"));			
@@ -38,6 +40,13 @@ public class ParticipantValidator implements UserInputValidator {
 		}
 		if (ValidationUtil.exceedsMaximumLength(view.getComment(), 1024)) {
 			throw new InvalidUserInputException(StandardMessages.textTooLong("Kommentar"));			
+		}
+		if (!Session.currentSession.user().hasAccessToRestrictedFields() &&
+				(view.getStatus() == ParticipationStatuses.CONSENT_WITHDRAWN
+				|| view.getStatus() == ParticipationStatuses.DATA_COLLECTION_TERMINATED
+				|| view.getStatus() == ParticipationStatuses.NEVER_PARTICIPATED)) {
+			throw new InvalidUserInputException("Kan ikke sette status til " + view.getStatus() +
+					". Ta kontakt med administrator for å gjennomføre denne endringen.");
 		}
 	}
 }

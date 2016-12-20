@@ -16,6 +16,7 @@ import no.atferdssenteret.panda.controller.AdditionalActionsForContext;
 import no.atferdssenteret.panda.controller.QuestionnaireController;
 import no.atferdssenteret.panda.filter.QuestionnaireFilterCreator;
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.Session;
 import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
@@ -23,6 +24,7 @@ import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.entity.Questionnaire_;
 import no.atferdssenteret.panda.model.entity.Target;
 import no.atferdssenteret.panda.model.entity.Target_;
+import no.atferdssenteret.panda.model.entity.User;
 import no.atferdssenteret.panda.model.table.QuestionnaireTable;
 import no.atferdssenteret.panda.model.table.QuestionnaireTableForDataCollectionView;
 import no.atferdssenteret.panda.util.JPATransactor;
@@ -31,7 +33,7 @@ import no.atferdssenteret.panda.view.DefaultTablePanel;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 
 public class QuestionnaireTableController extends AbstractTableController {
-	public final static String CONTEXT = "QUESITONNAIRE";
+	public final static String CONTEXT = "QUESTIONNAIRE";
 	private final static String COMMAND_REGISTER_QUESTIONNAIRE = "REGISTER_QUESTIONNAIRE";
 	private DefaultTablePanel view;
 	private DefaultAbstractTableModel tableModel;
@@ -46,6 +48,10 @@ public class QuestionnaireTableController extends AbstractTableController {
 			tableModel = new QuestionnaireTable();
 			buttons = createButtons();
 			view = new DefaultTablePanel(this, new QuestionnaireFilterCreator());
+			view().setSelectedFilter(QuestionnaireFilterCreator.FILTER_NAME_STATUS, Questionnaire.Statuses.NOT_RECIEVED);
+			if (Session.currentSession.user().getAccessLevel() == User.AccessLevel.DATA_COLLECTOR) {
+				view().setSelectedFilter(QuestionnaireFilterCreator.FILTER_NAME_DATA_COLLECTOR, Session.currentSession.user());
+			}
 		}
 		else {
 			tableModel = new QuestionnaireTableForDataCollectionView();
@@ -78,12 +84,14 @@ public class QuestionnaireTableController extends AbstractTableController {
 
 	private List<JButton> createButtons() {
 		List<JButton> buttons = new LinkedList<JButton>();
-		for (AdditionalAction additionalAction : AdditionalActionsForContext.getInstance().get(CONTEXT)) {
-			additionalAction.setController(this);
-			JButton additionalActionButton = new JButton(additionalAction.getName());
-			additionalActionButton.setActionCommand(additionalAction.getActionCommand());
-			additionalActionButton.addActionListener(additionalAction);
-			buttons.add(additionalActionButton);
+		if (AdditionalActionsForContext.getInstance().get(CONTEXT) != null) {
+			for (AdditionalAction additionalAction : AdditionalActionsForContext.getInstance().get(CONTEXT)) {
+				additionalAction.setController(this);
+				JButton additionalActionButton = new JButton(additionalAction.getName());
+				additionalActionButton.setActionCommand(additionalAction.getActionCommand());
+				additionalActionButton.addActionListener(additionalAction);
+				buttons.add(additionalActionButton);
+			}
 		}
 		buttons.add(ButtonUtil.editButton(this));
 		JButton butRegisterRecievedQuestionnaire = new JButton("Registrer mottatt skjema");
@@ -120,22 +128,16 @@ public class QuestionnaireTableController extends AbstractTableController {
 	@Override
 	public void evaluateActionEvent(ActionEvent event) {
 		if (event.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)) {
-			QuestionnaireController questionnaireController = new QuestionnaireController(view.getWindow(), null);
+			QuestionnaireController questionnaireController = new QuestionnaireController(view.getWindow(), null, true);
 			if (questionnaireController.model() != null) {
-//				dataCollection.addQuestionnaire((Questionnaire)questionnaireController.model());
-//				((Questionnaire)questionnaireController.model()).setDataCollection(dataCollection);
 				tableModel.addRow(questionnaireController.model());
-//				tableModel.setModels(dataCollection.getQuestionnaires());
 			}
 		}
 		else if (event.getActionCommand().equals(ButtonUtil.COMMAND_EDIT)
 				|| event.getActionCommand().equals(ButtonUtil.COMMAND_DOUBLE_CLICK)) {
 			Questionnaire model = (Questionnaire)modelForSelectedTableRow();
-			new QuestionnaireController(view.getWindow(), model);
-//			tableModel.setModels(dataCollection.getQuestionnaires());
+			new QuestionnaireController(view.getWindow(), model, dataCollection != null);
 			tableModel.update(model);
-//			tableModel.addRow(controller.model());
-//			updateTableModel(); // funker ikke
 		}
 		else if (event.getActionCommand().equals(COMMAND_REGISTER_QUESTIONNAIRE)) {
 			registerRecievedQuestionnaire();
@@ -182,6 +184,8 @@ public class QuestionnaireTableController extends AbstractTableController {
 				equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.COMPLETED);
 		Predicate initiatedDataCollections = criteriaBuilder.
 				equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.INITIATED);
-		return criteriaBuilder.or(completedDataCollecitons, initiatedDataCollections);
+        Predicate appointedDataCollections = criteriaBuilder.
+                equal(joinQuestionnaireDataColleciton.get(DataCollection_.progressStatus), DataCollection.ProgressStatuses.APPOINTED);
+		return criteriaBuilder.or(completedDataCollecitons, initiatedDataCollections, appointedDataCollections);
 	}
 }

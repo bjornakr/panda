@@ -1,5 +1,6 @@
 package no.atferdssenteret.panda.model;
 
+
 public enum ParticipationStatuses {
 	WAITING_FOR_CONSENT("Venter på samtykke"),
 	NEVER_PARTICIPATED("Har aldri deltatt"),
@@ -17,5 +18,4 @@ public enum ParticipationStatuses {
 	public String toString() {
 		return name;
 	}
-
 }

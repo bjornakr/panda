@@ -4,7 +4,7 @@
   <groupId>no.atferdssenteret.panda</groupId>
   <artifactId>panda</artifactId>
   <packaging>jar</packaging>
-  <version>0.9</version>
+  <version>1.0</version>
   <name>panda</name>
   <url>http://maven.apache.org</url>
 

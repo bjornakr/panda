@@ -93,12 +93,12 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	private User dataCollector;
 
 	@PrePersist
-	protected void onCreate() {
+	public void onCreate() {
 		TimeStamper.onCreate(this);
 	}
 
 	@PreUpdate
-	protected void onUpdate() {
+	public void onUpdate() {
 		TimeStamper.onUpdate(this);
 	}
 
@@ -160,10 +160,10 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 		return null;
 	}
 
-	public void addQuestionnaire(Questionnaire questionnaire) {
-		questionnaire.setDataCollection(this);
-		questionnaires.add(questionnaire);
-	}
+//	public void addQuestionnaire(Questionnaire questionnaire) {
+//		questionnaire.setDataCollection(this);
+//		questionnaires.add(questionnaire);
+//	}
 
 	public void setQuestionnaires(List<Questionnaire> questionnaires) {
 		for (Questionnaire questionnaire : questionnaires) {
@@ -306,22 +306,6 @@ public class DataCollection implements Model, TargetBelonging, Comparable<DataCo
 	}
 
 	public boolean isUntouched() {
-//		return (progressStatus == ProgressStatuses.NOT_INITIATED
-//				&& !hasQuestionnairesWithQuestionnaireEvents());
-//				&& dataCollector == target.getDataCollector());
-		System.out.println("created == null: " + (created == null));
-		if (created != null) {
-			System.out.println("created.equals(updated): " + (created.equals(updated)));
-		}
 		return (created == null || created.equals(updated));
 	}
-
-//	private boolean hasQuestionnairesWithQuestionnaireEvents() {
-//		for (Questionnaire questionnaire : questionnaires) {
-//			if (questionnaire.getQuestionnaireEvents().size() > 0) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 }

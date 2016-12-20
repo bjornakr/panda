@@ -77,13 +77,10 @@ public class UserController extends ApplicationController {
 		model.setAccessLevel((User.AccessLevel)view.getAccessLevel());
 		model.setFirstName(StringUtil.groomString(view.getFirstName()));
 		model.setLastName(StringUtil.groomString(view.getLastName()));
-		System.out.println("Svapp?");
 		if (passwordDialog != null && passwordDialog.isPasswordCreated()) {
 			String password = new String(passwordDialog.getPassword());
-			System.out.println(password);
 			validatePassword(password);
 			BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
-			System.out.println(encryptor.encryptPassword(password));
 			model.setEncryptedPassword(encryptor.encryptPassword(password));
 		}
 	}
@@ -96,7 +93,6 @@ public class UserController extends ApplicationController {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getActionCommand());
 		if (getMode() == Mode.CREATE
 				&& e.getActionCommand().equals(ButtonUtil.COMMAND_CREATE)
 				&& User.userNameExists(model.getUsername())) {

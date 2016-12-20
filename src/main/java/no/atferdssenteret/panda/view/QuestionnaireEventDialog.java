@@ -55,7 +55,7 @@ public class QuestionnaireEventDialog extends JDialog {
 		txtDate.setText(date);
 	}
 
-	public Object getType() {
+	public Object getQuestionnaireEventType() {
 		return cboxType.getSelectedItem();	
 	}
 

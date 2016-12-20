@@ -28,7 +28,6 @@ public class JPATransactor {
 
 	public EntityManager entityManager() {
 		if (entityManager == null || !entityManager.isOpen()) {
-			System.out.println("Creating new entitymanager");
 			entityManager = entityManagerFactory.createEntityManager();
 		}
 		return entityManager;
@@ -48,19 +47,9 @@ public class JPATransactor {
 		return entityManager().getCriteriaBuilder().createQuery(c);
 	}
 
-//	public Model mergeIfDetached(Model model) {
-//		if (model != null) {
-//			if (!JPATransactor.getInstance().entityManager().contains(model)) {
-//				System.out.println("Merging: " + model);
-//				return JPATransactor.getInstance().entityManager().merge(model);
-//			}
-//		}
-//		return model;
-//	}
 	public <T extends Model> T mergeIfDetached(T model) {
 		if (model != null) {
 			if (!JPATransactor.getInstance().entityManager().contains(model)) {
-				System.out.println("Merging: " + model);
 				return JPATransactor.getInstance().entityManager().merge(model);
 			}
 		}

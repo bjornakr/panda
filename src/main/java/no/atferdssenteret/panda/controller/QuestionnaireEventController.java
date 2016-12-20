@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.sql.Date;
 
 import no.atferdssenteret.panda.model.Model;
+import no.atferdssenteret.panda.model.TimeStamper;
 import no.atferdssenteret.panda.model.entity.QuestionnaireEvent;
 import no.atferdssenteret.panda.model.validator.QuestionnaireEventValidator;
 import no.atferdssenteret.panda.model.validator.UserInputValidator;
@@ -58,8 +59,9 @@ public class QuestionnaireEventController extends ApplicationController {
 		if (getMode() == Mode.CREATE) {
 			model = new QuestionnaireEvent();
 		}
+		TimeStamper.onUpdate(model);
 		model.setDate(StringUtil.parseDate(view.getDate()));
-		model.setType((QuestionnaireEvent.Types)view.getType());
+		model.setType((QuestionnaireEvent.Types)view.getQuestionnaireEventType());
 		model.setComment(StringUtil.groomString(view.getComment()));
 	}
 
@@ -68,8 +70,10 @@ public class QuestionnaireEventController extends ApplicationController {
 		if (event.getActionCommand().equals(COMMAND_SAVE)) {
 			try {
 				getValidator().validateUserInput();
+//				JPATransactor.getInstance().transaction().begin();
 				transferUserInputToModel();
 				model.validateUserInput();
+//				JPATransactor.getInstance().transaction().commit();
 				view.dispose();
 			}
 			catch (Exception e) {

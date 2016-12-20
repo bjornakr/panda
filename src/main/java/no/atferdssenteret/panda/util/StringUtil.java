@@ -87,7 +87,11 @@ public class StringUtil {
 	 * @return A new string with linebreaks
 	 */
 	public static String splitString(String s, int prefferedLength, int padding_) {
-		s = s.trim();
+		if (s == null) {
+            return null;
+        }
+
+        s = s.trim();
 		String result = null;
 		Integer lastSpace = null;
 		int substringStart = 0;

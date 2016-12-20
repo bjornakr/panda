@@ -121,9 +121,6 @@ public abstract class AbstractTableController implements StandardController, Lis
 						&& !JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow())) {
 					throw new IllegalStateException(modelForSelectedTableRow() + " er ikke lenger tilgjengelig. Tabellen vil nå bli oppdatert.");
 				}
-				System.out.println("!JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow(): " + !JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow()));
-				System.out.println("!!!modelForSelectedTableRow().getCreated() NOT null: " + (modelForSelectedTableRow().getCreated() != null));
-
 			}
 			if (event.getActionCommand().equals(ButtonUtil.COMMAND_DELETE)) {
 				processDeleteCommand();
@@ -184,9 +181,6 @@ public abstract class AbstractTableController implements StandardController, Lis
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
-		if (modelForSelectedTableRow() != null) {
-			System.err.println("ATC: " + JPATransactor.getInstance().entityManager().contains(modelForSelectedTableRow()));
-		}
 		setButtonEnabledStates();
 		view().updateTableCounters();
 		if (modelForSelectedTableRow() instanceof TargetBelonging) {

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import no.atferdssenteret.panda.model.QuestionnaireTypes;
+import no.atferdssenteret.panda.model.entity.Questionnaire;
 import no.atferdssenteret.panda.view.util.ButtonUtil;
 import no.atferdssenteret.panda.view.util.GridBagLayoutAutomat;
 import no.atferdssenteret.panda.view.util.GuiUtil;
@@ -23,6 +24,7 @@ public class QuestionnaireDialog extends JDialog {
 	private ActionListener actionListener;
 	private DefaultTablePanel questionnaireEventView;
 	private JComboBox cboxName = new JComboBox(QuestionnaireTypes.getInstance().toArray());
+	private JComboBox cboxFormats = new JComboBox(Questionnaire.Formats.values());
 
 	public QuestionnaireDialog(Window parentWindow, ActionListener actionListener, DefaultTablePanel questionnaireEventPanel) {
 		this.actionListener = actionListener;
@@ -39,7 +41,8 @@ public class QuestionnaireDialog extends JDialog {
 
 		List<LabelFieldPair> labelsAndFields = new LinkedList<LabelFieldPair>();
 		labelsAndFields.add(new LabelFieldPair(new JLabel("Spørreskjema"), cboxName));
-		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));
+		labelsAndFields.add(new LabelFieldPair(new JLabel("Format"), cboxFormats));
+		add(GridBagLayoutAutomat.createPanelFor(labelsAndFields, true), GridBagLayoutAutomat.typicalConstraintsForPanel(0, 0));		
 		questionnaireEventView.setTableHeight(100);
 		questionnaireEventView.showCounters(false);
 		add(createQuestionnaireEventPanel(), GridBagLayoutAutomat.typicalConstraintsForPanel(1, 1));
@@ -62,6 +65,14 @@ public class QuestionnaireDialog extends JDialog {
 
 	public void setQuestionnaireName(String name) {
 		cboxName.setSelectedItem(name);
+	}
+	
+	public Object getFormat() {
+		return cboxFormats.getSelectedItem();
+	}
+	
+	public void setFormat(Questionnaire.Formats format) {
+		cboxFormats.setSelectedItem(format);
 	}
 	
 	public void enableQuestionnaireComboBox(boolean enable) {

@@ -12,15 +12,21 @@ import no.atferdssenteret.panda.model.entity.DataCollection;
 import no.atferdssenteret.panda.model.entity.DataCollection_;
 import no.atferdssenteret.panda.model.entity.Questionnaire;
 import no.atferdssenteret.panda.model.entity.Questionnaire_;
+import no.atferdssenteret.panda.model.entity.User;
 
 public class QuestionnaireFilterCreator implements FilterCreator {
+	public final static String FILTER_NAME_DATA_COLLECTOR = "Datainnsamler";
+	public final static String FILTER_NAME_STATUS = "Status";
+	
+	
 	@Override
 	public Filter[] createFilters() {
-		Filter[] filters = new Filter[3];
+		Filter[] filters = new Filter[5];
 		filters[0] = new Filter("Datainnsamling", DataCollectionTypes.getInstance().toArray());
-		//filters[1] = new Filter("Spørreskjema", QuestionnairesForDataCollectionType.getInstance().allQuestionnaireNames().toArray());
-		filters[1] = new Filter("Spørreskjema", QuestionnaireTypes.getInstance().toArray());
-		filters[2] = new Filter("Status", Questionnaire.Statuses.values());
+		filters[1] = new Filter(FILTER_NAME_DATA_COLLECTOR, User.dataCollectors().toArray());
+		filters[2] = new Filter("Spørreskjema", QuestionnaireTypes.getInstance().toArray());
+		filters[3] = new Filter(FILTER_NAME_STATUS, Questionnaire.Statuses.values());
+		filters[4] = new Filter("Format", Questionnaire.Formats.values());
 		return filters;
 	}
 	
@@ -35,6 +41,13 @@ public class QuestionnaireFilterCreator implements FilterCreator {
 		}
 		else if (value instanceof Questionnaire.Statuses) {
 			return criteriaBuilder.equal(root.get(Questionnaire_.status), value);
+		}
+		else if (value instanceof Questionnaire.Formats) {
+			return criteriaBuilder.equal(root.get(Questionnaire_.format), value);
+		}
+		else if (value instanceof User) {
+			Path<User> dataCollectorPath = joinQuestionnaireDataCollection.get(DataCollection_.dataCollector);
+			return criteriaBuilder.equal(dataCollectorPath, value);
 		}
 		else {
 			return criteriaBuilder.conjunction();

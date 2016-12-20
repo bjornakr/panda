@@ -51,7 +51,9 @@ public class DataCollectionTableController extends AbstractTableController {
 		if (Session.currentSession.user().getAccessLevel() == User.AccessLevel.DATA_COLLECTOR) {
 			view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_DATA_COLLECTOR, Session.currentSession.user());
 		}
-		view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_STATUS, DataCollectionFilterCreator.Statuses.FORTHCOMING_AND_DELAYED);
+		if (target == null) {
+			view().setSelectedFilter(DataCollectionFilterCreator.FILTER_NAME_STATUS, DataCollectionFilterCreator.Statuses.FORTHCOMING_AND_DELAYED);
+		}
 	}
 
 	@Override protected String getContext() {
